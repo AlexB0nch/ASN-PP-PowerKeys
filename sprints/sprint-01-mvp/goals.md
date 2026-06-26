@@ -1,11 +1,27 @@
-# Sprint 01 — MVP
+# Sprint 01 — MVP Foundation
 
-## Цели
+- **Версия:** v1.0 MVP
+- **Период:** TBD
 
-- [ ] Регистрация плагина (COM Add-in, VSTO)
-- [ ] Команды выравнивания (18 команд)
-- [ ] Команды изменения размера (20 команд)
-- [ ] Базовые объектные команды: Insert, Duplicate, Group, Order
-- [ ] Цвет заливки и обводки из Slide Master (`Alt+G`, `Alt+L`)
-- [ ] Вкладка PowerKeys в Ribbon
-- [ ] Менеджер шорткатов (базовый)
+## Sprint Goal
+
+> Плагин загружается в PowerPoint, показывает вкладку PowerKeys и умеет выравнивать и изменять размер объектов через шорткаты.
+
+## Scope (в спринте)
+
+- Инициализация VSTO COM Add-in
+- Ядро: `ShortcutManager`, `CommandDispatcher`, `ColorSchemeReader`
+- Команды выравнивания (18)
+- Команды изменения размера (20)
+- Вкладка PowerKeys в Ribbon
+- Базовый Shortcut Manager
+
+## Out of scope (не в этом спринте)
+
+- Object / Format / Text / Slide команды (Sprint 02)
+- Профили шорткатов, Smart Color Picker (Sprint 03)
+
+## Риски и зависимости
+
+- VSTO-сборку и тестирование можно выполнить только на Windows + PowerPoint (см. `setup/environment`).
+- Конфликты шорткатов с нативными комбинациями PowerPoint.
