@@ -1,0 +1,35 @@
+# Build
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+# Visual Studio
+.vs/
+*.sln.docstates
+
+# NuGet
+packages/
+*.nupkg
+
+# Installer output
+installer/output/
+
+# User settings (runtime)
+src/PptPowerKeys/Settings/UserSettings.json
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE
+.idea/
+*.swp
+*~

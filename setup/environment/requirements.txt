@@ -1,0 +1,6 @@
+# PPT PowerKeys — зависимости окружения (справочно)
+# Основная разработка ведётся в Visual Studio / VSTO на Windows.
+#
+# NuGet-пакеты (будут в .csproj):
+#   Microsoft.Office.Interop.PowerPoint
+#   Microsoft.Office.Tools.Common.v4.0.Utilities
