@@ -7,6 +7,22 @@ PowerPoint plugin. Shortcuts
 
 ---
 
+## Навигация по репозиторию
+
+| Раздел | Описание |
+|--------|----------|
+| [`src/PptPowerKeys/`](./src/PptPowerKeys) | Код плагина (`Core`, `Commands`, `UI`, `Settings`) |
+| [`docs/architecture.md`](./docs/architecture.md) | Архитектура |
+| [`docs/adr/`](./docs/adr) | Architecture Decision Records |
+| [`docs/cursor-workflow.md`](./docs/cursor-workflow.md) | AI-workflow в Cursor: архитектор + субагенты |
+| [`sprints/`](./sprints) | Спринты, backlog, roadmap |
+| [`setup/environment/`](./setup/environment) | Настройка окружения разработки |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Как контрибьютить |
+| [`AGENTS.md`](./AGENTS.md) | Инструкции для AI-агентов |
+| [`.github/`](./.github) | PR-шаблон, review, issue-шаблоны, CODEOWNERS |
+
+---
+
 ## Общая концепция
 
 **PPT PowerKeys** — это COM-надстройка (`.dll`) для Microsoft PowerPoint (Windows, версии 2013–2021, Microsoft 365), которая добавляет в ленту отдельную вкладку **PowerKeys** и регистрирует глобальные клавиатурные сочетания для >100 команд. Все шорткаты настраиваемы через встроенный менеджер горячих клавиш.
