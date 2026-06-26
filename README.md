@@ -1,6 +1,20 @@
 # ASN-PP-PowerKeys
 PowerPoint plugin. Shortcuts
 
+> ### Migration: VSTO → Office Web Add-in
+> Проект мигрирует с Windows-only **VSTO** на кроссплатформенный **Office Web Add-in**.
+> Целевая архитектура, инструкция по запуску и карта VSTO → Office.js — в
+> [`docs/migration/`](docs/migration/).
+>
+> - `src/PptPowerKeys.Core` — бизнес-логика (.NET 8, чистый C#, юнит-тесты без PowerPoint)
+> - `src/PptPowerKeys.Api` — ASP.NET Core backend (Swagger)
+> - `src/PptPowerKeys.AddIn` — task pane (TypeScript + React + Fluent UI + Office.js)
+> - `src/PptPowerKeys.VstoLegacy*` — старый VSTO-проект (заморожен)
+>
+> Сборка/тесты: `dotnet test PptPowerKeys.sln`. Раздел ниже описывает **исходный VSTO**-замысел и сохранён как продуктовая спецификация.
+
+---
+
 # PPT PowerKeys — Плагин для Microsoft PowerPoint
 
 > Плагин для PowerPoint, воспроизводящий и расширяющий функционал **ShortCut Tools** — незаменимого инструмента для консультантов McKinsey, BCG, Bain и всех, кто работает со слайдами профессионально.
