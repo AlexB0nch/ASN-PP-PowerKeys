@@ -1,0 +1,13 @@
+---
+description: Git-процесс, ветки, коммиты и PR для PPT PowerKeys.
+alwaysApply: true
+---
+
+# Git-процесс
+
+- Не пушить напрямую в `main`.
+- Ветки: `cursor/<кратко>-7151` (агенты Cursor) или `feature/<кратко>`.
+- Коммиты по Conventional Commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`. Один коммит — одно логическое изменение.
+- PR в `main` по шаблону @.github/PULL_REQUEST_TEMPLATE.md, с указанием Sprint и Task ID.
+- Review по @.github/review/CHECKLIST.md и процессу @.github/review/PROCESS.md.
+- Задачи берём из `sprints/sprint-NN-*/backlog.md` и двигаем по статусам Todo → In Progress → In Review → Done.

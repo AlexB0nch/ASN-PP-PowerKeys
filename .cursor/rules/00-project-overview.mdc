@@ -1,0 +1,24 @@
+---
+description: Обзор проекта PPT PowerKeys — что это, стек, где что лежит. Базовый контекст для любой задачи.
+alwaysApply: true
+---
+
+# PPT PowerKeys
+
+COM-надстройка (VSTO) для Microsoft PowerPoint: вкладка ленты **PowerKeys** + >100 настраиваемых шорткатов.
+
+- Описание продукта: @README.md
+- Архитектура: @docs/architecture.md
+- Общие инструкции агентам: @AGENTS.md
+
+## Стек
+- C# + VSTO, `Microsoft.Office.Interop.PowerPoint`
+- .NET Framework 4.7.2+ / .NET 6+, per-user COM Add-in (`HKCU`)
+- Совместимость: PowerPoint 2013–2021 / M365, x86 и x64
+
+## Структура
+- `src/PptPowerKeys/` — `Core`, `Commands`, `UI`, `Settings`
+- `tests/`, `installer/`, `docs/`, `sprints/`
+
+## Окружение
+Сборка/тест VSTO — только на Windows + PowerPoint. Cloud-агенты (Linux) — для правок, рефактора, docs и review, не для сборки против Office.
