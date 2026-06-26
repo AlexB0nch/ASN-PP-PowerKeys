@@ -1,0 +1,9 @@
+# Владельцы кода — автоматически назначаются ревьюерами PR.
+# Замените @maintainer на реальные GitHub-аккаунты.
+
+*                       @AlexB0nch
+
+/src/PptPowerKeys/Core/  @AlexB0nch
+/docs/                   @AlexB0nch
+/sprints/                @AlexB0nch
+/.cursor/                @AlexB0nch
