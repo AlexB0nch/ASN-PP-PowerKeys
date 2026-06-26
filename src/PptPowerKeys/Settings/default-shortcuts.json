@@ -1,0 +1,10 @@
+{
+  "Profile": "Custom",
+  "Shortcuts": [
+    { "CommandId": "AlignLeft", "Keys": "Alt+1" },
+    { "CommandId": "AlignCenterHorizontal", "Keys": "Alt+2" },
+    { "CommandId": "SameWidth", "Keys": "Alt+B" },
+    { "CommandId": "FillColor", "Keys": "Alt+G" },
+    { "CommandId": "ToggleZoom", "Keys": "F1" }
+  ]
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="OnLoad">
+  <ribbon>
+    <tabs>
+      <tab id="tabPowerKeys" label="PowerKeys" insertAfterMso="TabHome">
+        <group id="grpAlignment" label="Выравнивание">
+          <button id="btnAlignLeft" label="Left" screentip="Align Left" onAction="OnAction" size="large" imageMso="ObjectsAlignLeft" />
+          <button id="btnAlignCenterH" label="Center" screentip="Align Center Horizontal" onAction="OnAction" imageMso="ObjectsAlignCenterHorizontal" />
+          <button id="btnAlignRight" label="Right" screentip="Align Right" onAction="OnAction" imageMso="ObjectsAlignRight" />
+          <button id="btnAlignTop" label="Top" screentip="Align Top" onAction="OnAction" imageMso="ObjectsAlignTop" />
+          <button id="btnAlignMiddle" label="Middle" screentip="Align Middle Vertical" onAction="OnAction" imageMso="ObjectsAlignMiddleVertical" />
+          <button id="btnAlignBottom" label="Bottom" screentip="Align Bottom" onAction="OnAction" imageMso="ObjectsAlignBottom" />
+          <button id="btnDistributeH" label="Dist H" screentip="Distribute Horizontal" onAction="OnAction" imageMso="ObjectsDistributeHorizontally" />
+          <button id="btnDistributeV" label="Dist V" screentip="Distribute Vertical" onAction="OnAction" imageMso="ObjectsDistributeVertically" />
+        </group>
+        <group id="grpResize" label="Размер">
+          <button id="btnSameWidth" label="Same Width" onAction="OnAction" imageMso="ObjectsSameWidth" />
+          <button id="btnSameHeight" label="Same Height" onAction="OnAction" imageMso="ObjectsSameHeight" />
+          <button id="btnStretchLeft" label="To Left" onAction="OnAction" imageMso="ObjectsAlignLeft" />
+          <button id="btnStretchRight" label="To Right" onAction="OnAction" imageMso="ObjectsAlignRight" />
+        </group>
+        <group id="grpObjects" label="Объекты">
+          <button id="btnInsertRectangle" label="Rectangle" onAction="OnAction" imageMso="ShapeRectangle" />
+          <button id="btnInsertSquare" label="Square" onAction="OnAction" imageMso="ShapeRectangle" />
+          <button id="btnInsertCircle" label="Circle" onAction="OnAction" imageMso="ShapeOval" />
+          <button id="btnInsertLine" label="Line" onAction="OnAction" imageMso="ShapeStraightLine" />
+          <button id="btnInsertTextbox" label="Textbox" onAction="OnAction" imageMso="TextBoxInsert" />
+          <button id="btnInsertArrow" label="Arrow" onAction="OnAction" imageMso="ShapeRightArrow" />
+        </group>
+        <group id="grpDuplicate" label="Дублировать">
+          <button id="btnDuplicateRight" label="Right" onAction="OnAction" imageMso="ObjectBringForward" />
+          <button id="btnDuplicateLeft" label="Left" onAction="OnAction" imageMso="ObjectSendBackward" />
+          <button id="btnDuplicateDown" label="Down" onAction="OnAction" imageMso="AlignBottom" />
+          <button id="btnDuplicateUp" label="Up" onAction="OnAction" imageMso="AlignTop" />
+        </group>
+        <group id="grpOrder" label="Порядок">
+          <button id="btnBringToFront" label="To Front" onAction="OnAction" imageMso="ObjectBringToFront" />
+          <button id="btnSendToBack" label="To Back" onAction="OnAction" imageMso="ObjectSendToBack" />
+          <button id="btnBringForward" label="Forward" onAction="OnAction" imageMso="ObjectBringForward" />
+          <button id="btnSendBackward" label="Backward" onAction="OnAction" imageMso="ObjectSendBackward" />
+          <button id="btnGroup" label="Group" onAction="OnAction" imageMso="ObjectsGroup" />
+          <button id="btnUngroup" label="Ungroup" onAction="OnAction" imageMso="ObjectsUngroup" />
+        </group>
+        <group id="grpFormat" label="Формат">
+          <button id="btnFillColor" label="Fill" onAction="OnAction" imageMso="ShapeFillColorPicker" />
+          <button id="btnLineColor" label="Line" onAction="OnAction" imageMso="OutlineColorPicker" />
+          <button id="btnTextColor" label="Text Color" onAction="OnAction" imageMso="FontColorPicker" />
+          <button id="btnFormatPainter" label="Format Painter" onAction="OnAction" imageMso="FormatPainter" />
+        </group>
+        <group id="grpText" label="Текст">
+          <button id="btnPasteUnformatted" label="Paste Plain" onAction="OnAction" imageMso="PasteTextOnly" />
+          <button id="btnAddup" label="Addup" onAction="OnAction" imageMso="CalculateNow" />
+          <button id="btnSuperscript" label="Superscript" onAction="OnAction" imageMso="FontSuperscript" />
+          <button id="btnSubscript" label="Subscript" onAction="OnAction" imageMso="FontSubscript" />
+        </group>
+        <group id="grpSlides" label="Слайды">
+          <button id="btnToggleZoom" label="Zoom" onAction="OnAction" imageMso="ZoomDialog" />
+          <button id="btnSlideSorter" label="Sorter" onAction="OnAction" imageMso="SlideSorter" />
+          <button id="btnPrintSlide" label="Print" onAction="OnAction" imageMso="FilePrint" />
+          <button id="btnCopySlide" label="Copy Slide" onAction="OnAction" imageMso="SlideDuplicate" />
+        </group>
+        <group id="grpSettings" label="Настройки">
+          <button id="btnShortcutManager" label="Shortcuts" onAction="OnAction" imageMso="KeyboardCustomization" />
+          <button id="btnColorScheme" label="Colors" onAction="OnAction" imageMso="ThemeColorsGallery" />
+          <button id="btnResetDefaults" label="Reset" onAction="OnAction" imageMso="Undo" />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
