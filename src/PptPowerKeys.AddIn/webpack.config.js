@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const DEFAULT_DEV_API = "https://localhost:7168";
-const DEFAULT_PROD_API = "https://pptpowerkeys-api.azurewebsites.net";
+const DEFAULT_PROD_API = "https://95.140.152.103.sslip.io";
 
 module.exports = (env, argv) => {
   const dev = argv.mode === "development";

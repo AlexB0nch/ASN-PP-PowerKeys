@@ -71,7 +71,7 @@ jobs:
       - name: Build production add-in
         env:
           ADDIN_BASE_URL: https://alexb0nch.github.io/ASN-PP-PowerKeys
-          API_BASE_URL: https://pptpowerkeys-api.azurewebsites.net
+          API_BASE_URL: https://95.140.152.103.sslip.io
         run: npm run build:prod
 
       # The built task pane (dist/ + manifest.prod.xml) is published as an artifact.
