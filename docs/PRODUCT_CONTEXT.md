@@ -61,6 +61,18 @@ PowerPoint (Desktop/Web/Mac/iPad)
 ## 6. Дорожная карта / статус
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
+**Текущее состояние (2026-06-27):** надстройка **загружается в PowerPoint Online** — production-манифест
+`src/PptPowerKeys.AddIn/manifest.prod.xml` (статика на GitHub Pages) открывает task pane «PptPowerKeys (Web)».
+Осталось: **API не задеплоен** → панель показывает «Cannot reach backend» (см. задачу S01-011).
+
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S01-008:** dev/prod манифесты разделены; production URL подставляются при сборке (`ADDIN_BASE_URL`, `API_BASE_URL`).
   Для PowerPoint on the web достаточно `DesktopFormFactor` + публичные HTTPS URL (отдельный `WebFormFactor` в add-in only manifest не требуется).
+- **S01-009:** prod-манифесту дан отдельный `<Id>` (`5b0ca36f-...`), отличный от dev (`92d7d44c-...`) — Office Online
+  кэширует надстройку по `<Id>`, одинаковый GUID приводил к отдаче закэшированного localhost-SourceLocation.
+  prod `DisplayName` = «PptPowerKeys (Web)».
+- **S01-010:** prod-манифест `manifest.prod.xml` **закоммичен** в репозиторий (убран из `.gitignore`) — пользователь
+  устанавливает надстройку через `git pull` + upload файла из клона, и prod-манифест должен быть доступен напрямую.
+  CI-шаг (`ci.yml`) защищает закоммиченный файл от дрейфа с шаблоном.
+- **Хостинг (2026-06-27):** статика add-in — **GitHub Pages** (`https://alexb0nch.github.io/ASN-PP-PowerKeys/`).
+  API планируется на публичный HTTPS-хост (Azure App Service `pptpowerkeys-api` по умолчанию) — задача S01-011.

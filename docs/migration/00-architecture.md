@@ -101,5 +101,9 @@ Sideload `src/PptPowerKeys.AddIn/manifest.dev.xml` (или `manifest.xml`) в Po
 - [x] В новой архитектуре нет зависимости от VSTO и .NET Framework 4.8.
 - [x] Манифест валиден и заявляет запуск на Windows / Mac / Web / iPad.
 - [x] CI/CD (GitHub Actions) собирает Core+API, гоняет тесты, собирает add-in.
-- [ ] Полный функциональный паритет и реальный sideload в PowerPoint — требует
-      Windows/Mac с Office (вне CI), выполняется в Phase 4.
+- [x] **Реальный sideload в PowerPoint Online подтверждён** (2026-06-27): production-манифест
+      `manifest.prod.xml` грузится, task pane «PptPowerKeys (Web)» открывается и рендерит UI
+      (S01-008/009/010). Статика — на GitHub Pages.
+- [ ] **API задеплоен на публичный HTTPS-хост** — пока нет: панель показывает «Cannot reach backend»
+      (`pptpowerkeys-api.azurewebsites.net` не поднят). Следующая задача — S01-011.
+- [ ] Полный функциональный паритет команд (выполнение layout-операций в живом PowerPoint) — Phase 4.
