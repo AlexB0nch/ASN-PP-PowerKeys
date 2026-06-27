@@ -53,11 +53,14 @@ PowerPoint (Desktop/Web/Mac/iPad)
 Подробности и нюансы Cloud — в `AGENTS.md`. Кратко:
 - Backend: `dotnet test PptPowerKeys.sln`; запуск API `cd src/PptPowerKeys.Api && dotnet run` (http://localhost:5168, `/swagger`).
 - Add-in: `cd src/PptPowerKeys.AddIn && npm ci`; dev `npm start` (https://localhost:3000); проверки `npm run typecheck|validate|build`.
-- CI: `.github/workflows/ci.yml` (jobs: backend .NET 8 + add-in TypeScript на ubuntu).
-- Реальный sideload в PowerPoint требует Windows/Mac с Office (вне CI) — Phase 4.
+- **Production (PowerPoint Online):** `manifest.dev.xml` (localhost) vs `manifest.prod.xml` (генерируется из `manifest.template.xml`);
+  `npm run build:prod` / `validate:prod`; статика на GitHub Pages, API на Azure. Runbook: `docs/migration/02-powerpoint-web-deploy.md`.
+- CI: `.github/workflows/ci.yml` (jobs: backend .NET 8 + add-in TypeScript на ubuntu); deploy add-in — `.github/workflows/deploy-addin-pages.yml`.
+- Реальный sideload в PowerPoint требует Office (Desktop/Web); автотесты не покрывают загрузку iframe в браузере.
 
 ## 6. Дорожная карта / статус
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
-- _(заполняется по мере принятия продуктовых решений)_
+- **S01-008:** dev/prod манифесты разделены; production URL подставляются при сборке (`ADDIN_BASE_URL`, `API_BASE_URL`).
+  Для PowerPoint on the web достаточно `DesktopFormFactor` + публичные HTTPS URL (отдельный `WebFormFactor` в add-in only manifest не требуется).

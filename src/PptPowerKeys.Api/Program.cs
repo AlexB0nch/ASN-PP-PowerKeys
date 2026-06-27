@@ -25,13 +25,42 @@ builder.Services.AddSingleton<SettingsStore>();
 
 // The Office task pane runs on a different origin (the add-in dev server / CDN),
 // so CORS is required. Origins are configurable via "Cors:AllowedOrigins".
+// Production also allows the GitHub Pages host used for the add-in bundle.
 const string CorsPolicy = "AddInClients";
-var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-    ?? new[] { "https://localhost:3000" };
+var configuredOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? Array.Empty<string>();
+var allowedOrigins = configuredOrigins
+    .Concat(new[]
+    {
+        "https://localhost:3000",
+        "https://alexbonch.github.io",
+    })
+    .Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicy, policy => policy
         .WithOrigins(allowedOrigins)
+        .SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin))
+            {
+                return false;
+            }
+
+            if (allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // Office Online may load the task pane from a public static host while
+            // the exact path varies (GitHub Pages project sites, custom domains).
+            return Uri.TryCreate(origin, UriKind.Absolute, out var uri)
+                && uri.Scheme == Uri.UriSchemeHttps
+                && uri.Host.Equals("alexbonch.github.io", StringComparison.OrdinalIgnoreCase);
+        })
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
