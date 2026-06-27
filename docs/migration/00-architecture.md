@@ -31,7 +31,7 @@ PowerPoint (Desktop / Web / Mac / iPad)
 | `src/PptPowerKeys.VstoLegacy*` | Замороженный старый VSTO-проект (Windows-only). Не развивается. |
 
 Корневой `PptPowerKeys.sln` объединяет .NET 8 проекты (Core + Api + Tests).
-`src/PptPowerKeys.VstoLegacy.sln` — отдельный solution для legacy (открывается только на Windows с VS + VSTO).
+`src/PptPowerKeys.VstoLegacy.sln` — отдельный solution для legacy (только Windows + **Visual Studio 2022** + workload VSTO).
 
 ## Ключевой архитектурный приём: граница `ShapeBounds`
 
@@ -96,7 +96,8 @@ Sideload `src/PptPowerKeys.AddIn/manifest.xml` в PowerPoint
 
 - [x] Бизнес-логика покрыта юнит-тестами **без** зависимости от PowerPoint.
 - [x] В новой архитектуре нет зависимости от VSTO и .NET Framework 4.8.
-- [x] Манифест валиден и заявляет запуск на Windows / Mac / Web / iPad.
+- [x] Манифест валиден по схеме (`npm run validate`) для **локального sideload** (Desktop).
+- [ ] **PowerPoint Web:** манифест пока указывает на `localhost` и содержит только `DesktopFormFactor` — в браузере надстройка не загружается (см. `S01-008`).
 - [x] CI/CD (GitHub Actions) собирает Core+API, гоняет тесты, собирает add-in.
 - [ ] Полный функциональный паритет и реальный sideload в PowerPoint — требует
       Windows/Mac с Office (вне CI), выполняется в Phase 4.

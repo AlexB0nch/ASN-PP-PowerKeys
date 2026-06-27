@@ -25,8 +25,8 @@ PowerPoint plugin. Shortcuts
 
 **PPT PowerKeys** — это COM-надстройка (`.dll`) для Microsoft PowerPoint (Windows, версии 2013–2021, Microsoft 365), которая добавляет в ленту отдельную вкладку **PowerKeys** и регистрирует глобальные клавиатурные сочетания для >100 команд. Все шорткаты настраиваемы через встроенный менеджер горячих клавиш.
 
-**Технический стек:**
-- Visual Studio / VSTO (Visual Studio Tools for Office) на C# или VB.NET
+**Технический стек (legacy VSTO):**
+- **Visual Studio 2022** + workload VSTO (Visual Studio Tools for Office) на C# — не VS Code и не VS 2019
 - Интеграция через `Microsoft.Office.Interop.PowerPoint`
 - Регистрация COM Add-in через реестр Windows
 - Установка через `.msi` / `.exe` инсталлятор

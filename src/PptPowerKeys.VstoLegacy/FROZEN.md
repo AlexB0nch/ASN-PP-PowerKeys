@@ -5,7 +5,7 @@ This is the original Windows-only **VSTO** add-in (C# / .NET Framework 4.8).
 It is **frozen** as part of the migration to the Office Web Add-in architecture
 (see [`docs/migration/`](../../docs/migration/)). No new features are added here.
 
-- Builds only on Windows with Visual Studio + the VSTO workload.
+- Builds only on Windows with **Visual Studio 2022** + the VSTO workload (solution targets VS 17).
 - Does **not** build on Linux/CI and is intentionally excluded from the root
   `PptPowerKeys.sln` and the CI pipeline.
 - Kept for reference and for the coexistence period (Phase 0–4) during which the

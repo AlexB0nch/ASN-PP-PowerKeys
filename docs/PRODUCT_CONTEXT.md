@@ -29,7 +29,9 @@ PowerPoint (Desktop/Web/Mac/iPad)
 | `src/PptPowerKeys.VstoLegacy*` | **Заморожен** (Windows-only VSTO). Новые фичи не добавляются (`FROZEN.md`). |
 
 Корневой `PptPowerKeys.sln` = Core + Api + Tests (кроссплатформенно).
-`src/PptPowerKeys.VstoLegacy.sln` — отдельный legacy-solution (только Windows + VS + VSTO).
+`src/PptPowerKeys.VstoLegacy.sln` — отдельный legacy-solution (только Windows + **Visual Studio 2022** + workload VSTO).
+**Важно:** для legacy нужна именно **Visual Studio 2022** (solution target — VS 17); VS Code / Rider / VS 2019 не подходят.
+Для активной разработки (Core/Api/AddIn) Visual Studio **не обязательна** — достаточно `dotnet` CLI и Node.js (см. `AGENTS.md`).
 
 ## 3. Инварианты / правила (нарушать нельзя)
 - **Граница `ShapeBounds`** (`{id,left,top,width,height}` в points): host читает геометрию через Office.js →
@@ -60,4 +62,5 @@ PowerPoint (Desktop/Web/Mac/iPad)
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
-- _(заполняется по мере принятия продуктовых решений)_
+- **VS 2022 для VSTO:** сборка/отладка `VstoLegacy` — только Windows + Visual Studio 2022 + workload «Office/SharePoint development» (VSTO). Не «любая Visual Studio».
+- **PowerPoint Online (Web):** dev-манифест с `https://localhost:3000` не работает в браузере; для Web нужны публичные HTTPS URL, `WebFormFactor` в манифесте и задеплоенный API (задача `S01-008`).
