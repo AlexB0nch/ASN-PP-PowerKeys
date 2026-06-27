@@ -22,7 +22,13 @@ packages/
 installer/output/
 
 # User settings (runtime)
-src/PptPowerKeys/Settings/UserSettings.json
+src/PptPowerKeys.VstoLegacy/Settings/UserSettings.json
+
+# Node / Office add-in
+node_modules/
+src/PptPowerKeys.AddIn/dist/
+npm-debug.log*
+*.log
 
 # OS
 Thumbs.db

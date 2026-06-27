@@ -1,0 +1,82 @@
+name: Deploy
+
+# Story 5: build → test → deploy without manual machine installs.
+# The deploy steps are gated on the relevant secrets being present, so the
+# workflow is safe to keep enabled before any hosting is configured.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: pptpowerkeys-api
+  DOTNET_VERSION: 8.0.x
+
+jobs:
+  deploy-api:
+    name: Build & deploy API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Test
+        run: dotnet test PptPowerKeys.sln --configuration Release
+
+      - name: Publish API
+        run: dotnet publish src/PptPowerKeys.Api/PptPowerKeys.Api.csproj -c Release -o ./publish
+
+      - name: Deploy to Azure Web App
+        if: ${{ env.AZURE_PUBLISH_PROFILE != '' }}
+        env:
+          AZURE_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
+
+      - name: Skip notice
+        if: ${{ env.AZURE_PUBLISH_PROFILE == '' }}
+        env:
+          AZURE_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        run: echo "AZURE_WEBAPP_PUBLISH_PROFILE secret not set — skipping API deploy."
+
+  build-addin:
+    name: Build & publish add-in artifact
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/PptPowerKeys.AddIn
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: src/PptPowerKeys.AddIn/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # The built task pane (dist/ + manifest.xml) is published as an artifact.
+      # A production pipeline would upload dist/ to a CDN/Static Web App and push
+      # manifest.xml to the Microsoft 365 Admin Center (Centralized Deployment).
+      - name: Upload add-in bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: pptpowerkeys-addin
+          path: |
+            src/PptPowerKeys.AddIn/dist
+            src/PptPowerKeys.AddIn/manifest.xml
