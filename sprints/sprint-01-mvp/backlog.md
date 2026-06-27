@@ -13,4 +13,5 @@
 | S01-005 | ResizeCommands (20 команд) | Commands | Todo | — |
 | S01-006 | RibbonTab.xml — вкладка PowerKeys | UI | Todo | — |
 | S01-007 | ColorSchemeReader — палитра Slide Master | Core | Todo | — |
-| S01-008 | Исправить загрузку Add-in в PowerPoint Online (Web) | AddIn | Done | PR #7 |
+| S01-008 | Исправить загрузку Add-in в PowerPoint Online (Web) | AddIn | Done | PR #7, #8 |
+| S01-009 | Отдельный Id prod-манифеста (кэш Office отдаёт localhost) | AddIn | In Progress | — |
