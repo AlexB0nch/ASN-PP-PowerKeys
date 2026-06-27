@@ -9,7 +9,7 @@
 | **Task ID** | `S01-011` |
 | **Спринт** | `sprint-01-mvp` |
 | **Компонент** | Api (+ AddIn config, CI/CD) |
-| **Статус** | In Progress |
+| **Статус** | Часть A — Done (PR #11); часть B — за владельцем |
 | **Связано с** | S01-008/009/010 (загрузка add-in решена) |
 
 ## Симптом (от пользователя)
@@ -75,3 +75,16 @@
 ## Примечание для builder
 Сфокусируйся на части **A** — сделай API контейнеризуемым и хост-агностичным, приведи deploy-конфиг и документацию
 в порядок. Часть **B** (создание аккаунта/секрета/URL) выполняет владелец репозитория; чётко опиши эти шаги в доках/PR.
+
+## Приёмка части A (architect, 2026-06-27) — PR #11
+Принято. Проверено независимо (docker на VM нет → запуск опубликованного API с теми же env, что в образе):
+- `Dockerfile` (context = корень репо, restore Core+Api, multi-stage) + `.dockerignore`; `render.yaml` как альтернатива.
+- `Program.cs` читает `$PORT` (проверено `PORT=10000` → `/health` 200); дефолт `ASPNETCORE_URLS=http://+:8080`.
+- `deploy.yml`: gating исправлен (job-level env), без секрета build+test проходят, deploy скипается.
+- Локально: `/health` → 200, `/api/commands` → 200 (76 команд), CORS preflight → 204 `Access-Control-Allow-Origin: https://alexb0nch.github.io`.
+- `dotnet test -c Release` — 47 passed; `npm run validate:prod` — valid.
+
+**Остаётся часть B (владелец):** создать Azure App Service `pptpowerkeys-api` (free F1) → скачать Publish Profile →
+добавить секрет `AZURE_WEBAPP_PUBLISH_PROFILE` в GitHub Actions → push в `main` задеплоит API. Проверить
+`https://pptpowerkeys-api.azurewebsites.net/health` → 200 и панель в PowerPoint Online без «Cannot reach backend».
+Альтернатива без Azure: Render (Blueprint `render.yaml`) — тогда передать новый URL, builder обновит `API_BASE_URL`.

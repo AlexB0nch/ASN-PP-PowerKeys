@@ -18,6 +18,11 @@ jobs:
   deploy-api:
     name: Build & deploy API
     runs-on: ubuntu-latest
+    # Map the secret to a job-level env so step `if:` conditions can read it.
+    # (A step cannot reference its own step-level env in its own `if:`, and
+    # secrets are not allowed directly in `if:` expressions — hence this hop.)
+    env:
+      AZURE_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,8 +39,6 @@ jobs:
 
       - name: Deploy to Azure Web App
         if: ${{ env.AZURE_PUBLISH_PROFILE != '' }}
-        env:
-          AZURE_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
@@ -44,9 +47,7 @@ jobs:
 
       - name: Skip notice
         if: ${{ env.AZURE_PUBLISH_PROFILE == '' }}
-        env:
-          AZURE_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        run: echo "AZURE_WEBAPP_PUBLISH_PROFILE secret not set — skipping API deploy."
+        run: echo "AZURE_WEBAPP_PUBLISH_PROFILE secret not set — skipping API deploy (build + test still ran)."
 
   build-addin:
     name: Build & publish add-in artifact

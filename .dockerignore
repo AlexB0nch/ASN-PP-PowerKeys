@@ -1,0 +1,15 @@
+# Keep the build context small and deterministic for `docker build .`.
+**/bin/
+**/obj/
+**/.vs/
+**/node_modules/
+src/PptPowerKeys.AddIn/dist/
+src/PptPowerKeys.VstoLegacy/
+src/PptPowerKeys.VstoLegacy*/
+.git/
+.github/
+docs/
+sprints/
+installer/output/
+**/*.user
+**/*.log
