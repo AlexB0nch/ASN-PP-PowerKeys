@@ -16,4 +16,4 @@
 | S01-008 | Исправить загрузку Add-in в PowerPoint Online (Web) | AddIn | Done | PR #7, #8 |
 | S01-009 | Отдельный Id prod-манифеста (кэш Office отдаёт localhost) | AddIn | Done | PR #9 |
 | S01-010 | Закоммитить готовый production-манифест в репозиторий | AddIn | Done | PR #10 |
-| S01-011 | Задеплоить API на публичный HTTPS (Cannot reach backend) | Api | In Progress | — |
+| S01-011 | Задеплоить API на публичный HTTPS (Cannot reach backend) | Api | In Review (часть A done; часть B — владелец) | PR #11 |
