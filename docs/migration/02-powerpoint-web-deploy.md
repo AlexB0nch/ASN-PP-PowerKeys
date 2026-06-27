@@ -83,10 +83,27 @@ CORS в production (`appsettings.Production.json` + `Program.cs`) разреша
 Prod-GUID можно переопределить через env `ADDIN_ID` при сборке (`npm run build:manifest`); по умолчанию
 используется `5b0ca36f-...`. Менять dev-GUID **не нужно**.
 
+## Какой манифест грузить (важно)
+
+> **Для PowerPoint Online загружайте только `src/PptPowerKeys.AddIn/manifest.prod.xml`.**
+> Этот файл **закоммичен в репозиторий** (S01-010) — после `git pull origin main` он уже есть в вашем
+> клоне с публичными HTTPS URL (`alexb0nch.github.io` / `pptpowerkeys-api.azurewebsites.net`) и prod-`<Id>`
+> `5b0ca36f-...`. Грузите его напрямую из клона — скачивать что-либо отдельно не нужно.
+
+| Файл | Назначение | Грузить в Online? |
+|------|------------|-------------------|
+| `manifest.prod.xml` | **Production** (публичные URL, prod-Id) | ✅ **Да — единственный для Online** |
+| `manifest.xml` / `manifest.dev.xml` | Локальная dev-разработка (`localhost:3000`, dev-Id `92d7d44c-...`) | ❌ Нет — вызывает «localhost refused to connect» |
+
+`manifest.prod.xml` детерминированно генерируется из `manifest.template.xml` (`npm run build:manifest`),
+а CI проверяет, что закоммиченная копия не разошлась с шаблоном. Если нужно переопределить URL/Id —
+пересоберите его и закоммитьте заново.
+
 ## Sideload в PowerPoint Online
 
-1. Задеплойте статику и API (или используйте уже задеплоенные URL из PR).
-2. Скачайте `manifest.prod.xml` из артефакта CI / GitHub Pages.
+1. `git pull origin main` — в клоне появляется `src/PptPowerKeys.AddIn/manifest.prod.xml`
+   (статика/API уже задеплоены на публичные URL).
+2. Возьмите файл `src/PptPowerKeys.AddIn/manifest.prod.xml` **прямо из клона** (НЕ `manifest.xml`/`manifest.dev.xml`).
 3. **Удалите старую надстройку из Office, если загружали её раньше:** **Insert → My Add-ins →**
    найдите PptPowerKeys → **Remove** (это сбрасывает кэш localhost-версии). Из-за нового prod-`<Id>`
    prod-надстройка появится как **`PptPowerKeys (Web)`** — отдельно от dev-`PptPowerKeys`.

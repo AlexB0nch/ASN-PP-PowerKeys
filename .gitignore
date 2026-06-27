@@ -27,7 +27,6 @@ src/PptPowerKeys.VstoLegacy/Settings/UserSettings.json
 # Node / Office add-in
 node_modules/
 src/PptPowerKeys.AddIn/dist/
-src/PptPowerKeys.AddIn/manifest.prod.xml
 npm-debug.log*
 *.log
 

@@ -15,4 +15,4 @@
 | S01-007 | ColorSchemeReader — палитра Slide Master | Core | Todo | — |
 | S01-008 | Исправить загрузку Add-in в PowerPoint Online (Web) | AddIn | Done | PR #7, #8 |
 | S01-009 | Отдельный Id prod-манифеста (кэш Office отдаёт localhost) | AddIn | Done | PR #9 |
-| S01-010 | Закоммитить готовый production-манифест в репозиторий | AddIn | In Progress | — |
+| S01-010 | Закоммитить готовый production-манифест в репозиторий | AddIn | Done | PR #10 |

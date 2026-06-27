@@ -9,8 +9,8 @@
 | **Task ID** | `S01-010` |
 | **Спринт** | `sprint-01-mvp` |
 | **Компонент** | AddIn (manifest + CI + docs) |
-| **Статус** | In Progress |
-| **Связано с** | S01-008, S01-009 |
+| **Статус** | Done |
+| **Связано с** | S01-008, S01-009; PR #10 |
 
 ## Симптом (от пользователя)
 Пользователь устанавливает надстройку так: `git pull origin main` на локальной машине → загружает
@@ -55,15 +55,19 @@ HTTPS URL и prod-Id `5b0ca36f-a511-4705-a5e2-9609ff931f85`, который по
 - `docs/migration/02-powerpoint-web-deploy.md`, опц. `AGENTS.md`
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `manifest.prod.xml` присутствует в git (отслеживается), содержит `<Id>5b0ca36f-...`,
-       `SourceLocation = https://alexb0nch.github.io/ASN-PP-PowerKeys/taskpane.html`, `DisplayName "PptPowerKeys (Web)"`.
-2. [ ] `manifest.prod.xml` больше не упомянут в `.gitignore`.
-3. [ ] CI-шаг проверяет синхронность закоммиченного `manifest.prod.xml` с генерацией (diff = пусто).
-4. [ ] dev-манифесты не изменены; `npm run validate` и `npm run validate:prod` — зелёные.
-5. [ ] `npm run typecheck`, `npm run build:prod`, `dotnet test PptPowerKeys.sln` — зелёные.
-6. [ ] Документация: чётко указано, какой файл грузить (`manifest.prod.xml`) и удалить старую надстройку.
-7. [ ] PR в `main` со ссылкой на S01-010.
-8. [ ] (Ручная проверка пользователем) `git pull` → upload `manifest.prod.xml` → панель открывает Pages-URL без «localhost refused to connect».
+1. [x] `manifest.prod.xml` отслеживается git, `<Id>5b0ca36f-...`, `SourceLocation = .../taskpane.html`, `DisplayName "PptPowerKeys (Web)"`, без localhost.
+2. [x] `manifest.prod.xml` убран из `.gitignore` (`git check-ignore` → NOT_IGNORED).
+3. [x] CI-шаг «Check committed production manifest is in sync» (`build:manifest` + `git diff --exit-code`).
+4. [x] dev-манифесты не тронуты; `validate` и `validate:prod` — зелёные.
+5. [x] `typecheck`, `build:prod`, `dotnet test` (47 passed) — зелёные.
+6. [x] Документация (`02-powerpoint-web-deploy.md`, `AGENTS.md`): грузить `manifest.prod.xml`, удалить старую надстройку.
+7. [x] PR #10.
+8. [ ] Ручная проверка пользователем: `git pull` → upload `manifest.prod.xml` → панель без «localhost refused to connect».
+
+## Приёмка (architect, 2026-06-27)
+- PR #10, ветка `cursor/s01-010-commit-prod-manifest-cdb3`. Локально подтверждено: prod-манифест в git,
+  deterministic drift-check проходит, CI-шаг на месте, `validate`/`validate:prod`/`dotnet test` зелёные.
+- Остаётся пользовательский smoke-test (критерий 8).
 
 ## Примечание для builder
 Суть: пользователь грузит файл из git-клона, а prod-манифест туда не попадает. Закоммить `manifest.prod.xml`

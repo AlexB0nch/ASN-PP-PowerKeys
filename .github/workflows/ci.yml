@@ -55,5 +55,10 @@ jobs:
       - name: Validate production manifest
         run: npm run validate:prod
 
+      - name: Check committed production manifest is in sync with template
+        run: |
+          npm run build:manifest
+          git diff --exit-code -- manifest.prod.xml
+
       - name: Build
         run: npm run build
