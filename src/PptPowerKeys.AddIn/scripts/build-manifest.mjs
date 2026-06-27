@@ -49,12 +49,18 @@ function normalizeAddinBase(url) {
   return base;
 }
 
-/** API origin for AppDomains / CORS (origin only). */
+/** API origin for AppDomains / CORS (origin only, no path). */
 function normalizeApiOrigin(url) {
   return parseHttpsUrl(url, "API_BASE_URL").origin;
 }
 
+/** Page origin for AppDomains (no path — MS manifest requirement). */
+function normalizeAddinOrigin(url) {
+  return parseHttpsUrl(url, "ADDIN_BASE_URL").origin;
+}
+
 const addinBase = normalizeAddinBase(process.env.ADDIN_BASE_URL ?? defaultAddinBase);
+const addinOrigin = normalizeAddinOrigin(process.env.ADDIN_BASE_URL ?? defaultAddinBase);
 const apiBase = normalizeApiOrigin(process.env.API_BASE_URL ?? defaultApiBase);
 
 const templatePath = path.join(addInDir, "manifest.template.xml");
@@ -63,6 +69,7 @@ const outputPath = path.join(addInDir, "manifest.prod.xml");
 const template = fs.readFileSync(templatePath, "utf8");
 const manifest = template
   .replaceAll("{{ADDIN_BASE_URL}}", addinBase)
+  .replaceAll("{{ADDIN_ORIGIN}}", addinOrigin)
   .replaceAll("{{API_DOMAIN}}", apiBase);
 
 fs.writeFileSync(outputPath, manifest, "utf8");

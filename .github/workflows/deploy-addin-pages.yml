@@ -54,6 +54,7 @@ jobs:
           mkdir -p ../../site
           cp -r dist/. ../../site/
           cp manifest.prod.xml ../../site/manifest.xml
+          touch ../../site/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

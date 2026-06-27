@@ -22,6 +22,7 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: "[name].js",
+      publicPath: "./",
       clean: true,
     },
     resolve: {

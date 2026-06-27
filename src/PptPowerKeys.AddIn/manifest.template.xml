@@ -7,7 +7,7 @@
   xsi:type="TaskPaneApp">
 
   <Id>92d7d44c-7eb7-4ed2-b83b-d6fa8fff9873</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.0.1</Version>
   <ProviderName>ASN-PP-PowerKeys</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="PptPowerKeys" />
@@ -17,7 +17,7 @@
   <SupportUrl DefaultValue="https://github.com/AlexB0nch/ASN-PP-PowerKeys" />
 
   <AppDomains>
-    <AppDomain>{{ADDIN_BASE_URL}}</AppDomain>
+    <AppDomain>{{ADDIN_ORIGIN}}</AppDomain>
     <AppDomain>{{API_DOMAIN}}</AppDomain>
   </AppDomains>
 
