@@ -18,7 +18,7 @@
 
   <AppDomains>
     <AppDomain>https://alexb0nch.github.io</AppDomain>
-    <AppDomain>https://pptpowerkeys-api.azurewebsites.net</AppDomain>
+    <AppDomain>https://95.140.152.103.sslip.io</AppDomain>
   </AppDomains>
 
   <Hosts>

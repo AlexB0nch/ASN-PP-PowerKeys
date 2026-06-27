@@ -21,7 +21,7 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const addInDir = path.resolve(root, "..");
 
 const defaultAddinBase = "https://alexb0nch.github.io/ASN-PP-PowerKeys";
-const defaultApiBase = "https://pptpowerkeys-api.azurewebsites.net";
+const defaultApiBase = "https://95.140.152.103.sslip.io";
 // Production-only GUID, distinct from the dev manifests' 92d7d44c-... Id.
 const defaultAddinId = "5b0ca36f-a511-4705-a5e2-9609ff931f85";
 

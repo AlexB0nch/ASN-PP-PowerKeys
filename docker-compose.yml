@@ -1,0 +1,40 @@
+# Deploy stack for the PptPowerKeys API on a self-managed VDS (S01-012, part A).
+#
+# Caddy terminates HTTPS (Let's Encrypt, automatic) and reverse-proxies to the
+# API container over the internal Docker network. The public hostname is taken
+# from API_PUBLIC_HOST (see Caddyfile + .env); it defaults to the sslip.io host
+# that resolves to the VDS IP, so HTTPS works without owning a domain.
+#
+#   docker compose up -d --build
+#
+# Override the host by exporting API_PUBLIC_HOST (or putting it in a .env file
+# next to this compose file), e.g. API_PUBLIC_HOST=api.example.com.
+
+services:
+  api:
+    build: .
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    expose:
+      - "8080"
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # Forwarded to the Caddyfile; defaults there if unset.
+      API_PUBLIC_HOST: ${API_PUBLIC_HOST:-95.140.152.103.sslip.io}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - api
+
+volumes:
+  caddy_data:
+  caddy_config:
