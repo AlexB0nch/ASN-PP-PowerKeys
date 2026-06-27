@@ -8,6 +8,15 @@ using PptPowerKeys.Core.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Container hosts (Render, Fly, Railway, …) inject the listen port via $PORT
+// rather than ASPNETCORE_URLS. Honour it so the same image runs anywhere; the
+// Dockerfile's ASPNETCORE_URLS=http://+:8080 remains the default fallback.
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrWhiteSpace(port))
+{
+    builder.WebHost.UseUrls($"http://+:{port}");
+}
+
 // Serialize enums as their string names so the TypeScript client can send
 // "AlignLeft" instead of a magic integer.
 builder.Services.ConfigureHttpJsonOptions(options =>
