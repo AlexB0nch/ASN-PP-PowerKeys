@@ -9,7 +9,7 @@
 | **Task ID** | `S01-012` |
 | **Спринт** | `sprint-01-mvp` |
 | **Компонент** | Api (deploy) + AddIn (API_BASE_URL) + CI/CD |
-| **Статус** | In Progress |
+| **Статус** | Часть A — Done (PR #12); часть B — за владельцем |
 | **Связано с** | S01-011 (Dockerfile/контейнеризация готовы); снимает «Cannot reach backend» |
 
 ## Контекст
@@ -76,3 +76,13 @@ PowerPoint Online (S01-008/009/010), но без API показывает «Cann
 ## Примечание для builder
 Хост держи в **одной** переменной (`API_PUBLIC_HOST` / env), чтобы переключение на домен было тривиальным.
 Реальный деплой и секреты — за владельцем (часть B); твоя зона — рабочая обвязка + документация.
+
+## Приёмка части A (architect, 2026-06-27) — PR #12
+Принято. Проверено: `docker-compose.yml` (api + `caddy:2`, авто-HTTPS), `Caddyfile` с `{$API_PUBLIC_HOST:95.140.152.103.sslip.io}`,
+`deploy-vds.yml` (scp+ssh, gated на `VDS_SSH_KEY`, host key не пиннится — отмечено комментарием-риском).
+`manifest.prod.xml`: `AppDomain` API → `https://95.140.152.103.sslip.io`, add-in URLs остались `alexb0nch.github.io`.
+`dotnet test` — 47 passed (incl. CORS), `validate:prod` — valid, drift-check — пусто.
+
+**Остаётся часть B (владелец):** deploy-пользователь + SSH-пара, Docker + compose, порты 80/443, секреты
+`VDS_HOST`/`VDS_USER`/`VDS_SSH_KEY`/(`VDS_SSH_PORT`), запуск workflow «Deploy API to VDS»,
+проверка `https://95.140.152.103.sslip.io/health` → 200.
