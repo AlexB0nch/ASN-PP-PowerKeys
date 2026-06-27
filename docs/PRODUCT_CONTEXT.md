@@ -61,9 +61,10 @@ PowerPoint (Desktop/Web/Mac/iPad)
 ## 6. Дорожная карта / статус
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
-**Текущее состояние (2026-06-27):** надстройка **загружается в PowerPoint Online** — production-манифест
-`src/PptPowerKeys.AddIn/manifest.prod.xml` (статика на GitHub Pages) открывает task pane «PptPowerKeys (Web)».
-Осталось: **API не задеплоен** → панель показывает «Cannot reach backend» (см. задачу S01-011).
+**Текущее состояние (2026-06-27):** сквозной путь работает end-to-end — надстройка **загружается в PowerPoint
+Online** (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), а **API задеплоен на собственный VDS**
+(`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt; деплой по SSH через GitHub Actions).
+`/api/commands` отвечает, CORS для GitHub Pages работает.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S01-008:** dev/prod манифесты разделены; production URL подставляются при сборке (`ADDIN_BASE_URL`, `API_BASE_URL`).
@@ -74,5 +75,8 @@ PowerPoint (Desktop/Web/Mac/iPad)
 - **S01-010:** prod-манифест `manifest.prod.xml` **закоммичен** в репозиторий (убран из `.gitignore`) — пользователь
   устанавливает надстройку через `git pull` + upload файла из клона, и prod-манифест должен быть доступен напрямую.
   CI-шаг (`ci.yml`) защищает закоммиченный файл от дрейфа с шаблоном.
-- **Хостинг (2026-06-27):** статика add-in — **GitHub Pages** (`https://alexb0nch.github.io/ASN-PP-PowerKeys/`).
-  API планируется на публичный HTTPS-хост (Azure App Service `pptpowerkeys-api` по умолчанию) — задача S01-011.
+- **Хостинг (2026-06-27):** статика add-in — **GitHub Pages** (`https://alexb0nch.github.io/ASN-PP-PowerKeys/`);
+  **API — собственный VDS** `https://95.140.152.103.sslip.io` (Docker Compose: Caddy auto-HTTPS + Kestrel-контейнер),
+  деплой по SSH через `.github/workflows/deploy-vds.yml` (секреты `VDS_*` в GitHub Actions). Хост в одной
+  переменной `API_PUBLIC_HOST` (sslip.io → легко сменить на свой домен). Azure-путь (S01-011) остаётся как опция,
+  но не используется. Реальный деплой подтверждён в S01-012.

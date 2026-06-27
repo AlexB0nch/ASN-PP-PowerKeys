@@ -9,7 +9,7 @@
 | **Task ID** | `S01-012` |
 | **Спринт** | `sprint-01-mvp` |
 | **Компонент** | Api (deploy) + AddIn (API_BASE_URL) + CI/CD |
-| **Статус** | Часть A — Done (PR #12); часть B — за владельцем |
+| **Статус** | Done — API задеплоен на VDS, HTTPS работает |
 | **Связано с** | S01-011 (Dockerfile/контейнеризация готовы); снимает «Cannot reach backend» |
 
 ## Контекст
@@ -101,3 +101,15 @@ sudo usermod -aG docker <VDS_USER>   # затем новый SSH-сеанс по
 docker --version && docker compose version
 ```
 После этого перезапустить workflow «Deploy API to VDS» → ожидается `/health` 200.
+
+## Итог (architect, 2026-06-27) — DONE ✅
+После установки Docker на VDS деплой прошёл успешно (run 28295459697, все шаги зелёные, включая health-check).
+Независимая проверка с агентской VM:
+- `https://95.140.152.103.sslip.io/health` → **200** (Kestrel via Caddy).
+- `/api/commands` → **200, 76 команд**.
+- CORS preflight из `https://alexb0nch.github.io` → **204** + корректный `Access-Control-Allow-Origin`.
+- TLS — **валидный Let's Encrypt** (issuer Let's Encrypt, CN `95.140.152.103.sslip.io`).
+- Задеплоенный на Pages `taskpane.js` обращается к `95.140.152.103.sslip.io`.
+
+Сопутствующие PR: #13 (health-check после деплоя), #14 (scp одним архивом), #15 (деплой на любой push в main).
+Остаточный пункт — пользовательский клик-тест в PowerPoint Online (открыть/обновить панель → команды загружаются).
