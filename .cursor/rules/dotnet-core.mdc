@@ -1,0 +1,16 @@
+---
+description: Конвенции для .NET 8 бэкенда PptPowerKeys (Core / Api / Tests).
+globs: src/PptPowerKeys.Core/**/*.cs,src/PptPowerKeys.Api/**/*.cs,src/PptPowerKeys.Tests/**/*.cs
+---
+
+# Конвенции .NET 8 (Core / Api / Tests)
+
+- **Чистота Core:** `PptPowerKeys.Core` не должен зависеть от `Microsoft.Office.*`, ASP.NET или UI.
+  Только переносимая бизнес-логика. Геометрия фигур — через границу `ShapeBounds` (points), а не Office-типы.
+- **Anchor-семантика:** опорная фигура — последняя в выделении (`AnchorIndex` переопределяет). Сохраняй при любых layout-операциях.
+- **Тестируемость:** новую логику покрывай юнит-тестами в `PptPowerKeys.Tests` (xUnit) — **без** PowerPoint/Office.
+  Это же гоняет CI (`dotnet test PptPowerKeys.sln`).
+- **Api — тонкий слой:** endpoints в `PptPowerKeys.Api` лишь валидируют вход и вызывают Core; бизнес-логику в Api не дублируй.
+  Enum'ы сериализуются строками (см. `JsonStringEnumConverter` в `Program.cs`) — имена команд приходят как `"AlignLeft"`.
+- **Совместимость контракта:** при изменении DTO в `Api/Contracts` синхронизируй типы клиента в `AddIn/src/services/types.ts`.
+- **Без секретов/хардкода путей.** CORS-origin'ы и базовые URL — через конфигурацию, не хардкодь.
