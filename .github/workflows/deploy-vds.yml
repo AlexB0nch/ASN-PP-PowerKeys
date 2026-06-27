@@ -75,11 +75,28 @@ jobs:
           username: ${{ secrets.VDS_USER }}
           key: ${{ secrets.VDS_SSH_KEY }}
           port: ${{ secrets.VDS_SSH_PORT || 22 }}
+          command_timeout: 20m
           script: |
             set -e
             cd ~/pptpowerkeys
             docker compose up -d --build
             docker compose ps
+
+      # Confirms the SSH deploy actually produced a working public HTTPS endpoint
+      # (Caddy must also finish provisioning the Let's Encrypt cert), retrying
+      # while the build/cert settle.
+      - name: Verify API health over HTTPS
+        if: ${{ env.VDS_SSH_KEY != '' }}
+        run: |
+          host="${API_PUBLIC_HOST}"
+          echo "Waiting for https://$host/health ..."
+          for i in $(seq 1 30); do
+            code=$(curl -s -m 10 -o /dev/null -w '%{http_code}' "https://$host/health" || true)
+            echo "attempt $i: HTTP $code"
+            if [ "$code" = "200" ]; then echo "API healthy at https://$host/health"; exit 0; fi
+            sleep 10
+          done
+          echo "API did not return 200 from https://$host/health in time"; exit 1
 
       - name: Skip notice
         if: ${{ env.VDS_SSH_KEY == '' }}
