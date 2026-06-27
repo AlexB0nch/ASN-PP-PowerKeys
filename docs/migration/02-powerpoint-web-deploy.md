@@ -66,11 +66,52 @@ Workflow `.github/workflows/deploy-addin-pages.yml` (при push в `main`):
 
 Итоговый URL статики: `https://alexb0nch.github.io/ASN-PP-PowerKeys/taskpane.html`
 
-## Деплой API
+## Деплой API (S01-011)
 
-Workflow `.github/workflows/deploy.yml` публикует API в Azure Web App `pptpowerkeys-api`, если задан секрет `AZURE_WEBAPP_PUBLISH_PROFILE`.
+API — кроссплатформенный ASP.NET Core (.NET 8). Он контейнеризуем (`Dockerfile` в корне репо)
+и слушает порт из окружения, поэтому разворачивается на любом HTTPS-хосте.
 
-CORS в production (`appsettings.Production.json` + `Program.cs`) разрешает origin `https://alexb0nch.github.io`.
+| Артефакт | Назначение |
+|----------|------------|
+| `Dockerfile` (корень репо) | multi-stage `sdk:8.0` → `aspnet:8.0`; build context = **корень репо** (Api ссылается на Core). По умолчанию слушает `http://+:8080`. |
+| `Program.cs` (биндинг порта) | если хост задаёт env `PORT` (Render/Fly/Railway) — слушает `http://+:${PORT}`; иначе работает `ASPNETCORE_URLS` из Dockerfile (8080). |
+| `.github/workflows/deploy.yml` | на push в `main` собирает + тестирует API, затем деплоит в Azure App Service **только если** задан секрет `AZURE_WEBAPP_PUBLISH_PROFILE` (иначе шаг пропускается, workflow не падает). |
+| `render.yaml` (опционально) | Blueprint для Render как альтернатива Azure (через `Dockerfile`). |
+
+CORS в production (`appsettings.Production.json` + `Program.cs`) разрешает origin `https://alexb0nch.github.io`
+и проверяется интеграционным тестом `Cors_AllowsGitHubPagesOrigin`.
+
+### Локальная проверка образа/сервиса
+
+```bash
+# Вариант с Docker
+docker build -t pptpowerkeys-api .          # build context = корень репо
+docker run -p 8080:8080 pptpowerkeys-api
+curl -i http://localhost:8080/health        # → 200 {"status":"ok"}
+curl -i http://localhost:8080/api/commands  # → 200, каталог команд
+
+# Вариант без Docker (тот же бинарь, порт из env)
+ASPNETCORE_URLS=http://+:8080 dotnet run --project src/PptPowerKeys.Api --no-launch-profile
+```
+
+### Что делает владелец репозитория (часть B — нужны учётные данные)
+
+**Основной путь — Azure App Service** (имя `pptpowerkeys-api` совпадает с текущим `API_BASE_URL`,
+манифест менять не нужно):
+
+1. Azure Portal → **Create a resource → Web App**. Name: `pptpowerkeys-api`, Runtime stack: **.NET 8**,
+   OS: Linux, Plan: **Free F1**, регион — любой. Create.
+2. На созданном App Service: **Get publish profile** (Overview → Download publish profile) — скачивается `.PublishSettings` (XML).
+3. GitHub → репозиторий → **Settings → Secrets and variables → Actions → New repository secret**.
+   Name: `AZURE_WEBAPP_PUBLISH_PROFILE`, Value: **всё содержимое** скачанного `.PublishSettings`.
+4. Запустить деплой: push в `main` (или **Actions → Deploy → Run workflow**). Шаг *Deploy to Azure Web App* выполнится.
+5. Проверить: открыть `https://pptpowerkeys-api.azurewebsites.net/health` → `200 {"status":"ok"}`,
+   затем `…/api/commands` → каталог. В PowerPoint Online панель загружает команды без «Cannot reach backend».
+
+**Альтернатива — Render / Fly (без Azure):** развернуть `Dockerfile` (на Render — через `render.yaml`,
+New → Blueprint → выбрать репо). Хост даст другой URL (напр. `https://pptpowerkeys-api.onrender.com`),
+поэтому builder обновит `API_BASE_URL` в `deploy.yml`/`deploy-addin-pages.yml` на новый хост, пересоберёт
+`manifest.prod.xml` (`npm run build:prod`) и передеплоит Pages. Проверка та же: `/health` → 200.
 
 ## Разные `<Id>` у dev и prod манифестов
 
