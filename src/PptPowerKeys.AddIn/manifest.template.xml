@@ -6,11 +6,11 @@
   xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
   xsi:type="TaskPaneApp">
 
-  <Id>92d7d44c-7eb7-4ed2-b83b-d6fa8fff9873</Id>
+  <Id>{{ADDIN_ID}}</Id>
   <Version>1.0.0.1</Version>
   <ProviderName>ASN-PP-PowerKeys</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="PptPowerKeys" />
+  <DisplayName DefaultValue="PptPowerKeys (Web)" />
   <Description DefaultValue="Keyboard-driven alignment, resize and object tools for PowerPoint, relative to the last-selected anchor." />
   <IconUrl DefaultValue="{{ADDIN_BASE_URL}}/assets/icon-32.png" />
   <HighResolutionIconUrl DefaultValue="{{ADDIN_BASE_URL}}/assets/icon-80.png" />

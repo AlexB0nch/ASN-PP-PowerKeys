@@ -67,15 +67,35 @@ Workflow `.github/workflows/deploy.yml` публикует API в Azure Web App 
 
 CORS в production (`appsettings.Production.json` + `Program.cs`) разрешает origin `https://alexb0nch.github.io`.
 
+## Разные `<Id>` у dev и prod манифестов
+
+> **Важно (S01-009).** Office Online **кэширует надстройку по `<Id>`**. Раньше dev и prod манифесты
+> имели **одинаковый** GUID `92d7d44c-7eb7-4ed2-b83b-d6fa8fff9873`: после загрузки localhost-манифеста
+> Office запоминал его по этому Id и при повторной загрузке prod-манифеста отдавал **закэшированную
+> localhost-версию** (`SourceLocation = https://localhost:3000`) → «localhost refused to connect».
+> Bump версии кэш по Id не сбрасывает.
+
+| Манифест | `<Id>` | `DisplayName` | `SourceLocation` |
+|----------|--------|---------------|------------------|
+| `manifest.xml` / `manifest.dev.xml` (dev) | `92d7d44c-7eb7-4ed2-b83b-d6fa8fff9873` | `PptPowerKeys` | `https://localhost:3000/taskpane.html` |
+| `manifest.prod.xml` (генерируется) | `5b0ca36f-a511-4705-a5e2-9609ff931f85` | `PptPowerKeys (Web)` | `https://alexb0nch.github.io/ASN-PP-PowerKeys/taskpane.html` |
+
+Prod-GUID можно переопределить через env `ADDIN_ID` при сборке (`npm run build:manifest`); по умолчанию
+используется `5b0ca36f-...`. Менять dev-GUID **не нужно**.
+
 ## Sideload в PowerPoint Online
 
 1. Задеплойте статику и API (или используйте уже задеплоенные URL из PR).
 2. Скачайте `manifest.prod.xml` из артефакта CI / GitHub Pages.
-3. Откройте [PowerPoint Online](https://office.com) → **Insert → Add-ins → Upload My Add-in**.
-4. Загрузите `manifest.prod.xml`.
-5. На вкладке **Home** нажмите **PowerKeys** (или **Add-ins** → выберите PptPowerKeys).
-6. **Ожидаемый результат:** task pane открывается без «Error del complemento»; UI загружается.
-7. Если API доступен: список команд подтягивается с `/api/commands` (нет ошибки CORS в консоли браузера).
+3. **Удалите старую надстройку из Office, если загружали её раньше:** **Insert → My Add-ins →**
+   найдите PptPowerKeys → **Remove** (это сбрасывает кэш localhost-версии). Из-за нового prod-`<Id>`
+   prod-надстройка появится как **`PptPowerKeys (Web)`** — отдельно от dev-`PptPowerKeys`.
+4. Откройте [PowerPoint Online](https://office.com) → **Insert → Add-ins → Upload My Add-in**.
+5. Загрузите `manifest.prod.xml`.
+6. На вкладке **Home** нажмите **PowerKeys** (или **Add-ins** → выберите PptPowerKeys (Web)).
+7. **Ожидаемый результат:** task pane открывается с `https://alexb0nch.github.io/...`, без
+   «localhost refused to connect» / «Error del complemento»; UI загружается.
+8. Если API доступен: список команд подтягивается с `/api/commands` (нет ошибки CORS в консоли браузера).
 
 ### Отличие ошибок
 

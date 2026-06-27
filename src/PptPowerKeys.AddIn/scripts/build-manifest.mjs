@@ -6,6 +6,12 @@
  * Environment variables:
  *   ADDIN_BASE_URL — origin serving taskpane.html (no trailing slash)
  *   API_BASE_URL   — backend origin for CORS / AppDomains (no trailing slash)
+ *   ADDIN_ID       — manifest <Id> GUID (defaults to the prod GUID below)
+ *
+ * The production manifest deliberately uses a different <Id> than the dev
+ * manifests (manifest.dev.xml / manifest.xml keep 92d7d44c-...). Office Online
+ * caches add-ins by <Id>; sharing the dev GUID made it serve the cached
+ * localhost SourceLocation instead of the freshly uploaded prod manifest.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -16,6 +22,19 @@ const addInDir = path.resolve(root, "..");
 
 const defaultAddinBase = "https://alexb0nch.github.io/ASN-PP-PowerKeys";
 const defaultApiBase = "https://pptpowerkeys-api.azurewebsites.net";
+// Production-only GUID, distinct from the dev manifests' 92d7d44c-... Id.
+const defaultAddinId = "5b0ca36f-a511-4705-a5e2-9609ff931f85";
+
+const GUID_RE = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+function normalizeAddinId(value) {
+  const id = value.trim();
+  if (!GUID_RE.test(id)) {
+    console.error(`ADDIN_ID is not a valid GUID: ${value}`);
+    process.exit(1);
+  }
+  return id;
+}
 
 function parseHttpsUrl(url, label) {
   let parsed;
@@ -62,17 +81,20 @@ function normalizeAddinOrigin(url) {
 const addinBase = normalizeAddinBase(process.env.ADDIN_BASE_URL ?? defaultAddinBase);
 const addinOrigin = normalizeAddinOrigin(process.env.ADDIN_BASE_URL ?? defaultAddinBase);
 const apiBase = normalizeApiOrigin(process.env.API_BASE_URL ?? defaultApiBase);
+const addinId = normalizeAddinId(process.env.ADDIN_ID ?? defaultAddinId);
 
 const templatePath = path.join(addInDir, "manifest.template.xml");
 const outputPath = path.join(addInDir, "manifest.prod.xml");
 
 const template = fs.readFileSync(templatePath, "utf8");
 const manifest = template
+  .replaceAll("{{ADDIN_ID}}", addinId)
   .replaceAll("{{ADDIN_BASE_URL}}", addinBase)
   .replaceAll("{{ADDIN_ORIGIN}}", addinOrigin)
   .replaceAll("{{API_DOMAIN}}", apiBase);
 
 fs.writeFileSync(outputPath, manifest, "utf8");
 console.log(`Wrote ${outputPath}`);
+console.log(`  ADDIN_ID       = ${addinId}`);
 console.log(`  ADDIN_BASE_URL = ${addinBase}`);
 console.log(`  API_BASE_URL   = ${apiBase}`);
