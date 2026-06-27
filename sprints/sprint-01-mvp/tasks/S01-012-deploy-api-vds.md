@@ -86,3 +86,18 @@ PowerPoint Online (S01-008/009/010), но без API показывает «Cann
 **Остаётся часть B (владелец):** deploy-пользователь + SSH-пара, Docker + compose, порты 80/443, секреты
 `VDS_HOST`/`VDS_USER`/`VDS_SSH_KEY`/(`VDS_SSH_PORT`), запуск workflow «Deploy API to VDS»,
 проверка `https://95.140.152.103.sslip.io/health` → 200.
+
+## Проверка подключения к VDS (architect, 2026-06-27)
+Запущен реальный деплой (через push в `main`). Результаты:
+- ✅ **SSH-подключение работает**: секреты `VDS_HOST/VDS_USER/VDS_SSH_KEY` валидны, порты 22/80/443 открыты, `sslip.io` резолвится.
+- ✅ Копирование файлов: исправлено (PR #14) — `scp` одним архивом (`drone-scp` спотыкался о многострочный `source:`).
+- ❌ **На VDS не установлен Docker**: `bash: docker: command not found` на шаге `docker compose up`.
+- Шаг health-check `/health` добавлен (PR #13).
+
+**Действие владельца (часть B, осталось):** установить Docker + compose и дать права deploy-пользователю:
+```bash
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker <VDS_USER>   # затем новый SSH-сеанс подхватит группу
+docker --version && docker compose version
+```
+После этого перезапустить workflow «Deploy API to VDS» → ожидается `/health` 200.
