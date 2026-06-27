@@ -9,16 +9,10 @@ name: Deploy API to VDS
 
 on:
   workflow_dispatch:
+  # Deploy on any push to main. (No paths filter: lets us re-trigger a deploy
+  # after server-side changes — e.g. installing Docker — without a code change.)
   push:
     branches: [main]
-    paths:
-      - "src/PptPowerKeys.Core/**"
-      - "src/PptPowerKeys.Api/**"
-      - "Dockerfile"
-      - ".dockerignore"
-      - "docker-compose.yml"
-      - "Caddyfile"
-      - ".github/workflows/deploy-vds.yml"
 
 env:
   # Public hostname Caddy issues the certificate for. The sslip.io host resolves
