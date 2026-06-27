@@ -38,12 +38,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare deploy .env (API_PUBLIC_HOST)
+      - name: Package deploy bundle
         if: ${{ env.VDS_SSH_KEY != '' }}
-        # docker compose / Caddyfile read API_PUBLIC_HOST from this .env on the VDS.
-        run: echo "API_PUBLIC_HOST=${API_PUBLIC_HOST}" > .env
+        # Bundle everything into ONE archive so scp copies a single file — a
+        # multiline `source:` list confused drone-scp ("empty archive"). Paths are
+        # preserved relative to the repo root so the Dockerfile build context on
+        # the VDS matches local `docker build .` (Api references Core).
+        run: |
+          echo "API_PUBLIC_HOST=${API_PUBLIC_HOST}" > .env
+          tar czf deploy.tar.gz \
+            Dockerfile .dockerignore docker-compose.yml Caddyfile .env \
+            src/PptPowerKeys.Core src/PptPowerKeys.Api
+          ls -la deploy.tar.gz
 
-      - name: Copy deploy files to VDS
+      - name: Copy deploy bundle to VDS
         if: ${{ env.VDS_SSH_KEY != '' }}
         uses: appleboy/scp-action@v1
         with:
@@ -51,17 +59,8 @@ jobs:
           username: ${{ secrets.VDS_USER }}
           key: ${{ secrets.VDS_SSH_KEY }}
           port: ${{ secrets.VDS_SSH_PORT || 22 }}
+          source: deploy.tar.gz
           target: ~/pptpowerkeys
-          # Paths are preserved relative to the repo root so the Dockerfile build
-          # context on the VDS matches local `docker build .` (Api references Core).
-          source: |
-            Dockerfile
-            .dockerignore
-            docker-compose.yml
-            Caddyfile
-            .env
-            src/PptPowerKeys.Core
-            src/PptPowerKeys.Api
 
       - name: Build & start containers on VDS
         if: ${{ env.VDS_SSH_KEY != '' }}
@@ -79,6 +78,8 @@ jobs:
           script: |
             set -e
             cd ~/pptpowerkeys
+            tar xzf deploy.tar.gz
+            rm -f deploy.tar.gz
             docker compose up -d --build
             docker compose ps
 
