@@ -6,6 +6,6 @@ globs: src/PptPowerKeys.VstoLegacy/**,src/PptPowerKeys.VstoLegacy.Tests/**
 # VstoLegacy — ЗАМОРОЖЕН (см. src/PptPowerKeys.VstoLegacy/FROZEN.md)
 
 - Это старый Windows-only VSTO-аддин (C# / .NET Framework 4.8). **Новые фичи сюда НЕ добавляются.**
-- Собирается только на Windows + Visual Studio + VSTO workload; исключён из корневого `PptPowerKeys.sln` и из CI.
+- Собирается только на Windows + **Visual Studio 2022** + workload VSTO; исключён из корневого `PptPowerKeys.sln` и из CI.
 - На Linux/CI не собирается — это ожидаемо. Весь новый код идёт в `Core`/`Api`/`AddIn`.
 - Трогать только при явной необходимости поддержки на период сосуществования (Phase 0–4).

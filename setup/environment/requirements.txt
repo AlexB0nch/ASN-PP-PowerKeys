@@ -1,5 +1,6 @@
 # PPT PowerKeys — зависимости окружения (справочно)
-# Основная разработка ведётся в Visual Studio / VSTO на Windows.
+# Legacy VSTO: только Windows + Visual Studio 2022 + workload VSTO.
+# Активная разработка (Core/Api/AddIn): dotnet CLI + Node.js, VS 2022 не обязательна.
 #
 # NuGet-пакеты (будут в .csproj):
 #   Microsoft.Office.Interop.PowerPoint
