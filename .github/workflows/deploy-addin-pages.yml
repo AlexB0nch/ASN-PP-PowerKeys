@@ -42,7 +42,7 @@ jobs:
 
       - name: Build production bundle
         env:
-          ADDIN_BASE_URL: https://alexbonch.github.io/ASN-PP-PowerKeys
+          ADDIN_BASE_URL: https://alexb0nch.github.io/ASN-PP-PowerKeys
           API_BASE_URL: https://pptpowerkeys-api.azurewebsites.net
         run: npm run build:prod
 

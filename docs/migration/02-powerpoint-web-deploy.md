@@ -24,7 +24,7 @@
 
 | Переменная | Значение по умолчанию |
 |------------|----------------------|
-| `ADDIN_BASE_URL` | `https://alexbonch.github.io/ASN-PP-PowerKeys` |
+| `ADDIN_BASE_URL` | `https://alexb0nch.github.io/ASN-PP-PowerKeys` |
 | `API_BASE_URL` | `https://pptpowerkeys-api.azurewebsites.net` |
 
 Переопределяются при сборке (см. ниже).
@@ -36,7 +36,7 @@ cd src/PptPowerKeys.AddIn
 npm ci
 
 # Сгенерировать manifest.prod.xml с публичными URL
-ADDIN_BASE_URL=https://alexbonch.github.io/ASN-PP-PowerKeys \
+ADDIN_BASE_URL=https://alexb0nch.github.io/ASN-PP-PowerKeys \
 API_BASE_URL=https://pptpowerkeys-api.azurewebsites.net \
 npm run build:prod
 
@@ -59,13 +59,13 @@ Workflow `.github/workflows/deploy-addin-pages.yml` (при push в `main`):
 
 Включите Pages в настройках репозитория: **Settings → Pages → Source: GitHub Actions**.
 
-Итоговый URL статики: `https://alexbonch.github.io/ASN-PP-PowerKeys/taskpane.html`
+Итоговый URL статики: `https://alexb0nch.github.io/ASN-PP-PowerKeys/taskpane.html`
 
 ## Деплой API
 
 Workflow `.github/workflows/deploy.yml` публикует API в Azure Web App `pptpowerkeys-api`, если задан секрет `AZURE_WEBAPP_PUBLISH_PROFILE`.
 
-CORS в production (`appsettings.Production.json` + `Program.cs`) разрешает origin `https://alexbonch.github.io`.
+CORS в production (`appsettings.Production.json` + `Program.cs`) разрешает origin `https://alexb0nch.github.io`.
 
 ## Sideload в PowerPoint Online
 

@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const addInDir = path.resolve(root, "..");
 
-const defaultAddinBase = "https://alexbonch.github.io/ASN-PP-PowerKeys";
+const defaultAddinBase = "https://alexb0nch.github.io/ASN-PP-PowerKeys";
 const defaultApiBase = "https://pptpowerkeys-api.azurewebsites.net";
 
 function parseHttpsUrl(url, label) {

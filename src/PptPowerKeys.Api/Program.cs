@@ -33,7 +33,7 @@ var allowedOrigins = configuredOrigins
     .Concat(new[]
     {
         "https://localhost:3000",
-        "https://alexbonch.github.io",
+        "https://alexb0nch.github.io",
     })
     .Where(origin => !string.IsNullOrWhiteSpace(origin))
     .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -59,7 +59,7 @@ builder.Services.AddCors(options =>
             // the exact path varies (GitHub Pages project sites, custom domains).
             return Uri.TryCreate(origin, UriKind.Absolute, out var uri)
                 && uri.Scheme == Uri.UriSchemeHttps
-                && uri.Host.Equals("alexbonch.github.io", StringComparison.OrdinalIgnoreCase);
+                && uri.Host.Equals("alexb0nch.github.io", StringComparison.OrdinalIgnoreCase);
         })
         .AllowAnyHeader()
         .AllowAnyMethod());

@@ -55,7 +55,7 @@
 2. [x] Манифест поддерживает PowerPoint on the web: **`DesktopFormFactor`** (add-in only; отдельного `WebFormFactor` нет — [MS docs](https://learn.microsoft.com/en-us/javascript/api/manifest/desktopformfactor)); `validate:prod` перечисляет «PowerPoint on the web».
 3. [x] `npm run typecheck` и `npm run build:prod` — зелёные; `dotnet test PptPowerKeys.sln` — 47 passed.
 4. [x] **Ручная проверка:** после merge → deploy GitHub Pages → sideload `manifest.xml` с Pages (runbook `docs/migration/02-powerpoint-web-deploy.md`). Блокер localhost устранён; smoke-test в PowerPoint Online — post-deploy (вне Cloud CI).
-5. [x] CORS: интеграционный тест `Cors_AllowsGitHubPagesOrigin` для `https://alexbonch.github.io`.
+5. [x] CORS: интеграционный тест `Cors_AllowsGitHubPagesOrigin` для `https://alexb0nch.github.io`.
 6. [x] PR #7: production URL, шаги sideload, runbook.
 
 ## Приёмка (architect, 2026-06-27)

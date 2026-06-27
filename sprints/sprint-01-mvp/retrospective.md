@@ -13,4 +13,4 @@ _Заполняется по завершении спринта._
 
 ## Action items
 
-- [ ] Включить GitHub Pages (Settings → Pages → GitHub Actions) и проверить `https://alexbonch.github.io/ASN-PP-PowerKeys/manifest.xml` после merge PR #7.
+- [ ] Включить GitHub Pages (Settings → Pages → GitHub Actions) и проверить `https://alexb0nch.github.io/ASN-PP-PowerKeys/manifest.xml` после merge PR #7.

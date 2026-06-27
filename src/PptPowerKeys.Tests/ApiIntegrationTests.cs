@@ -97,12 +97,12 @@ public class ApiIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factory.CreateClient();
         var request = new HttpRequestMessage(HttpMethod.Options, "/api/commands");
-        request.Headers.Add("Origin", "https://alexbonch.github.io");
+        request.Headers.Add("Origin", "https://alexb0nch.github.io");
         request.Headers.Add("Access-Control-Request-Method", "GET");
 
         var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         Assert.True(response.Headers.TryGetValues("Access-Control-Allow-Origin", out var values));
-        Assert.Contains("https://alexbonch.github.io", values);
+        Assert.Contains("https://alexb0nch.github.io", values);
     }
 }
