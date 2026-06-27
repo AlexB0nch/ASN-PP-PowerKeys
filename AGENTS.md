@@ -19,6 +19,16 @@ full Windows/Visual Studio workflow.
   `PptPowerKeys.Tests` xUnit project via Test Explorer / `dotnet test`.
 - There is **no linter** configured and **no CI workflow**; do not invent one.
 
+### Tooling available on the Linux VM (from the snapshot / update script)
+- **.NET 8 SDK** (`dotnet`) and **Mono** (`mcs`/`mono`) are installed.
+- The .NET 8 SDK does **not** make `dotnet build`/`dotnet test PptPowerKeys.sln` work: the
+  add-in `.csproj` is a legacy (non-SDK) VSTO project, so `dotnet` fails immediately with
+  `MSB4232` (the `<VSTOApplication>` item), and even past that it needs the Windows-only
+  Office interop + VSTO MSBuild targets. Build/test the solution on Windows in Visual Studio.
+- There is **no npm / Node project** in this repo (no `package.json`, and no
+  `src/PptPowerKeys.AddIn` directory). Do not add `npm ci`/`npm install` to startup — it
+  would fail. The add-in has no JS/Node build step.
+
 ### What CAN be verified on the Linux VM
 The platform-independent business logic that the xUnit tests cover
 (`src/PptPowerKeys/Commands/CommandIds.cs` enum and
