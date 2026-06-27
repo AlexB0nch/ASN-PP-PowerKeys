@@ -1,0 +1,24 @@
+---
+description: Базовый контекст продукта PPT PowerKeys и ключевые ограничения окружения. Якорь против дрейфа контекста между сессиями.
+alwaysApply: true
+---
+
+# Контекст продукта PPT PowerKeys (всегда учитывать)
+
+**Что это:** Windows-only VSTO COM-надстройка для Microsoft PowerPoint (C# / .NET Framework 4.8),
+добавляющая вкладку ленты **PowerKeys** и >100 настраиваемых горячих клавиш для работы со слайдами.
+Нет серверов, БД, портов и веб-интерфейса.
+
+**Единый источник правды:** `docs/PRODUCT_CONTEXT.md`. Перед существенными решениями читай его;
+после решений, меняющих продукт, — обновляй его (это делает агент `architect`).
+
+**Жёсткие ограничения окружения:**
+- Полная сборка надстройки и `dotnet test PptPowerKeys.sln` работают **только на Windows** +
+  Visual Studio 2022 (workload «Office/SharePoint development») + Office + VSTO Runtime.
+- На Linux/Cloud-агенте надстройку собрать нельзя (legacy VSTO `.csproj`, `Microsoft.Office.*` interop).
+  Проверять там можно только платформонезависимую логику (`CommandIds`, `UserSettings`) через **Mono**.
+- Подробности окружения — в `AGENTS.md` (`## Cursor Cloud specific instructions`).
+
+**Роли и процесс:** управление задачами — через агентов `architect` и `builder`
+(вызов `/architect`, `/builder`) и спринты. Полное описание — в `docs/TASK_MANAGEMENT.md`.
+Каждая задача имеет ID `S0X-0YY` и сквозную трассировку: GitHub Issue → backlog → ветка → PR.

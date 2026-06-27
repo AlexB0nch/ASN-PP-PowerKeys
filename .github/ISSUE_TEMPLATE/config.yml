@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Процесс и роли"
+    url: https://github.com/AlexB0nch/ASN-PP-PowerKeys/blob/main/docs/TASK_MANAGEMENT.md
+    about: "Как ставятся и принимаются задачи (агенты architect/builder, спринты)."

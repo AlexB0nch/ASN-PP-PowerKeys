@@ -1,5 +1,22 @@
 # AGENTS.md
 
+## Система управления задачами (читать в начале каждой сессии)
+
+Работа над продуктом управляется через двух агентов и спринты — чтобы контекст не терялся между сессиями.
+Перед началом работы прочитай:
+- `docs/PRODUCT_CONTEXT.md` — единый источник правды о продукте (архитектура, инварианты, ограничения).
+- `docs/TASK_MANAGEMENT.md` — процесс «architect → builder → PR → приёмка» и сквозная трассировка задач.
+- Текущий спринт: `sprints/sprint-XX-*/{goals,backlog,retrospective}.md`.
+
+Агенты (`.cursor/agents/`), вызов через **`/имя`** (в Cursor именованные агенты вызываются `/architect`,
+`/builder`; синтаксис `@` подключает только файлы/manual-правила и агента не запускает):
+- **`/architect`** — держит контекст продукта, пишет/декомпозирует задачи (GitHub Issues по
+  `.github/ISSUE_TEMPLATE/task.yml` + строка в backlog), ставит критерии приёмки, проверяет результат.
+- **`/builder`** — берёт задачу `S0X-0YY`, реализует её в ветке `cursor/<task-id>-<slug>`, открывает PR.
+
+Правила в `.cursor/rules/` (`product-context`, `task-workflow`, `csharp-vsto`) подгружаются автоматически.
+Сквозная трассировка: один ID `S0X-0YY` присутствует в Issue → backlog → ветке → PR → коммитах.
+
 ## Cursor Cloud specific instructions
 
 ### What this repo is

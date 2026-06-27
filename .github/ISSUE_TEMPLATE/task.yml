@@ -1,0 +1,68 @@
+name: "Задача спринта"
+description: "Постановка задачи (заполняет architect)"
+title: "[S0X-0YY] <краткое название задачи>"
+labels: ["task"]
+body:
+  - type: input
+    id: task_id
+    attributes:
+      label: "Task ID"
+      description: "Идентификатор вида S0X-0YY"
+      placeholder: "S01-004"
+    validations:
+      required: true
+  - type: input
+    id: sprint
+    attributes:
+      label: "Спринт"
+      placeholder: "sprint-01-mvp"
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Компонент"
+      options:
+        - Core
+        - Commands
+        - UI
+        - Settings
+        - setup
+        - docs
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: "Цель"
+      description: "Зачем задача и какую ценность даёт"
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: "Scope / Анти-scope"
+      description: "Что входит и что явно НЕ входит"
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: "Затрагиваемые файлы"
+      placeholder: "src/PptPowerKeys/Commands/AlignmentCommands.cs, ..."
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Критерии приёмки (Definition of Done)"
+      description: "Проверяемый список. Для Office/VSTO — как проверить на Windows; для платформонезависимой логики — Mono-проверка."
+    validations:
+      required: true
+  - type: input
+    id: deps
+    attributes:
+      label: "Зависимости"
+      placeholder: "S01-003; внешние факторы"
+    validations:
+      required: false
