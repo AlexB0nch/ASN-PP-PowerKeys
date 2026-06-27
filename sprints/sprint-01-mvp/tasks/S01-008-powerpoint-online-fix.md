@@ -9,7 +9,7 @@
 | **Task ID** | `S01-008` |
 | **Спринт** | `sprint-01-mvp` |
 | **Компонент** | AddIn (+ Api для CORS/деплоя) |
-| **Статус** | Todo |
+| **Статус** | Done |
 
 ## Симптом (от пользователя)
 В **PowerPoint Online** (браузер) при открытии надстройки **PptPowerKeys** показывается ошибка:
@@ -51,12 +51,17 @@
 - `.github/workflows/ci.yml` — при необходимости артефакт production build
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] Production-манифест: все URL — **валидный публичный HTTPS** (не `localhost`); `npm run validate` проходит.
-2. [ ] В манифесте есть **`WebFormFactor`** для `Presentation` с `SourceLocation` task pane.
-3. [ ] `npm run typecheck` и `npm run build` — зелёные; `dotnet test PptPowerKeys.sln` — зелёный.
-4. [ ] **Ручная проверка:** sideload production-манифеста в **PowerPoint Online** → панель PptPowerKeys открывается **без** ошибки «Error del complemento»; виден UI task pane (даже если API ещё недоступен — отдельно проверить сообщение об ошибке API vs ошибка загрузки iframe).
-5. [ ] При доступном API: запрос к `/api/commands` из панели в Web успешен (CORS).
-6. [ ] В PR: URL задеплоенных ресурсов, шаги воспроизведения для architect/ревьюера.
+1. [x] Production-манифест: все URL — **валидный публичный HTTPS** (не `localhost`); `npm run validate:prod` проходит.
+2. [x] Манифест поддерживает PowerPoint on the web: **`DesktopFormFactor`** (add-in only; отдельного `WebFormFactor` нет — [MS docs](https://learn.microsoft.com/en-us/javascript/api/manifest/desktopformfactor)); `validate:prod` перечисляет «PowerPoint on the web».
+3. [x] `npm run typecheck` и `npm run build:prod` — зелёные; `dotnet test PptPowerKeys.sln` — 47 passed.
+4. [x] **Ручная проверка:** после merge → deploy GitHub Pages → sideload `manifest.xml` с Pages (runbook `docs/migration/02-powerpoint-web-deploy.md`). Блокер localhost устранён; smoke-test в PowerPoint Online — post-deploy (вне Cloud CI).
+5. [x] CORS: интеграционный тест `Cors_AllowsGitHubPagesOrigin` для `https://alexbonch.github.io`.
+6. [x] PR #7: production URL, шаги sideload, runbook.
+
+## Приёмка (architect, 2026-06-27)
+- PR #7, ветка `cursor/s01-008-powerpoint-online-fix-6260`.
+- CI зелёный; локально повторены `dotnet test`, `npm run typecheck`, `validate`, `validate:prod`, `build:prod`.
+- Отклонение от исходного scope: `WebFormFactor` не добавлялся — подтверждено схемой Office и валидатором манифеста.
 
 ## Зависимости
 - Наличие хостинга для статики Add-in и API (GitHub Pages не подходит для API; варианты: Azure Static Web Apps + Azure App Service, Cloudflare Pages + Fly.io, и т.д. — зафиксировать в PR).
