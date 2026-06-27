@@ -1,0 +1,30 @@
+---
+description: Процесс управления задачами PPT PowerKeys (architect → builder → PR → приёмка) и сквозная трассировка, чтобы контекст не терялся между сессиями.
+alwaysApply: true
+---
+
+# Процесс управления задачами (всегда соблюдать)
+
+Двое агентов управляют работой (см. `.cursor/agents/`):
+- **`architect`** — держит контекст продукта, пишет/декомпозирует задачи, ставит критерии приёмки, проверяет результат.
+- **`builder`** — выполняет одну задачу по ID, открывает PR.
+
+> Вызов агентов в Cursor — через `/architect` и `/builder` (НЕ через `@`; `@` подключает файлы и manual-правила).
+
+## Жизненный цикл задачи
+1. **Backlog** — `architect` создаёт GitHub Issue по `.github/ISSUE_TEMPLATE/task.yml` + строку в
+   `sprints/sprint-XX-*/backlog.md`. ID: `S0X-0YY`.
+2. **In Progress** — `builder` создаёт ветку `cursor/<task-id>-<slug>`, реализует строго в рамках scope.
+3. **In Review** — `builder` открывает PR в `main` по `.github/PULL_REQUEST_TEMPLATE.md`
+   (`Sprint`/`Task ID`, `Closes #<issue>`), приложив результаты тестов/сборки.
+4. **Done** — `architect` проверяет по критериям приёмки и `.github/review/CHECKLIST.md`, ставит `Done`
+   и закрывает Issue; иначе возвращает с конкретными правками.
+
+## Сквозная трассировка (анти-дрейф контекста)
+Один ID `S0X-0YY` присутствует в: GitHub Issue → строке backlog → имени ветки → заголовке/описании PR → коммитах.
+
+## Definition of Done (минимум)
+- Выполнены все критерии приёмки.
+- Зелёные `dotnet test PptPowerKeys.sln` и (если затронута панель) `npm run typecheck`/`npm run build` — как в CI.
+- Бизнес-логика покрыта тестами в `PptPowerKeys.Tests` без зависимости от PowerPoint.
+- Пройден `.github/review/CHECKLIST.md`; продуктовые решения отражены в `docs/PRODUCT_CONTEXT.md`/ретроспективе.

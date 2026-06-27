@@ -1,0 +1,15 @@
+---
+description: Конвенции для Office Web Add-in (task pane) PptPowerKeys.
+globs: src/PptPowerKeys.AddIn/**/*.ts,src/PptPowerKeys.AddIn/**/*.tsx
+---
+
+# Конвенции Office Web Add-in (src/PptPowerKeys.AddIn)
+
+- **Стек:** TypeScript + React + Fluent UI + Office.js. UI-компоненты — на Fluent UI (`@fluentui/react-components`).
+- **Граница host↔логика:** панель читает геометрию выделения через Office.js в `ShapeBounds[]`, шлёт на бэкенд
+  (`/api/...`), применяет результат обратно по `id`. Не дублируй математику layout на клиенте — она в `Core`/`Api`.
+- **Типы контракта:** держи `src/services/types.ts` в синхроне с `PptPowerKeys.Api/Contracts`. Команды — строковые имена (`"AlignLeft"`).
+- **Конфиг:** базовый URL бэкенда — через `src/config.ts` (`API_BASE_URL`), не хардкодь.
+- **Проверки перед PR (как в CI):** `npm run typecheck`, `npm run validate` (манифест), `npm run build`.
+  Dev-сервер — `npm start` (https://localhost:3000, self-signed). Реальный sideload требует Office (Windows/Mac/Web).
+- **Манифест:** изменения в `manifest.xml` должны проходить `office-addin-manifest validate`.

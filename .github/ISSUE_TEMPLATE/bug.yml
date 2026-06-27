@@ -1,0 +1,52 @@
+name: "Баг"
+description: "Сообщение об ошибке в PPT PowerKeys"
+title: "[bug] <краткое описание>"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Описание"
+      description: "Что происходит не так"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Шаги воспроизведения"
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Ожидаемое поведение"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Область"
+      options:
+        - Core
+        - Api
+        - AddIn (task pane)
+        - VstoLegacy
+        - CI / окружение
+        - другое
+    validations:
+      required: false
+  - type: input
+    id: env
+    attributes:
+      label: "Окружение"
+      placeholder: "PowerPoint Web / Windows 11; .NET 8; Node 20"
+    validations:
+      required: false
+  - type: input
+    id: related_task
+    attributes:
+      label: "Связанная задача (Task ID), если есть"
+      placeholder: "S02-003"
+    validations:
+      required: false

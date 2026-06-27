@@ -1,0 +1,28 @@
+---
+description: Базовый контекст продукта PPT PowerKeys и ключевые ограничения. Якорь против дрейфа контекста между сессиями.
+alwaysApply: true
+---
+
+# Контекст продукта PPT PowerKeys (всегда учитывать)
+
+**Что это:** Office Web Add-in для Microsoft PowerPoint (Windows / Mac / Web / iPad), мигрированный с
+Windows-only VSTO. Воспроизводит/расширяет «ShortCut Tools»: >100 команд работы со слайдами.
+
+**Архитектура (см. `docs/migration/00-architecture.md`):**
+- `src/PptPowerKeys.Core` — .NET 8 class library, чистый C# **без** `Microsoft.Office.*`. Вся переносимая бизнес-логика.
+- `src/PptPowerKeys.Api` — ASP.NET Core Minimal API + Swagger поверх Core.
+- `src/PptPowerKeys.AddIn` — task pane: TypeScript + React + Fluent UI + Office.js.
+- `src/PptPowerKeys.VstoLegacy*` — **замороженный** старый VSTO (Windows-only, новые фичи НЕ добавлять).
+
+**Ключевой инвариант — граница `ShapeBounds`:** геометрия выделения читается через Office.js в
+`ShapeBounds[]`, считается чистыми функциями в `Core` (`LayoutEngine` и др.), затем применяется обратно.
+Anchor (опорная фигура) = **последняя** выделенная. Это позволяет тестировать математику без PowerPoint.
+
+**Единый источник правды:** `docs/PRODUCT_CONTEXT.md` — читать перед существенными решениями, обновлять после них.
+
+**Окружение / команды:** см. `AGENTS.md`. Backend кроссплатформенный: `dotnet test PptPowerKeys.sln`,
+`cd src/PptPowerKeys.Api && dotnet run`. Панель: `cd src/PptPowerKeys.AddIn && npm ci && npm start|build`.
+Реальный sideload в PowerPoint требует Windows/Mac с Office (вне CI).
+
+**Процесс:** управление задачами — агенты `architect`/`builder` (вызов `/architect`, `/builder`) и спринты.
+Полное описание — `docs/TASK_MANAGEMENT.md`. Каждая задача `S0X-0YY` трассируется Issue → backlog → ветка → PR.
