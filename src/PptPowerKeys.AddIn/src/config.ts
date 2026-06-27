@@ -1,7 +1,5 @@
-// Base URL of the PptPowerKeys ASP.NET Core backend. Overridable at build time
-// via the API_BASE_URL define; defaults to the local dev server.
-declare const process: { env: Record<string, string | undefined> };
+// Base URL of the PptPowerKeys ASP.NET Core backend. Injected at build time by
+// webpack DefinePlugin from the API_BASE_URL environment variable.
+declare const process: { env: { API_BASE_URL?: string } };
 
-export const API_BASE_URL: string =
-  (typeof process !== "undefined" && process.env && process.env.API_BASE_URL) ||
-  "https://localhost:7168";
+export const API_BASE_URL: string = process.env.API_BASE_URL ?? "https://localhost:7168";

@@ -1,0 +1,68 @@
+name: Deploy Add-in to GitHub Pages
+
+# Publishes the production add-in bundle (dist/ + manifest.prod.xml) so PowerPoint
+# Online can load the task pane from a public HTTPS origin (S01-008).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & deploy add-in static bundle
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: src/PptPowerKeys.AddIn
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: src/PptPowerKeys.AddIn/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build production bundle
+        env:
+          ADDIN_BASE_URL: https://alexbonch.github.io/ASN-PP-PowerKeys
+          API_BASE_URL: https://pptpowerkeys-api.azurewebsites.net
+        run: npm run build:prod
+
+      - name: Validate production manifest
+        run: npm run validate:prod
+
+      - name: Prepare Pages site
+        run: |
+          mkdir -p ../../site
+          cp -r dist/. ../../site/
+          cp manifest.prod.xml ../../site/manifest.xml
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

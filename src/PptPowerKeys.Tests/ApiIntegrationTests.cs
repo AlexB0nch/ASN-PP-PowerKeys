@@ -91,4 +91,18 @@ public class ApiIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
         var saved = await put.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal("Team", saved.GetProperty("profile").GetString());
     }
+
+    [Fact]
+    public async Task Cors_AllowsGitHubPagesOrigin()
+    {
+        var client = _factory.CreateClient();
+        var request = new HttpRequestMessage(HttpMethod.Options, "/api/commands");
+        request.Headers.Add("Origin", "https://alexbonch.github.io");
+        request.Headers.Add("Access-Control-Request-Method", "GET");
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        Assert.True(response.Headers.TryGetValues("Access-Control-Allow-Origin", out var values));
+        Assert.Contains("https://alexbonch.github.io", values);
+    }
 }

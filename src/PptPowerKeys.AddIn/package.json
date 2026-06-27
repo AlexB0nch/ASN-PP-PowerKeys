@@ -7,9 +7,12 @@
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
+    "build:manifest": "node scripts/build-manifest.mjs",
+    "build:prod": "npm run build:manifest && webpack --mode production",
     "start": "webpack serve --mode development",
     "typecheck": "tsc --noEmit",
-    "validate": "office-addin-manifest validate manifest.xml"
+    "validate": "office-addin-manifest validate manifest.dev.xml",
+    "validate:prod": "npm run build:manifest && office-addin-manifest validate manifest.prod.xml"
   },
   "dependencies": {
     "@fluentui/react-components": "^9.54.0",

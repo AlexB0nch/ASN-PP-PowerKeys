@@ -52,5 +52,8 @@ jobs:
       - name: Validate manifest
         run: npm run validate
 
+      - name: Validate production manifest
+        run: npm run validate:prod
+
       - name: Build
         run: npm run build

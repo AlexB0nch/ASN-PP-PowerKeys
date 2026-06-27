@@ -74,9 +74,12 @@ npm install
 npm start          # https://localhost:3000 (webpack dev server)
 ```
 
-Sideload `src/PptPowerKeys.AddIn/manifest.xml` в PowerPoint
+Sideload `src/PptPowerKeys.AddIn/manifest.dev.xml` (или `manifest.xml`) в PowerPoint
 (Web: Insert → Add-ins → Upload My Add-in; Desktop: разделяемая папка / Centralized Deployment).
 По умолчанию панель ходит на бэкенд по `API_BASE_URL` (см. `src/config.ts`).
+
+> **PowerPoint Online:** для Web нужен production-манифест с публичными HTTPS URL — см.
+> [`docs/migration/02-powerpoint-web-deploy.md`](02-powerpoint-web-deploy.md).
 
 > Примечание: dev-сервер использует self-signed HTTPS. Для sideload на desktop
 > выполните `npx office-addin-dev-certs install` (требует Windows/Mac).

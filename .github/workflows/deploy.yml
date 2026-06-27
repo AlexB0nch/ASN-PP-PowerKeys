@@ -67,16 +67,20 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build production add-in
+        env:
+          ADDIN_BASE_URL: https://alexbonch.github.io/ASN-PP-PowerKeys
+          API_BASE_URL: https://pptpowerkeys-api.azurewebsites.net
+        run: npm run build:prod
 
-      # The built task pane (dist/ + manifest.xml) is published as an artifact.
-      # A production pipeline would upload dist/ to a CDN/Static Web App and push
-      # manifest.xml to the Microsoft 365 Admin Center (Centralized Deployment).
+      # The built task pane (dist/ + manifest.prod.xml) is published as an artifact.
+      # manifest.prod.xml uses public HTTPS URLs for PowerPoint Online sideload.
+      # Upload dist/ to GitHub Pages (deploy-addin-pages.yml) or a CDN; push
+      # manifest.prod.xml to Microsoft 365 Admin Center for Centralized Deployment.
       - name: Upload add-in bundle
         uses: actions/upload-artifact@v4
         with:
           name: pptpowerkeys-addin
           path: |
             src/PptPowerKeys.AddIn/dist
-            src/PptPowerKeys.AddIn/manifest.xml
+            src/PptPowerKeys.AddIn/manifest.prod.xml
