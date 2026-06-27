@@ -1,0 +1,12 @@
+# Caddy site for the PptPowerKeys API (S01-012, part A).
+#
+# The hostname comes from the API_PUBLIC_HOST environment variable and defaults
+# to the sslip.io host that resolves to the VDS IP (95.140.152.103). Caddy
+# automatically obtains and renews a Let's Encrypt certificate for it, then
+# reverse-proxies HTTPS traffic to the API container on the internal network.
+#
+# This is the single point to change when moving to a custom domain: set
+# API_PUBLIC_HOST (env or .env next to docker-compose.yml) to your domain.
+{$API_PUBLIC_HOST:95.140.152.103.sslip.io} {
+    reverse_proxy api:8080
+}
