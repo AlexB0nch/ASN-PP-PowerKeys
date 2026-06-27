@@ -1,0 +1,19 @@
+# Optional alternative to Azure App Service (S01-011 — part A).
+#
+# Render Blueprint that builds the API from the repo-root Dockerfile and serves
+# it over public HTTPS. Use this only if NOT deploying to Azure; in that case the
+# add-in's API_BASE_URL must be repointed to the Render host and Pages rebuilt.
+#
+# Setup (owner, part B): Render dashboard → New → Blueprint → pick this repo.
+# Render injects $PORT (honoured by Program.cs); health check uses /health.
+services:
+  - type: web
+    name: pptpowerkeys-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
