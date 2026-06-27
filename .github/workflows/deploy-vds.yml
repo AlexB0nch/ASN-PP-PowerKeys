@@ -1,0 +1,86 @@
+name: Deploy API to VDS
+
+# S01-012 (part A): deploy the API to the owner's self-managed VDS over SSH.
+# Caddy (docker-compose.yml + Caddyfile) terminates HTTPS via Let's Encrypt.
+#
+# The deploy steps are gated on the VDS_SSH_KEY secret, so the workflow is safe
+# to keep enabled before any server access is configured — without the secret it
+# runs the skip notice and succeeds (mirrors deploy.yml's Azure gating).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/PptPowerKeys.Core/**"
+      - "src/PptPowerKeys.Api/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "docker-compose.yml"
+      - "Caddyfile"
+      - ".github/workflows/deploy-vds.yml"
+
+env:
+  # Public hostname Caddy issues the certificate for. The sslip.io host resolves
+  # to the VDS IP (95.140.152.103); override with the API_PUBLIC_HOST repo
+  # variable to use a custom domain (A-record → IP).
+  API_PUBLIC_HOST: ${{ vars.API_PUBLIC_HOST || '95.140.152.103.sslip.io' }}
+
+jobs:
+  deploy:
+    name: Build & deploy API on VDS over SSH
+    runs-on: ubuntu-latest
+    # Map the secret to a job-level env so step `if:` conditions can read it.
+    # (Secrets are not allowed directly in `if:`, and a step cannot reference its
+    # own step-level env in its own `if:` — hence this hop, as in deploy.yml.)
+    env:
+      VDS_SSH_KEY: ${{ secrets.VDS_SSH_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare deploy .env (API_PUBLIC_HOST)
+        if: ${{ env.VDS_SSH_KEY != '' }}
+        # docker compose / Caddyfile read API_PUBLIC_HOST from this .env on the VDS.
+        run: echo "API_PUBLIC_HOST=${API_PUBLIC_HOST}" > .env
+
+      - name: Copy deploy files to VDS
+        if: ${{ env.VDS_SSH_KEY != '' }}
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.VDS_HOST }}
+          username: ${{ secrets.VDS_USER }}
+          key: ${{ secrets.VDS_SSH_KEY }}
+          port: ${{ secrets.VDS_SSH_PORT || 22 }}
+          target: ~/pptpowerkeys
+          # Paths are preserved relative to the repo root so the Dockerfile build
+          # context on the VDS matches local `docker build .` (Api references Core).
+          source: |
+            Dockerfile
+            .dockerignore
+            docker-compose.yml
+            Caddyfile
+            .env
+            src/PptPowerKeys.Core
+            src/PptPowerKeys.Api
+
+      - name: Build & start containers on VDS
+        if: ${{ env.VDS_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1
+        # NOTE: the host key is not pinned, so the runner trusts whatever key the
+        # server presents on first contact (a theoretical MITM risk). To harden,
+        # add a VDS_SSH_FINGERPRINT secret and pass it via `fingerprint:` here and
+        # in the scp step above.
+        with:
+          host: ${{ secrets.VDS_HOST }}
+          username: ${{ secrets.VDS_USER }}
+          key: ${{ secrets.VDS_SSH_KEY }}
+          port: ${{ secrets.VDS_SSH_PORT || 22 }}
+          script: |
+            set -e
+            cd ~/pptpowerkeys
+            docker compose up -d --build
+            docker compose ps
+
+      - name: Skip notice
+        if: ${{ env.VDS_SSH_KEY == '' }}
+        run: echo "VDS_SSH_KEY secret not set — skipping VDS deploy. Add VDS_HOST/VDS_USER/VDS_SSH_KEY (and optional VDS_SSH_PORT) secrets to enable."
