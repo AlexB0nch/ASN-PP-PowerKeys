@@ -1,6 +1,6 @@
 # S04-003 — Integration + persist recent colors
 
-> Статус: **Todo** — старт после merge S04-002.
+> Статус: **Done** (PR #31).
 
 ## Метаданные
 | Поле | Значение |
@@ -8,7 +8,7 @@
 | **Task ID** | `S04-003` |
 | **Спринт** | `sprint-04-smart-color-picker` |
 | **Компонент** | AddIn (+ опционально Core/Api для UserSettings) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Полная интеграция VSTO parity: `Alt+G`/`Alt+L` cycle по theme+recent; **persist** 5 recent colors
