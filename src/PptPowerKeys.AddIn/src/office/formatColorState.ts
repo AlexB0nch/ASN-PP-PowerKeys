@@ -21,6 +21,62 @@ export const DEFAULT_PALETTE: readonly string[] = [
 
 const MAX_RECENT = 5;
 
+/** localStorage key for recent colors (per device; no Api round-trip). */
+export const RECENT_COLORS_STORAGE_KEY = "ppt-powerkeys-recent-colors";
+
+function isLocalStorageAvailable(): boolean {
+  try {
+    if (typeof localStorage === "undefined") {
+      return false;
+    }
+    const probe = "__ppt_pk_ls_probe__";
+    localStorage.setItem(probe, probe);
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function persistRecentColors(): void {
+  if (!isLocalStorageAvailable()) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(RECENT_COLORS_STORAGE_KEY, JSON.stringify(recentColors));
+  } catch {
+    // Quota or privacy mode — in-memory recent still works for this session.
+  }
+}
+
+/** Loads persisted recent colors from localStorage (call on task pane startup). */
+export function loadPersistedRecentColors(): void {
+  if (!isLocalStorageAvailable()) {
+    return;
+  }
+
+  try {
+    const raw = localStorage.getItem(RECENT_COLORS_STORAGE_KEY);
+    if (!raw) {
+      return;
+    }
+
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return;
+    }
+
+    recentColors = parsed
+      .filter((entry): entry is string => typeof entry === "string")
+      .map((entry) => normalizeHex(entry))
+      .slice(0, MAX_RECENT);
+    activePaletteCache = null;
+  } catch {
+    // Corrupt payload — ignore and start fresh.
+  }
+}
+
 interface CycleState {
   fingerprint: string;
   index: number;
@@ -193,6 +249,7 @@ export function recordRecentColor(color: string): void {
   }
 
   activePaletteCache = null;
+  persistRecentColors();
   void refreshActivePalette();
 }
 
@@ -203,6 +260,13 @@ export function resetFormatColorState(): void {
   themeColorSource = "fallback";
   activePaletteCache = null;
   paletteRefreshPromise = null;
+  if (isLocalStorageAvailable()) {
+    try {
+      localStorage.removeItem(RECENT_COLORS_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+  }
   for (const kind of Object.keys(cycleByCommand) as ColorCommandKind[]) {
     cycleByCommand[kind] = { fingerprint: "", index: 0 };
   }

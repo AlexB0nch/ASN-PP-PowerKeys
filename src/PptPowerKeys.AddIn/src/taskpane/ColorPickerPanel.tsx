@@ -16,7 +16,9 @@ import {
   normalizeHex,
   recordRecentColor,
   refreshActivePalette,
+  setThemeColors,
 } from "../office/formatColorState";
+import { readPresentationThemeColors } from "../office/themeColors";
 import {
   applyFillColor,
   applyLineColor,
@@ -98,6 +100,12 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
     const reloadPalette = React.useCallback(async () => {
       setLoading(true);
       try {
+        const themeResult = await readPresentationThemeColors();
+        if (themeResult.source === "fallback") {
+          setThemeColors(null, "fallback");
+        } else {
+          setThemeColors(themeResult.colors, themeResult.source);
+        }
         await refreshActivePalette();
         setPaletteTick((t) => t + 1);
       } finally {
@@ -204,10 +212,7 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
 
         {themeSource === "fallback" && (
           <MessageBar intent="warning">
-            <MessageBarBody>
-              Theme colors could not be read from this presentation. Showing default palette
-              colors instead.
-            </MessageBarBody>
+            <MessageBarBody>Theme colors unavailable — using default palette.</MessageBarBody>
           </MessageBar>
         )}
 
