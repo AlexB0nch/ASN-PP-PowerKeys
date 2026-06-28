@@ -4,4 +4,6 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| _(architect заводит S03-001…)_ | | | | |
+| S03-001 | Persistent SettingsStore (file-backed JSON, Docker volume) | Core + Api + Tests + setup | In Progress | [task](./tasks/S03-001-persistent-settings-store.md) |
+| S03-002 | Settings panel UI + wiring Settings commands | AddIn + Api | Todo | |
+| S03-003 | Shortcut Manager (edit bindings, conflict hints) | AddIn + Core | Todo | |
