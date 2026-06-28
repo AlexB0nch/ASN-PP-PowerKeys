@@ -8,7 +8,7 @@
 | **Task ID** | `S02-005` |
 | **Спринт** | `sprint-02-functionality` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Закрыть последние 7 команд категории **Slides**, которые сейчас попадают в default
@@ -82,12 +82,19 @@ Settings-команды (`OpenShortcutManager` и др.) — execution `Settings
 - View/zoom/sorter/slideshow/grid/guides/print — **None** (явная деградация).
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `CopySlide` дублирует текущий выделенный слайд через HostScript (или возвращает понятную ошибку, если API недоступен).
-2. [ ] `ToggleZoom`, `ToggleSlideSorter`, `StartSlideShow`, `ToggleGrid`, `ToggleGuides`, `PrintSlide` возвращают **конкретные** сообщения деградации (`ok: false`), не generic «not wired up yet».
-3. [ ] Ни одна из 7 Slides-команд не попадает в `default` в `runHostScript`.
-4. [ ] `dotnet test PptPowerKeys.sln` — зелёный (55 tests, без регрессии).
-5. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-6. [ ] PR: ветка `cursor/S02-005-slides-commands-1a4a`, Task ID `S02-005`, `Closes #<issue>`.
+1. [x] `CopySlide` дублирует текущий выделенный слайд через HostScript (или возвращает понятную ошибку, если API недоступен).
+2. [x] `ToggleZoom`, `ToggleSlideSorter`, `StartSlideShow`, `ToggleGrid`, `ToggleGuides`, `PrintSlide` возвращают **конкретные** сообщения деградации (`ok: false`), не generic «not wired up yet».
+3. [x] Ни одна из 7 Slides-команд не попадает в `default` в `runHostScript`.
+4. [x] `dotnet test PptPowerKeys.sln` — зелёный (55 passed).
+5. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+6. [x] PR #21: ветка `cursor/S02-005-slides-commands-1a4a`, Task ID `S02-005`, Closes #20.
+
+## Приёмка (architect, 2026-06-28)
+- PR #21, ветка `cursor/S02-005-slides-commands-1a4a`, merge commit `9487395` — **смержен в `main`**.
+- Локально повторены `dotnet test` (55 passed), `npm run typecheck`, `npm run validate:prod` — зелёные.
+- CHECKLIST: scope соблюдён, Slides — чистый HostScript, Core/Api/VstoLegacy не тронуты.
+- `CopySlide`: `exportAsBase64` → `insertSlidesFromBase64` с `KeepSourceFormatting`; fallback при недоступном API.
+- Ручная проверка в PowerPoint Online — post-merge (deploy Pages + VDS).
 
 ## Зависимости
 - S02-001…004 — в main.

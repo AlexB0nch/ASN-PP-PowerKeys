@@ -12,7 +12,7 @@
 - [x] **Format** — S02-002, PR #17
 - [x] **Text** — S02-003, PR #18
 - [x] **Alignment** (edge-align + copy-and-align) — S02-004, PR #19
-- [ ] **Slides** — **S02-005** (следующий приоритет)
+- [x] **Slides** — S02-005, PR #21
 - [ ] Единая деградация `support=None` + UX — **S02-006**
 - [x] Юнит-тесты новой логики в `PptPowerKeys.Tests` (55 tests после S02-004)
 - [x] Контракт `Api/Contracts` ↔ `AddIn/src/services/types.ts` синхронизирован по мере задач

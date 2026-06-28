@@ -65,14 +65,17 @@ PowerPoint (Desktop/Web/Mac/iPad)
 загружается (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), тянет каталог из **API на собственном
 VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt, деплой по SSH через GitHub Actions),
 рендерит 76 команд по категориям. **ServerLayout** (alignment/resize/distribute + edge-align S02-004) и **HostScript**
-(Objects, Format, Text, copy-and-align) исполняются; остаётся категория **Slides** (S02-005).
+(Objects, Format, Text, copy-and-align, **Slides S02-005**) исполняются; default «not wired up yet» больше не срабатывает
+для каталоговых команд — остаётся **S02-006** (единый UX деградации `support=None`).
 
 **Следующий фокус — Sprint 02 (функциональность):** закрыты S02-001 (Objects), S02-002 (Format),
-S02-003 (Text), **S02-004 (Alignment: edge-align + copy-and-align)**. Следующий приоритет — Slides
-(S02-005) или единая деградация неподдерживаемых команд (S02-006). Хендофф —
+S02-003 (Text), S02-004 (Alignment), **S02-005 (Slides: CopySlide + view/print degradation)**. Следующий приоритет —
+**S02-006** (единая деградация + UX бейджи). Хендофф —
 `sprints/sprint-02-functionality/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S02-005:** Slides HostScript — `CopySlide` через `exportAsBase64` + `insertSlidesFromBase64` (Partial);
+  view/zoom/sorter/slideshow/grid/guides/print — явная деградация с конкретными сообщениями (None).
 - **S02-004:** Edge-align (`AlignLeftToRight` и др.) — математика в `LayoutEngine`, execution `ServerLayout`;
   CopyAndAlign — HostScript: клон на позиции источника + `api.applyLayout` с явным `anchorIndex` (последняя исходная).
 - **S02-003:** Text HostScript — `PasteUnformatted` через `navigator.clipboard.readText()` (Partial, user gesture);

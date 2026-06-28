@@ -8,13 +8,11 @@
 - **Add-in** — GitHub Pages: `https://alexb0nch.github.io/ASN-PP-PowerKeys/` (`manifest.prod.xml`, Id `5b0ca36f-...`).
 - **API** — VDS `https://95.140.152.103.sslip.io` (Caddy + Docker, deploy `deploy-vds.yml` на push в `main`).
 - **CORS** для GitHub Pages — настроен.
-- Панель рендерит **76 команд**; **S02-001…004 Done** (Objects, Format, Text, Alignment). Остаётся **Slides** (S02-005).
+- Панель рендерит **76 команд**; **S02-001…005 Done** (Objects, Format, Text, Alignment, Slides). Следующий — **S02-006** (единый UX `support=None`).
 
 ## 2. Главная проблема (фокус Sprint 02)
-В `runCommand.ts` default «not wired up yet» срабатывает **только для Slides** (7 команд):
-`ToggleZoom`, `ToggleSlideSorter`, `StartSlideShow`, `ToggleGrid`, `ToggleGuides`, `CopySlide`, `PrintSlide`.
-
-**S02-005:** `CopySlide` (Partial) + явная деградация view/print. Затем **S02-006** — единый UX для `support=None`.
+В `runCommand.ts` default «not wired up yet» **больше не срабатывает** для каталоговых команд.
+**S02-006:** единый UX для `support=None` (бейджи, консистентные сообщения).
 
 ## 3. Инварианты
 - Математика layout — только в `Core` (`ShapeBounds`); anchor = последняя выделенная.
@@ -33,8 +31,8 @@
 | S02-002 | Done (#17) | Format |
 | S02-003 | Done (#18) | Text |
 | S02-004 | Done (#19) | Alignment: edge-align + copy-and-align |
-| **S02-005** | **Todo** | **Slides: CopySlide + деградация view/print** |
-| S02-006 | Todo | Единая деградация `support=None` + UX бейджи |
+| **S02-005** | **Done (#21)** | **Slides: CopySlide + деградация view/print** |
+| **S02-006** | **Todo** | **Единая деградация `support=None` + UX бейджи** |
 
 ## 6. Процесс
 1. Task-файл в `sprints/sprint-02-functionality/tasks/` + строка в `backlog.md`.
