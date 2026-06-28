@@ -47,7 +47,7 @@ PowerPoint (Desktop/Web/Mac/iPad)
 | POST | `/api/layout/apply` | применить геометрическую команду к `ShapeBounds[]` |
 | POST | `/api/objects/duplicate-offset` | позиция дубликата (smart-duplicate) |
 | POST | `/api/text/addup` | сумма/мин/макс/среднее чисел из текста |
-| GET/PUT | `/api/settings`, POST `/api/settings/reset` | профиль + шорткаты (**Sprint 03:** file-backed persistence на VDS) |
+| GET/PUT | `/api/settings`, POST `/api/settings/reset` | профиль + шорткаты; file-backed JSON per user (`SETTINGS_DATA_PATH`, Docker volume `settings_data`) |
 
 ## 5. Окружение и команды
 Подробности и нюансы Cloud — в `AGENTS.md`. Кратко:
@@ -69,10 +69,13 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 (не красный Error). Default «not wired up yet» — safety-net для неизвестных id.
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
-**Sprint 03 — Settings UI, персистентный SettingsStore, Shortcut Manager.** Хендофф —
+**Sprint 03 — Settings UI, персистентный SettingsStore, Shortcut Manager.** S03-001 Done (PR #23:
+`FileUserSettingsStore` + Docker volume). Следующий шаг — S03-002 Settings panel UI. Хендофф —
 `sprints/sprint-03-settings/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S03-001:** `IUserSettingsStore` в Core; `FileUserSettingsStore` в Api — JSON per user под `SETTINGS_DATA_PATH`
+  (default `/data/settings`), atomic write, Docker volume `settings_data` на VDS.
 - **S02-006:** Единый реестр `unsupportedWebCommands.ts` для 9 None-команд; `CommandOutcome.kind`
   (`success` | `unsupported` | `error`); легенда бейджей и warning status bar вместо красного Error для ожидаемой деградации.
 - **S02-005:** Slides HostScript — `CopySlide` через `exportAsBase64` + `insertSlidesFromBase64` (Partial);

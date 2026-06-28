@@ -8,7 +8,7 @@
 | **Task ID** | `S03-001` |
 | **Спринт** | `sprint-03-settings` |
 | **Комponent** | Core + Api + Tests + setup/docs |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Заменить in-memory `SettingsStore` на **file-backed** хранилище, чтобы настройки пользователя
@@ -65,14 +65,20 @@ Settings UI (S03-002) и Shortcut Manager (S03-003) опираются на ст
 - `docs/migration/02-powerpoint-web-deploy.md` (volume/env)
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `SettingsStore` сохраняет `UserSettings` в JSON на диск per `X-User-Id` (или `__anonymous__`).
-2. [ ] Env `SETTINGS_DATA_PATH` настраивает каталог (default `/data/settings`).
-3. [ ] После «рестарта» store (новый экземпляр, тот же path) `GET /api/settings` возвращает ранее сохранённые данные.
-4. [ ] `POST /api/settings/reset` перезаписывает файл defaults из `UserSettings.CreateDefaults()`.
-5. [ ] Docker Compose монтирует volume для settings data на VDS.
-6. [ ] Runbook обновлён (volume path, env var).
-7. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-8. [ ] PR: ветка `cursor/S03-001-persistent-settings-store-9e95`, Task ID `S03-001`, `Closes #<issue>`.
+1. [x] `SettingsStore` сохраняет `UserSettings` в JSON на диск per `X-User-Id` (или `__anonymous__`).
+2. [x] Env `SETTINGS_DATA_PATH` настраивает каталог (default `/data/settings`).
+3. [x] После «рестарта» store (новый экземпляр, тот же path) `GET /api/settings` возвращает ранее сохранённые данные.
+4. [x] `POST /api/settings/reset` перезаписывает файл defaults из `UserSettings.CreateDefaults()`.
+5. [x] Docker Compose монтирует volume для settings data на VDS.
+6. [x] Runbook обновлён (volume path, env var).
+7. [x] `dotnet test PptPowerKeys.sln` — зелёный (61 passed).
+8. [x] PR #23: ветка `cursor/S03-001-persistent-settings-store-9e95`, Task ID `S03-001`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #23 merged в `main` (commit `be40c4e`).
+- CHECKLIST: scope соблюдён — Core interface + Api file impl, AddIn/VstoLegacy не тронуты.
+- `FileUserSettingsStore`: atomic write, sanitize filenames, lazy create defaults on Get.
+- Локально повторён `dotnet test` — 61 passed.
 
 ## Зависимости
 - Нет блокеров; Settings API и `UserSettings` уже в main.

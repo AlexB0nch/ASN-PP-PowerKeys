@@ -8,7 +8,7 @@
 **персистентное** хранилище на VDS (не in-memory), **Shortcut Manager** для редактирования привязок клавиш.
 
 ## Цели (декомпозирует architect в задачи `S03-0YY`)
-- [ ] **Персистентный `SettingsStore`** — JSON на диске (Docker volume на VDS), переживает рестарт API.
+- [x] **Персистентный `SettingsStore`** — JSON на диске (Docker volume на VDS), переживает рестарт API. (S03-001, PR #23)
 - [ ] **Settings panel** в AddIn — загрузка при старте, save/reset через `/api/settings`.
 - [ ] **Shortcut Manager UI** — список команд + keys, редактирование, валидация, сохранение.
 - [ ] Wiring Settings-команд: `OpenShortcutManager`, `ResetToDefaults` (и `OpenColorScheme` — stub или минимальный UI).
