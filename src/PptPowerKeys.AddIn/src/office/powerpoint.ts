@@ -677,3 +677,58 @@ export async function toggleSuperscript(): Promise<number> {
 export async function toggleSubscript(): Promise<number> {
   return toggleScriptAttribute("subscript");
 }
+
+type SlideExportCapable = PowerPoint.Slide & {
+  exportAsBase64?: () => OfficeExtension.ClientResult<string>;
+};
+
+type PresentationInsertCapable = PowerPoint.Presentation & {
+  insertSlidesFromBase64?: (
+    base64File: string,
+    options?: PowerPoint.InsertSlideOptions,
+  ) => void;
+};
+
+/**
+ * Duplicates the currently selected slide by exporting it as Base64 and inserting
+ * a copy immediately after the source slide.
+ */
+export async function duplicateSelectedSlide(): Promise<void> {
+  await PowerPoint.run(async (context) => {
+    const selectedSlides = context.presentation.getSelectedSlides();
+    selectedSlides.load("items");
+    await context.sync();
+
+    if (selectedSlides.items.length === 0) {
+      throw new Error("Select a slide first.");
+    }
+
+    const slide = selectedSlides.getItemAt(0);
+    const slideApi = slide as SlideExportCapable;
+    const presentationApi = context.presentation as PresentationInsertCapable;
+
+    if (
+      typeof slideApi.exportAsBase64 !== "function" ||
+      typeof presentationApi.insertSlidesFromBase64 !== "function"
+    ) {
+      throw new Error("Slide duplication is not supported on this PowerPoint version.");
+    }
+
+    slide.load("id");
+    await context.sync();
+
+    const base64Result = slideApi.exportAsBase64();
+    await context.sync();
+
+    const base64 = base64Result.value;
+    if (!base64) {
+      throw new Error("Slide duplication is not supported on this PowerPoint version.");
+    }
+
+    presentationApi.insertSlidesFromBase64(base64, {
+      targetSlideId: slide.id,
+      formatting: "KeepSourceFormatting",
+    });
+    await context.sync();
+  });
+}

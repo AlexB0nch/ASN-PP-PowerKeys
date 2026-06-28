@@ -8,6 +8,7 @@ import {
   applyTextColor,
   cloneSelectedShapesAtSourcePositions,
   copyObjectPosition,
+  duplicateSelectedSlide,
   duplicateShapesAtPositions,
   getPositionClipboard,
   getSelectedShapeBounds,
@@ -254,6 +255,41 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
     case "CopyAndAlignTop":
     case "CopyAndAlignBottom":
       return await runCopyAndAlign(descriptor.id as keyof typeof COPY_AND_ALIGN_LAYOUT);
+    case "CopySlide":
+      await duplicateSelectedSlide();
+      return { ok: true, message: "Slide duplicated." };
+    case "ToggleZoom":
+      return {
+        ok: false,
+        message: "Zoom is not available in PowerPoint Web. Use the host zoom controls.",
+      };
+    case "ToggleSlideSorter":
+      return {
+        ok: false,
+        message: "Slide sorter view is not available in PowerPoint Web.",
+      };
+    case "StartSlideShow":
+      return {
+        ok: false,
+        message:
+          "Slide show cannot be started from the add-in on PowerPoint Web. Use Present / Slide Show in the host.",
+      };
+    case "ToggleGrid":
+      return {
+        ok: false,
+        message: "Grid toggle is not available in PowerPoint Web.",
+      };
+    case "ToggleGuides":
+      return {
+        ok: false,
+        message: "Guides toggle is not available in PowerPoint Web.",
+      };
+    case "PrintSlide":
+      return {
+        ok: false,
+        message:
+          "Printing is not available from the add-in. Use Ctrl+P (Cmd+P) or the host Print command.",
+      };
     default:
       return {
         ok: false,
