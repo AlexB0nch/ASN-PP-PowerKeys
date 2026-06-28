@@ -13,7 +13,7 @@
 | ID | Статус | Содержание |
 |----|--------|------------|
 | S03-001 | **Done (#23)** | Persistent store + Docker volume |
-| **S03-002** | **Todo** | Settings panel UI + wiring Settings commands |
+| **S03-002** | **In Progress** | Settings panel UI + wiring Settings commands |
 | S03-003 | Todo | Shortcut Manager (edit bindings) — после S03-002 или объединить |
 
 ## 3. Следующая задача — S03-002
