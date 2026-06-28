@@ -228,7 +228,11 @@ export const App: React.FC = () => {
                 ))}
               </div>
               {category === "Settings" && (
-                <SettingsPanel ref={settingsPanelRef} onFeedback={setStatus} />
+                <SettingsPanel
+                  ref={settingsPanelRef}
+                  commands={commands}
+                  onFeedback={setStatus}
+                />
               )}
             </AccordionPanel>
           </AccordionItem>

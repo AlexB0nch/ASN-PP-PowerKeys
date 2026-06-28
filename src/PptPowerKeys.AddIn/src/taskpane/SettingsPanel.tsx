@@ -11,8 +11,9 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { api } from "../services/api";
-import { UserSettings } from "../services/types";
+import { CommandDescriptor, UserSettings } from "../services/types";
 import { CommandOutcome, outcomeError, outcomeSuccess } from "./runCommand";
+import { ShortcutManager } from "./ShortcutManager";
 
 const useStyles = makeStyles({
   root: {
@@ -28,22 +29,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     gap: "4px",
   },
-  shortcuts: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-    maxHeight: "200px",
-    overflowY: "auto",
-    padding: "6px",
-    borderRadius: tokens.borderRadiusMedium,
-    backgroundColor: tokens.colorNeutralBackground2,
-  },
-  shortcutRow: {
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    gap: "8px",
-    alignItems: "center",
-  },
   actions: {
     display: "flex",
     gap: "8px",
@@ -57,11 +42,12 @@ export interface SettingsPanelHandle {
 }
 
 interface SettingsPanelProps {
+  commands: CommandDescriptor[];
   onFeedback?: (outcome: CommandOutcome) => void;
 }
 
 export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanelProps>(
-  function SettingsPanel({ onFeedback }, ref) {
+  function SettingsPanel({ commands, onFeedback }, ref) {
     const styles = useStyles();
     const shortcutsRef = React.useRef<HTMLDivElement>(null);
     const [settings, setSettings] = React.useState<UserSettings | null>(null);
@@ -180,19 +166,14 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         </div>
 
         <div className={styles.row} ref={shortcutsRef} id="settings-shortcuts">
-          <Caption1>Shortcuts (read-only)</Caption1>
-          <div className={styles.shortcuts}>
-            {settings.shortcuts.length === 0 ? (
-              <Caption1>No shortcut bindings configured.</Caption1>
-            ) : (
-              settings.shortcuts.map((binding) => (
-                <div className={styles.shortcutRow} key={binding.commandId}>
-                  <Caption1>{binding.commandId}</Caption1>
-                  <Caption1>{binding.keys}</Caption1>
-                </div>
-              ))
-            )}
-          </div>
+          <Caption1>Shortcuts</Caption1>
+          <ShortcutManager
+            shortcuts={settings.shortcuts}
+            commands={commands}
+            onChange={(shortcuts) =>
+              setSettings((prev) => (prev ? { ...prev, shortcuts } : prev))
+            }
+          />
         </div>
 
         <div className={styles.actions}>
