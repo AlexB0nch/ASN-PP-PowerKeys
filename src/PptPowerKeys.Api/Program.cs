@@ -136,6 +136,12 @@ app.MapPost("/api/text/addup", ([FromBody] AddupApiRequest request) =>
     .WithName("AddupText")
     .WithTags("Text");
 
+// ── Color palette merge (theme + recent) ─────────────────────────────────────
+app.MapPost("/api/colors/build-palette", ([FromBody] BuildPaletteApiRequest request) =>
+    Results.Ok(BuildPaletteApiResponse.FromCore(request)))
+    .WithName("BuildPalette")
+    .WithTags("Colors");
+
 // ── Settings ─────────────────────────────────────────────────────────────────
 // X-User-Id stands in for the SSO identity that getAccessToken() would supply.
 app.MapGet("/api/settings", (IUserSettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId) =>

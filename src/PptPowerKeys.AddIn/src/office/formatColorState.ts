@@ -1,5 +1,9 @@
+import { api } from "../services/api";
+
 /** HostScript color commands that cycle a palette on repeat press. */
 export type ColorCommandKind = "FillColor" | "LineColor" | "TextColor";
+
+export type ThemeColorSource = "slideMaster" | "slide" | "fallback";
 
 /** Theme-like defaults when Slide Master palette is unavailable on Web. */
 export const DEFAULT_PALETTE: readonly string[] = [
@@ -29,6 +33,10 @@ const cycleByCommand: Record<ColorCommandKind, CycleState> = {
 };
 
 let recentColors: string[] = [];
+let themeColors: string[] | null = null;
+let themeColorSource: ThemeColorSource = "fallback";
+let activePaletteCache: string[] | null = null;
+let paletteRefreshPromise: Promise<void> | null = null;
 
 /** Normalizes a color string to uppercase `#RRGGBB`. */
 export function normalizeHex(color: string): string {
@@ -52,12 +60,49 @@ export function normalizeHex(color: string): string {
   return withHash.toUpperCase();
 }
 
-/** Default palette plus in-memory recent colors (deduplicated, defaults first). */
-export function getActivePalette(): string[] {
+/** Sets in-memory theme colors from the presentation (null = use API fallback theme). */
+export function setThemeColors(colors: string[] | null, source: ThemeColorSource = "fallback"): void {
+  themeColors = colors;
+  themeColorSource = source;
+  activePaletteCache = null;
+  void refreshActivePalette();
+}
+
+/** Returns how the current theme colors were obtained. */
+export function getThemeColorSource(): ThemeColorSource {
+  return themeColorSource;
+}
+
+/** Rebuilds the cached palette via the API (Core merge). */
+export async function refreshActivePalette(): Promise<void> {
+  if (paletteRefreshPromise) {
+    return paletteRefreshPromise;
+  }
+
+  paletteRefreshPromise = (async () => {
+    try {
+      const response = await api.buildPalette({
+        themeColors: themeColors ?? undefined,
+        recentColors,
+        fallbackTheme: [...DEFAULT_PALETTE],
+      });
+      activePaletteCache = response.palette;
+    } catch {
+      activePaletteCache = buildSyncFallbackPalette();
+    } finally {
+      paletteRefreshPromise = null;
+    }
+  })();
+
+  return paletteRefreshPromise;
+}
+
+function buildSyncFallbackPalette(): string[] {
   const seen = new Set<string>();
   const palette: string[] = [];
 
-  for (const color of DEFAULT_PALETTE) {
+  const themeSource = themeColors ?? [...DEFAULT_PALETTE];
+  for (const color of themeSource) {
     const normalized = normalizeHex(color);
     if (!seen.has(normalized)) {
       seen.add(normalized);
@@ -74,6 +119,15 @@ export function getActivePalette(): string[] {
   }
 
   return palette;
+}
+
+/** Theme + recent colors merged via Core (cached after bootstrap / recent updates). */
+export function getActivePalette(): string[] {
+  if (activePaletteCache) {
+    return activePaletteCache;
+  }
+
+  return buildSyncFallbackPalette();
 }
 
 /** Builds a stable fingerprint from selected shape ids in order. */
@@ -112,11 +166,18 @@ export function recordRecentColor(color: string): void {
   if (recentColors.length > MAX_RECENT) {
     recentColors = recentColors.slice(0, MAX_RECENT);
   }
+
+  activePaletteCache = null;
+  void refreshActivePalette();
 }
 
 /** Resets in-memory state (for tests or future settings reset). */
 export function resetFormatColorState(): void {
   recentColors = [];
+  themeColors = null;
+  themeColorSource = "fallback";
+  activePaletteCache = null;
+  paletteRefreshPromise = null;
   for (const kind of Object.keys(cycleByCommand) as ColorCommandKind[]) {
     cycleByCommand[kind] = { fingerprint: "", index: 0 };
   }

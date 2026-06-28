@@ -1,6 +1,8 @@
 import { API_BASE_URL } from "../config";
 import {
   AddupStats,
+  BuildPaletteRequest,
+  BuildPaletteResponse,
   CommandDescriptor,
   LayoutResult,
   ShapeBounds,
@@ -60,6 +62,12 @@ export const api = {
     request<AddupStats>("/api/text/addup", {
       method: "POST",
       body: JSON.stringify({ texts }),
+    }),
+
+  buildPalette: (body: BuildPaletteRequest) =>
+    request<BuildPaletteResponse>("/api/colors/build-palette", {
+      method: "POST",
+      body: JSON.stringify(body),
     }),
 
   getSettings: () => settingsRequest<UserSettings>("/api/settings"),

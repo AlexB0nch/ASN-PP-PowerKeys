@@ -63,3 +63,13 @@ export interface UserSettings {
   profile: string;
   shortcuts: ShortcutBinding[];
 }
+
+export interface BuildPaletteRequest {
+  themeColors?: string[];
+  recentColors?: string[];
+  fallbackTheme?: string[];
+}
+
+export interface BuildPaletteResponse {
+  palette: string[];
+}

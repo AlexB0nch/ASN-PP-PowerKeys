@@ -136,4 +136,48 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
         Assert.True(response.Headers.TryGetValues("Access-Control-Allow-Origin", out var values));
         Assert.Contains("https://alexb0nch.github.io", values);
     }
+
+    [Fact]
+    public async Task BuildPalette_MergesThemeAndRecent_Deduplicates()
+    {
+        var client = _factory.CreateClient();
+        var body = new
+        {
+            themeColors = new[] { "#FF0000", "#00FF00" },
+            recentColors = new[] { "#ff0000", "#0000FF" },
+            fallbackTheme = new[] { "#AABBCC" },
+        };
+
+        var response = await client.PostAsJsonAsync("/api/colors/build-palette", body);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var palette = result.GetProperty("palette");
+        Assert.Equal(3, palette.GetArrayLength());
+        Assert.Equal("#FF0000", palette[0].GetString());
+        Assert.Equal("#00FF00", palette[1].GetString());
+        Assert.Equal("#0000FF", palette[2].GetString());
+    }
+
+    [Fact]
+    public async Task BuildPalette_EmptyTheme_UsesFallback()
+    {
+        var client = _factory.CreateClient();
+        var body = new
+        {
+            themeColors = Array.Empty<string>(),
+            recentColors = new[] { "#123456" },
+            fallbackTheme = new[] { "#4472C4", "#ED7D31" },
+        };
+
+        var response = await client.PostAsJsonAsync("/api/colors/build-palette", body);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var palette = result.GetProperty("palette");
+        Assert.Equal(3, palette.GetArrayLength());
+        Assert.Equal("#4472C4", palette[0].GetString());
+        Assert.Equal("#ED7D31", palette[1].GetString());
+        Assert.Equal("#123456", palette[2].GetString());
+    }
 }
