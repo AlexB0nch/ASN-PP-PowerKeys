@@ -70,10 +70,16 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
-**Sprint 04 — Smart Color Picker** (в работе): S04-001 Done (#29), S04-002 Done (#30) — picker UI wired;
-S04-003 In Progress — persist recent.
+**Sprint 04 — Smart Color Picker** (в работе): S04-001 Done (#29), S04-002 Done (#30), S04-003 Done —
+persist recent + integration.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S04-003:** Recent colors (max 5) persist in browser `localStorage` key `ppt-powerkeys-recent-colors`
+  (per device, no Api/UserSettings round-trip — VSTO parity for session reload). `loadPersistedRecentColors()`
+  in `bootstrapThemeColors()`; `recordRecentColor` saves; `resetFormatColorState` clears for tests.
+  Fill/Line/Text cycle commands and `ColorPickerPanel` share the same recent list. Picker `reload` refreshes
+  theme via `readPresentationThemeColors()`; MessageBar when `source === 'fallback'` on Web.
+- **S04-002:** `ColorPickerPanel.tsx` — theme/recent swatches, Apply Fill/Line/Text; `OpenColorScheme` scrolls to picker in Settings.
 - **S04-001:** `ColorPaletteBuilder` (Core) merge theme≤10 + recent≤5; Api `POST /api/colors/build-palette`;
   AddIn `themeColors.ts` reads slide master `themeColorScheme` (PowerPointApi 1.10), silent fallback на
   `DEFAULT_PALETTE` на Web; `bootstrapThemeColors()` on `Office.onReady`.

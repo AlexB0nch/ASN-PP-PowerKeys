@@ -135,7 +135,10 @@ export const App: React.FC = () => {
         setOpenAccordionItems((prev) =>
           prev.includes("Settings") ? prev : [...prev, "Settings"],
         );
-        window.setTimeout(() => colorPickerPanelRef.current?.focus(), 150);
+        window.setTimeout(() => {
+          void colorPickerPanelRef.current?.reload();
+          colorPickerPanelRef.current?.focus();
+        }, 150);
         return outcomeSuccess("Color picker opened.");
       },
     }),

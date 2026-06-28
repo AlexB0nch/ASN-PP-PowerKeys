@@ -1,4 +1,10 @@
-import { DEFAULT_PALETTE, normalizeHex, setThemeColors, type ThemeColorSource } from "./formatColorState";
+import {
+  DEFAULT_PALETTE,
+  loadPersistedRecentColors,
+  normalizeHex,
+  setThemeColors,
+  type ThemeColorSource,
+} from "./formatColorState";
 
 /* global Office, PowerPoint */
 
@@ -99,6 +105,7 @@ export async function readPresentationThemeColors(): Promise<ThemeColorsResult> 
 
 /** Loads presentation theme colors into format-color state (called on task pane startup). */
 export async function bootstrapThemeColors(): Promise<ThemeColorsResult> {
+  loadPersistedRecentColors();
   const result = await readPresentationThemeColors();
 
   if (result.source === "fallback") {
