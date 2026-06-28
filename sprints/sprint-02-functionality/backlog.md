@@ -5,4 +5,4 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| _(пусто — архитектор новой сессии заводит задачи, см. `ARCHITECT-KICKOFF.md`)_ | | | | |
+| S02-001 | Objects: group/ungroup, duplicate, copy/paste position | AddIn | In Progress | [task](./tasks/S02-001-objects-group-duplicate-position.md) |
