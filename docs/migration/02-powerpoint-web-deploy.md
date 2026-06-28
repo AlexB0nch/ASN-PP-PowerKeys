@@ -130,7 +130,7 @@ New → Blueprint → выбрать репо). Хост даст другой U
 
 | Файл | Назначение |
 |------|------------|
-| `docker-compose.yml` (корень) | сервис `api` (`build: .` из корневого `Dockerfile`, `ASPNETCORE_ENVIRONMENT=Production`, `expose: 8080`) + сервис `caddy` (`caddy:2`, порты `80`/`443`, тома `caddy_data`/`caddy_config`, монтирует `./Caddyfile`). |
+| `docker-compose.yml` (корень) | сервис `api` (`build: .` из корневого `Dockerfile`, `ASPNETCORE_ENVIRONMENT=Production`, `SETTINGS_DATA_PATH=/data/settings`, том `settings_data:/data/settings`, `expose: 8080`) + сервис `caddy` (`caddy:2`, порты `80`/`443`, тома `caddy_data`/`caddy_config`, монтирует `./Caddyfile`). |
 | `Caddyfile` (корень) | `{$API_PUBLIC_HOST:95.140.152.103.sslip.io} { reverse_proxy api:8080 }` — авто-HTTPS; хост из env `API_PUBLIC_HOST` с дефолтом sslip.io (единственная точка смены на свой домен). |
 | `.github/workflows/deploy-vds.yml` | `workflow_dispatch` (+ push в `main` по путям API/compose/Caddyfile). Копирует на VDS `Dockerfile`/`.dockerignore`/`docker-compose.yml`/`Caddyfile`/`.env`/`src/PptPowerKeys.Core`/`src/PptPowerKeys.Api` (scp по SSH) и выполняет `docker compose up -d --build`. Job **gated на секрет `VDS_SSH_KEY`** — без него job не падает, а пишет skip notice (как Azure-gating в `deploy.yml`). |
 
@@ -159,6 +159,17 @@ New → Blueprint → выбрать репо). Хост даст другой U
    сертификат (несколько десятков секунд).
 7. **Проверка.** Открыть `https://95.140.152.103.sslip.io/health` → `200 {"status":"ok"}`, затем
    `…/api/commands` → каталог команд. В PowerPoint Online панель должна загружать команды без «Cannot reach backend».
+
+### Персистентность настроек (S03-001)
+
+Настройки пользователя (`UserSettings`, шорткаты) хранятся в JSON-файлах на диске API-контейнера:
+
+| Переменная / том | Назначение |
+|------------------|------------|
+| `SETTINGS_DATA_PATH` | Каталог данных (по умолчанию `/data/settings` в контейнере). Один файл `{userId}.json` на пользователя; аноним — `__anonymous__.json`. |
+| `settings_data` (Docker volume) | Named volume в `docker-compose.yml`, смонтирован в `/data/settings` у сервиса `api`. Переживает `docker compose up --build`. |
+
+При смене VDS или бэкапе скопируйте содержимое тома `settings_data` (или каталога на хосте, если смонтирован bind-mount).
 
 > **Замечание по безопасности.** В `deploy-vds.yml` host key сервера не закреплён (runner доверяет ключу при
 > первом подключении — теоретический риск MITM). Для усиления добавьте секрет с отпечатком и передайте его в

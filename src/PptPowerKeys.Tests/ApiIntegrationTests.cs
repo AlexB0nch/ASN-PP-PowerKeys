@@ -2,18 +2,19 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using PptPowerKeys.Core.Geometry;
 using Xunit;
 
 namespace PptPowerKeys.Tests;
 
-public class ApiIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestWebApplicationFactory _factory;
 
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
-    public ApiIntegrationTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public ApiIntegrationTests(TestWebApplicationFactory factory) => _factory = factory;
 
     [Fact]
     public async Task Health_ReturnsOk()
@@ -90,6 +91,36 @@ public class ApiIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 
         var saved = await put.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal("Team", saved.GetProperty("profile").GetString());
+    }
+
+    [Fact]
+    public async Task Settings_PersistAcrossFactoryRestart()
+    {
+        string dataPath = _factory.SettingsDataPath;
+        var client1 = _factory.CreateClient();
+        var updated = new
+        {
+            profile = "SurvivesRestart",
+            shortcuts = new[] { new { commandId = "AlignLeft", keys = "Ctrl+9" } },
+        };
+        var put = await client1.PutAsJsonAsync("/api/settings", updated);
+        put.EnsureSuccessStatusCode();
+
+        Environment.SetEnvironmentVariable("SETTINGS_DATA_PATH", dataPath);
+        await using var factory2 = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Settings:DataPath"] = dataPath,
+                });
+            });
+        });
+
+        var client2 = factory2.CreateClient();
+        var loaded = await client2.GetFromJsonAsync<JsonElement>("/api/settings");
+        Assert.Equal("SurvivesRestart", loaded.GetProperty("profile").GetString());
     }
 
     [Fact]
