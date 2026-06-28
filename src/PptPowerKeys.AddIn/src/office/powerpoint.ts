@@ -460,3 +460,160 @@ export async function pasteObjectPosition(position: PositionSnapshot): Promise<n
 
 /** Re-export for callers that need to read clipboard state without mutating selection. */
 export { getPositionClipboard };
+
+const ELLIPSIS = "...";
+
+async function readClipboardPlainText(): Promise<string> {
+  if (!navigator.clipboard?.readText) {
+    throw new Error("Clipboard API is not available in this browser.");
+  }
+
+  try {
+    const text = await navigator.clipboard.readText();
+    if (!text) {
+      throw new Error("Clipboard is empty.");
+    }
+    return text;
+  } catch (err) {
+    if (err instanceof Error && err.message === "Clipboard is empty.") {
+      throw err;
+    }
+    if (err instanceof DOMException && err.name === "NotAllowedError") {
+      throw new Error("Clipboard access was denied. Allow clipboard permissions and try again.");
+    }
+    throw err instanceof Error ? err : new Error(String(err));
+  }
+}
+
+/** Applies plain text from the system clipboard to every selected shape with a text frame. */
+export async function pasteUnformattedText(): Promise<number> {
+  const text = await readClipboardPlainText();
+
+  return PowerPoint.run(async (context) => {
+    const selected = context.presentation.getSelectedShapes();
+    selected.load("items/id");
+    await context.sync();
+
+    if (selected.items.length === 0) {
+      throw new Error("Select one or more shapes first.");
+    }
+
+    let applied = 0;
+    for (const shape of selected.items) {
+      try {
+        shape.textFrame.textRange.text = text;
+        applied += 1;
+      } catch {
+        // Shape has no text frame — skip.
+      }
+    }
+
+    if (applied === 0) {
+      throw new Error("Selected shape(s) have no text frame to paste into.");
+    }
+
+    await context.sync();
+    return applied;
+  });
+}
+
+/** Replaces the text of each selected shape with three dots (`"..."`). */
+export async function replaceSelectedTextWithEllipsis(): Promise<number> {
+  return PowerPoint.run(async (context) => {
+    const selected = context.presentation.getSelectedShapes();
+    selected.load("items/id");
+    await context.sync();
+
+    if (selected.items.length === 0) {
+      throw new Error("Select one or more shapes first.");
+    }
+
+    let applied = 0;
+    for (const shape of selected.items) {
+      try {
+        shape.textFrame.textRange.text = ELLIPSIS;
+        applied += 1;
+      } catch {
+        // Shape has no text frame — skip.
+      }
+    }
+
+    if (applied === 0) {
+      throw new Error("Selected shape(s) have no text to replace.");
+    }
+
+    await context.sync();
+    return applied;
+  });
+}
+
+type ScriptAttribute = "superscript" | "subscript";
+
+async function toggleScriptAttribute(attribute: ScriptAttribute): Promise<number> {
+  const label = attribute === "superscript" ? "Superscript" : "Subscript";
+
+  return PowerPoint.run(async (context) => {
+    const selected = context.presentation.getSelectedShapes();
+    selected.load("items/id");
+    await context.sync();
+
+    if (selected.items.length === 0) {
+      throw new Error("Select one or more shapes first.");
+    }
+
+    const fonts: PowerPoint.ShapeFont[] = [];
+    for (const shape of selected.items) {
+      try {
+        const font = shape.textFrame.textRange.font;
+        font.load("superscript,subscript");
+        fonts.push(font);
+      } catch {
+        // Shape has no text frame — skip.
+      }
+    }
+
+    if (fonts.length === 0) {
+      throw new Error("Selected shape(s) have no text to format.");
+    }
+
+    try {
+      await context.sync();
+    } catch {
+      throw new Error(`${label} is not supported on this PowerPoint version.`);
+    }
+
+    for (const font of fonts) {
+      const current = attribute === "superscript" ? font.superscript : font.subscript;
+      const enable = current !== true;
+      if (attribute === "superscript") {
+        font.superscript = enable;
+        if (enable) {
+          font.subscript = false;
+        }
+      } else {
+        font.subscript = enable;
+        if (enable) {
+          font.superscript = false;
+        }
+      }
+    }
+
+    try {
+      await context.sync();
+    } catch {
+      throw new Error(`${label} is not supported on this PowerPoint version.`);
+    }
+
+    return fonts.length;
+  });
+}
+
+/** Toggles superscript on selected shapes; enabling superscript disables subscript. */
+export async function toggleSuperscript(): Promise<number> {
+  return toggleScriptAttribute("superscript");
+}
+
+/** Toggles subscript on selected shapes; enabling subscript disables superscript. */
+export async function toggleSubscript(): Promise<number> {
+  return toggleScriptAttribute("subscript");
+}
