@@ -25,8 +25,9 @@ sprints/
 |--------|-------|--------|
 | Sprint 01 | Инфраструктура Web Add-in: Core/Api/AddIn, манифест, деплой статики + API на VDS | **Done** |
 | Sprint 02 | Функциональный паритет команд (Objects, Format, Text, Alignment, Slides, UX) | **Done** — `sprint-02-functionality/retrospective.md` |
-| Sprint 03 | Settings UI, персистентный SettingsStore, Shortcut Manager | **Active** — `sprint-03-settings/ARCHITECT-KICKOFF.md` |
-| Sprint 04 | Smart Color Picker, Backup, Multi-slide | Planned |
+| Sprint 03 | Settings UI, persistent SettingsStore, Shortcut Manager | **Done** — `sprint-03-settings/retrospective.md` |
+| Sprint 04 | Smart Color Picker / Slide Master palette (`OpenColorScheme`) | **Active** — `sprint-04-smart-color-picker/ARCHITECT-KICKOFF.md` |
+| Sprint 05 | Backup, Multi-slide, Statistics | Planned |
 
 > Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до
 > рабочего состояния в PowerPoint Online (исходные VSTO-цели переосмыслены). Детали — в его `retrospective.md`.

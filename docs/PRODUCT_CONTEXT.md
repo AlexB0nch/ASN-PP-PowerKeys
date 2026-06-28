@@ -69,9 +69,9 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 (не красный Error). Default «not wired up yet» — safety-net для неизвестных id.
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
-**Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, персистентный store, Shortcut Manager.
-**Sprint 04** — Smart Color Picker / Slide Master palette (следующий спринт).
-Хендофф — `sprints/sprint-03-settings/retrospective.md`.
+**Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
+**Sprint 04 — Smart Color Picker** (`OpenColorScheme` stub → реальный picker). Хендофф —
+`sprints/sprint-04-smart-color-picker/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S03-003:** `ShortcutManager.tsx` — editable bindings (title из каталога, edit keys, add/remove);
