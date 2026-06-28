@@ -9,9 +9,9 @@
 
 ## Цели (декомпозирует architect в задачи `S03-0YY`)
 - [x] **Персистентный `SettingsStore`** — JSON на диске (Docker volume на VDS), переживает рестарт API. (S03-001, PR #23)
-- [ ] **Settings panel** в AddIn — S03-002 (Todo в backlog).
-- [ ] **Shortcut Manager UI** — S03-003 (или часть S03-002).
-- [ ] Wiring Settings-команд — S03-002.
+- [x] **Settings panel** в AddIn — S03-002 (PR #25).
+- [ ] **Shortcut Manager UI** — S03-003 (следующий шаг).
+- [x] Wiring Settings-команд — S03-002 (PR #25).
 - [x] Тесты persistence — S03-001 (61 tests).
 - [x] Документация деплоя (volume, `SETTINGS_DATA_PATH`) — S03-001.
 

@@ -8,8 +8,9 @@
 | **Task ID** | `S03-002` |
 | **Спринт** | `sprint-03-settings` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | #24 |
+| **PR** | #25 |
 
 ## Цель
 Дать пользователю **рабочий Settings UI** в task pane: загрузка/сохранение/сброс настроек через
@@ -79,17 +80,23 @@
 - `src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts`
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `getUserId()` сохраняет stable id в `localStorage` (`pptpowerkeys-user-id`).
-2. [ ] `getSettings` / `saveSettings` / `resetSettings` отправляют `X-User-Id`.
-3. [ ] Settings panel загружает settings on mount, отображает profile и read-only shortcuts.
-4. [ ] Save и Reset to defaults работают через API и обновляют UI.
-5. [ ] `OpenShortcutManager` открывает/скроллит к Settings panel.
-6. [ ] `ResetToDefaults` вызывает `resetSettings()` и перезагружает UI.
-7. [ ] `OpenColorScheme` показывает stub «Smart Color Picker — planned (Sprint 04)».
-8. [ ] UI hint про ограничение global hotkeys на Office Web.
-9. [ ] `dotnet test PptPowerKeys.sln` — зелёный (61+).
-10. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-11. [ ] PR с Task ID `S03-002`, ветка `cursor/S03-002-settings-panel-ui-0813`.
+1. [x] `getUserId()` сохраняет stable id в `localStorage` (`pptpowerkeys-user-id`).
+2. [x] `getSettings` / `saveSettings` / `resetSettings` отправляют `X-User-Id`.
+3. [x] Settings panel загружает settings on mount, отображает profile и read-only shortcuts.
+4. [x] Save и Reset to defaults работают через API и обновляют UI.
+5. [x] `OpenShortcutManager` открывает/скроллит к Settings panel.
+6. [x] `ResetToDefaults` вызывает `resetSettings()` и перезагружает UI.
+7. [x] `OpenColorScheme` показывает stub «Smart Color Picker — planned (Sprint 04)».
+8. [x] UI hint про ограничение global hotkeys на Office Web.
+9. [x] `dotnet test PptPowerKeys.sln` — зелёный (61 passed).
+10. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+11. [x] PR #25: ветка `cursor/S03-002-settings-panel-ui-0813`, Task ID `S03-002`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #25 merged в `main` (commit `89511d2`).
+- CHECKLIST: scope соблюдён — AddIn only, Core/Api/VstoLegacy не тронуты.
+- `settingsRequest()` с `X-User-Id`; `SettingsPanel` с profile/shortcuts/Save/Reset; Settings-команды wired.
+- Локально повторены `dotnet test` (61), `npm run typecheck`, `npm run validate:prod` — зелёные.
 
 ## Зависимости
 - **S03-001 Done** (PR #23) — persistent settings API.

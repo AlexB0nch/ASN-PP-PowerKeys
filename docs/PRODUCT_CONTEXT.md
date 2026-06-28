@@ -70,10 +70,14 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 — Settings UI, персистентный SettingsStore, Shortcut Manager.** S03-001 Done (PR #23:
-`FileUserSettingsStore` + Docker volume). Следующий шаг — S03-002 Settings panel UI. Хендофф —
-`sprints/sprint-03-settings/ARCHITECT-KICKOFF.md`.
+`FileUserSettingsStore` + Docker volume). **S03-002 Done (PR #25):** Settings panel UI + wiring Settings-команд
+(`X-User-Id` в localStorage, Save/Reset, read-only shortcuts). Следующий шаг — **S03-003 Shortcut Manager**.
+Хендофф — `sprints/sprint-03-settings/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S03-002:** Settings panel в AddIn (`SettingsPanel.tsx`); `getUserId()` → `localStorage` + header `X-User-Id`;
+  `resetSettings()`; Settings-команды wired (`OpenShortcutManager` scroll, `ResetToDefaults` API reset,
+  `OpenColorScheme` stub Sprint 04); UI hint — Office Web не перехватывает global hotkeys как VSTO.
 - **S03-001:** `IUserSettingsStore` в Core; `FileUserSettingsStore` в Api — JSON per user под `SETTINGS_DATA_PATH`
   (default `/data/settings`), atomic write, Docker volume `settings_data` на VDS.
 - **S02-006:** Единый реестр `unsupportedWebCommands.ts` для 9 None-команд; `CommandOutcome.kind`
