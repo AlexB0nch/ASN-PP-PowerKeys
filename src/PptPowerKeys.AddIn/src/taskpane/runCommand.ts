@@ -32,10 +32,21 @@ import {
   normalizeHex,
   recordRecentColor,
 } from "../office/formatColorState";
+import { isUnsupportedWebCommand, runUnsupportedWebCommand } from "./unsupportedWebCommands";
+
+export type CommandOutcomeKind = "success" | "unsupported" | "error";
 
 export interface CommandOutcome {
-  ok: boolean;
+  kind: CommandOutcomeKind;
   message: string;
+}
+
+export function outcomeSuccess(message: string): CommandOutcome {
+  return { kind: "success", message };
+}
+
+export function outcomeError(message: string): CommandOutcome {
+  return { kind: "error", message };
 }
 
 /**
@@ -50,34 +61,34 @@ export async function runCommand(descriptor: CommandDescriptor): Promise<Command
       case "HostScript":
         return await runHostScript(descriptor);
       case "Settings":
-        return { ok: true, message: "Open the settings panel below." };
+        return outcomeSuccess("Open the settings panel below.");
       default:
-        return { ok: false, message: `Unknown execution kind for ${descriptor.id}.` };
+        return outcomeError(`Unknown execution kind for ${descriptor.id}.`);
     }
   } catch (err) {
-    return { ok: false, message: err instanceof Error ? err.message : String(err) };
+    return outcomeError(err instanceof Error ? err.message : String(err));
   }
 }
 
 async function runServerLayout(descriptor: CommandDescriptor): Promise<CommandOutcome> {
   const shapes = await getSelectedShapeBounds();
   if (shapes.length === 0) {
-    return { ok: false, message: "Select one or more shapes first." };
+    return outcomeError("Select one or more shapes first.");
   }
 
   const result = await api.applyLayout(descriptor.id, shapes);
   if (!result.changed) {
-    return { ok: true, message: result.message ?? "Nothing to change." };
+    return outcomeSuccess(result.message ?? "Nothing to change.");
   }
 
   await applyShapeBounds(result.shapes);
-  return { ok: true, message: `${descriptor.title} applied to ${result.shapes.length} shape(s).` };
+  return outcomeSuccess(`${descriptor.title} applied to ${result.shapes.length} shape(s).`);
 }
 
 async function runPaletteColorCommand(kind: ColorCommandKind): Promise<CommandOutcome> {
   const shapeIds = await getSelectedShapeIds();
   if (shapeIds.length === 0) {
-    return { ok: false, message: "Select one or more shapes first." };
+    return outcomeError("Select one or more shapes first.");
   }
 
   const color = nextPaletteColor(kind, shapeIds);
@@ -97,10 +108,9 @@ async function runPaletteColorCommand(kind: ColorCommandKind): Promise<CommandOu
   }
 
   recordRecentColor(normalized);
-  return {
-    ok: true,
-    message: `${kind === "FillColor" ? "Fill" : kind === "LineColor" ? "Line" : "Text"} color ${normalized} applied to ${count} shape(s).`,
-  };
+  return outcomeSuccess(
+    `${kind === "FillColor" ? "Fill" : kind === "LineColor" ? "Line" : "Text"} color ${normalized} applied to ${count} shape(s).`,
+  );
 }
 
 const COPY_AND_ALIGN_LAYOUT: Record<
@@ -118,7 +128,7 @@ async function runCopyAndAlign(
 ): Promise<CommandOutcome> {
   const originals = await getSelectedShapeBounds();
   if (originals.length === 0) {
-    return { ok: false, message: "Select one or more shapes first." };
+    return outcomeError("Select one or more shapes first.");
   }
 
   const clones = await cloneSelectedShapesAtSourcePositions();
@@ -128,127 +138,111 @@ async function runCopyAndAlign(
 
   const result = await api.applyLayout(layoutCommand, combined, anchorIndex);
   if (!result.changed) {
-    return { ok: true, message: result.message ?? "Nothing to change." };
+    return outcomeSuccess(result.message ?? "Nothing to change.");
   }
 
   await applyShapeBoundsOnSlide(result.shapes);
-  return {
-    ok: true,
-    message: `Duplicated and aligned ${clones.length} shape(s).`,
-  };
+  return outcomeSuccess(`Duplicated and aligned ${clones.length} shape(s).`);
 }
 
 async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutcome> {
+  if (isUnsupportedWebCommand(descriptor.id)) {
+    return runUnsupportedWebCommand(descriptor.id);
+  }
+
   switch (descriptor.id) {
     case "InsertRectangle":
     case "InsertSquare":
       await insertShape("rectangle");
-      return { ok: true, message: "Rectangle inserted." };
+      return outcomeSuccess("Rectangle inserted.");
     case "InsertEllipse":
       await insertShape("ellipse");
-      return { ok: true, message: "Ellipse inserted." };
+      return outcomeSuccess("Ellipse inserted.");
     case "InsertLine":
     case "InsertArrow":
       await insertShape("line");
-      return { ok: true, message: "Line inserted." };
+      return outcomeSuccess("Line inserted.");
     case "InsertTextbox":
       await insertTextBox();
-      return { ok: true, message: "Text box inserted." };
+      return outcomeSuccess("Text box inserted.");
     case "Group": {
       const count = await groupSelectedShapes();
-      return { ok: true, message: `Grouped ${count} shape(s).` };
+      return outcomeSuccess(`Grouped ${count} shape(s).`);
     }
     case "Ungroup":
       await ungroupSelectedShape();
-      return { ok: true, message: "Ungrouped." };
-    case "Regroup":
-      return {
-        ok: false,
-        message: "Regroup is not supported on PowerPoint Web.",
-      };
+      return outcomeSuccess("Ungrouped.");
     case "DuplicateRight":
     case "DuplicateLeft":
     case "DuplicateDown":
     case "DuplicateUp": {
       const shapes = await getSelectedShapeBounds();
       if (shapes.length === 0) {
-        return { ok: false, message: "Select one or more shapes first." };
+        return outcomeError("Select one or more shapes first.");
       }
       const targets = await Promise.all(
         shapes.map((source) => api.duplicateOffset(descriptor.id, source, 0)),
       );
       const count = await duplicateShapesAtPositions(shapes, targets);
-      return { ok: true, message: `Duplicated ${count} shape(s).` };
+      return outcomeSuccess(`Duplicated ${count} shape(s).`);
     }
     case "CopyObjectPosition": {
       const position = await copyObjectPosition();
-      return {
-        ok: true,
-        message: `Copied position (${position.left.toFixed(1)}, ${position.top.toFixed(1)}).`,
-      };
+      return outcomeSuccess(
+        `Copied position (${position.left.toFixed(1)}, ${position.top.toFixed(1)}).`,
+      );
     }
     case "PasteObjectPosition": {
       const position = getPositionClipboard();
       if (!position) {
-        return { ok: false, message: "Copy a position first (Copy object position)." };
+        return outcomeError("Copy a position first (Copy object position).");
       }
       const count = await pasteObjectPosition(position);
-      return { ok: true, message: `Pasted position to ${count} shape(s).` };
+      return outcomeSuccess(`Pasted position to ${count} shape(s).`);
     }
     case "BringToFront":
       await setZOrder("front");
-      return { ok: true, message: "Brought to front." };
+      return outcomeSuccess("Brought to front.");
     case "SendToBack":
       await setZOrder("back");
-      return { ok: true, message: "Sent to back." };
+      return outcomeSuccess("Sent to back.");
     case "BringForward":
       await setZOrder("forward");
-      return { ok: true, message: "Brought forward." };
+      return outcomeSuccess("Brought forward.");
     case "SendBackward":
       await setZOrder("backward");
-      return { ok: true, message: "Sent backward." };
+      return outcomeSuccess("Sent backward.");
     case "AddupTextFields": {
       const texts = await getSelectedShapeTexts();
       const stats = await api.addup(texts);
-      return {
-        ok: true,
-        message: `Sum ${stats.sum} · avg ${stats.average} · min ${stats.min} · max ${stats.max} (${stats.count} numbers).`,
-      };
+      return outcomeSuccess(
+        `Sum ${stats.sum} · avg ${stats.average} · min ${stats.min} · max ${stats.max} (${stats.count} numbers).`,
+      );
     }
     case "ToggleFillBlackWhite": {
       const count = await toggleFillBlackWhite();
-      return { ok: true, message: `Toggled fill on ${count} shape(s).` };
+      return outcomeSuccess(`Toggled fill on ${count} shape(s).`);
     }
     case "FillColor":
     case "LineColor":
     case "TextColor": {
       return await runPaletteColorCommand(descriptor.id as ColorCommandKind);
     }
-    case "FormatPainter":
-      return {
-        ok: false,
-        message: "Format painter is not supported on PowerPoint Web.",
-      };
     case "PasteUnformatted": {
       const count = await pasteUnformattedText();
-      return { ok: true, message: `Pasted plain text into ${count} shape(s).` };
+      return outcomeSuccess(`Pasted plain text into ${count} shape(s).`);
     }
-    case "PasteFormatted":
-      return {
-        ok: false,
-        message: "Paste formatted is not supported on PowerPoint Web.",
-      };
     case "ReplaceWithEllipsis": {
       const count = await replaceSelectedTextWithEllipsis();
-      return { ok: true, message: `Replaced text with "..." on ${count} shape(s).` };
+      return outcomeSuccess(`Replaced text with "..." on ${count} shape(s).`);
     }
     case "ToggleSuperscript": {
       const count = await toggleSuperscript();
-      return { ok: true, message: `Toggled superscript on ${count} shape(s).` };
+      return outcomeSuccess(`Toggled superscript on ${count} shape(s).`);
     }
     case "ToggleSubscript": {
       const count = await toggleSubscript();
-      return { ok: true, message: `Toggled subscript on ${count} shape(s).` };
+      return outcomeSuccess(`Toggled subscript on ${count} shape(s).`);
     }
     case "CopyAndAlignLeft":
     case "CopyAndAlignRight":
@@ -257,43 +251,11 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
       return await runCopyAndAlign(descriptor.id as keyof typeof COPY_AND_ALIGN_LAYOUT);
     case "CopySlide":
       await duplicateSelectedSlide();
-      return { ok: true, message: "Slide duplicated." };
-    case "ToggleZoom":
-      return {
-        ok: false,
-        message: "Zoom is not available in PowerPoint Web. Use the host zoom controls.",
-      };
-    case "ToggleSlideSorter":
-      return {
-        ok: false,
-        message: "Slide sorter view is not available in PowerPoint Web.",
-      };
-    case "StartSlideShow":
-      return {
-        ok: false,
-        message:
-          "Slide show cannot be started from the add-in on PowerPoint Web. Use Present / Slide Show in the host.",
-      };
-    case "ToggleGrid":
-      return {
-        ok: false,
-        message: "Grid toggle is not available in PowerPoint Web.",
-      };
-    case "ToggleGuides":
-      return {
-        ok: false,
-        message: "Guides toggle is not available in PowerPoint Web.",
-      };
-    case "PrintSlide":
-      return {
-        ok: false,
-        message:
-          "Printing is not available from the add-in. Use Ctrl+P (Cmd+P) or the host Print command.",
-      };
+      return outcomeSuccess("Slide duplicated.");
     default:
-      return {
-        ok: false,
-        message: `'${descriptor.title}' is not wired up yet (Office.js support: ${descriptor.support}).`,
-      };
+      // Safety-net for unknown ids — should never fire for catalog commands after S02-005.
+      return outcomeError(
+        `'${descriptor.title}' is not wired up yet (Office.js support: ${descriptor.support}).`,
+      );
   }
 }

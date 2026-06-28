@@ -27,6 +27,17 @@ const useStyles = makeStyles({
     height: "100vh",
     boxSizing: "border-box",
   },
+  legend: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    alignItems: "center",
+  },
+  legendItem: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "4px",
+  },
   grid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
@@ -56,6 +67,30 @@ const CATEGORY_ORDER: CommandCategory[] = [
 
 function supportColor(support: OfficeJsSupport): "success" | "warning" | "danger" {
   return support === "Full" ? "success" : support === "Partial" ? "warning" : "danger";
+}
+
+function supportLegendLabel(support: OfficeJsSupport): string {
+  return support === "Full" ? "Full" : support === "Partial" ? "Partial" : "Not on Web";
+}
+
+function outcomeBadge(outcome: CommandOutcome): { color: "success" | "warning" | "danger"; label: string } {
+  switch (outcome.kind) {
+    case "success":
+      return { color: "success", label: "OK" };
+    case "unsupported":
+      return { color: "warning", label: "Not on Web" };
+    case "error":
+      return { color: "danger", label: "Error" };
+  }
+}
+
+function commandTooltip(cmd: CommandDescriptor): string {
+  const shortcut = cmd.defaultShortcut ? ` · ${cmd.defaultShortcut}` : "";
+  if (cmd.support === "None") {
+    const reason = cmd.notes ? ` ${cmd.notes}` : "";
+    return `Not available on PowerPoint Web.${reason}${shortcut}`;
+  }
+  return `${cmd.notes ?? cmd.title}${shortcut}`;
 }
 
 export const App: React.FC = () => {
@@ -99,6 +134,8 @@ export const App: React.FC = () => {
     );
   }
 
+  const statusBadge = status ? outcomeBadge(status) : null;
+
   return (
     <div className={styles.root}>
       <Title3>PptPowerKeys</Title3>
@@ -107,6 +144,15 @@ export const App: React.FC = () => {
         cross-platform via Office.js.
       </Caption1>
 
+      <div className={styles.legend}>
+        {(["Full", "Partial", "None"] as OfficeJsSupport[]).map((support) => (
+          <span className={styles.legendItem} key={support}>
+            <Badge size="tiny" color={supportColor(support)} />
+            <Caption1>{supportLegendLabel(support)}</Caption1>
+          </span>
+        ))}
+      </div>
+
       {error && (
         <div className={styles.status}>
           <Subtitle2>Cannot reach backend</Subtitle2>
@@ -114,10 +160,10 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {status && (
+      {status && statusBadge && (
         <div className={styles.status}>
-          <Badge appearance="filled" color={status.ok ? "success" : "danger"}>
-            {status.ok ? "OK" : "Error"}
+          <Badge appearance="filled" color={statusBadge.color}>
+            {statusBadge.label}
           </Badge>{" "}
           <Caption1>{status.message}</Caption1>
         </div>
@@ -133,9 +179,7 @@ export const App: React.FC = () => {
                   <Tooltip
                     key={cmd.id}
                     relationship="description"
-                    content={`${cmd.notes ?? cmd.title}${
-                      cmd.defaultShortcut ? ` · ${cmd.defaultShortcut}` : ""
-                    }`}
+                    content={commandTooltip(cmd)}
                   >
                     <Button
                       className={styles.cmdButton}
