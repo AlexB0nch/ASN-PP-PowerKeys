@@ -15,6 +15,9 @@ services:
     build: .
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      SETTINGS_DATA_PATH: /data/settings
+    volumes:
+      - settings_data:/data/settings
     expose:
       - "8080"
     restart: unless-stopped
@@ -38,3 +41,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  settings_data:

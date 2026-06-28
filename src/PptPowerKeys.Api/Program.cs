@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PptPowerKeys.Api.Contracts;
 using PptPowerKeys.Api.Services;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Settings;
 using PptPowerKeys.Core.Layout;
 using PptPowerKeys.Core.Text;
 
@@ -30,7 +31,11 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "PptPowerKeys API", Version = "v1" });
 });
 
-builder.Services.AddSingleton<SettingsStore>();
+var settingsDataPath = builder.Configuration["Settings:DataPath"]
+    ?? Environment.GetEnvironmentVariable("SETTINGS_DATA_PATH")
+    ?? "/data/settings";
+
+builder.Services.AddSingleton<IUserSettingsStore>(_ => new FileUserSettingsStore(settingsDataPath));
 
 // The Office task pane runs on a different origin (the add-in dev server / CDN),
 // so CORS is required. Origins are configurable via "Cors:AllowedOrigins".
@@ -133,18 +138,18 @@ app.MapPost("/api/text/addup", ([FromBody] AddupApiRequest request) =>
 
 // ── Settings ─────────────────────────────────────────────────────────────────
 // X-User-Id stands in for the SSO identity that getAccessToken() would supply.
-app.MapGet("/api/settings", (SettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId) =>
+app.MapGet("/api/settings", (IUserSettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId) =>
         Results.Ok(store.Get(userId)))
     .WithName("GetSettings")
     .WithTags("Settings");
 
-app.MapPut("/api/settings", (SettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId,
-        [FromBody] PptPowerKeys.Core.Settings.UserSettings settings) =>
+app.MapPut("/api/settings", (IUserSettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId,
+        [FromBody] UserSettings settings) =>
         Results.Ok(store.Save(userId, settings)))
     .WithName("SaveSettings")
     .WithTags("Settings");
 
-app.MapPost("/api/settings/reset", (SettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId) =>
+app.MapPost("/api/settings/reset", (IUserSettingsStore store, [FromHeader(Name = "X-User-Id")] string? userId) =>
         Results.Ok(store.Reset(userId)))
     .WithName("ResetSettings")
     .WithTags("Settings");
