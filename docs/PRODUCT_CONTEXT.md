@@ -61,10 +61,15 @@ PowerPoint (Desktop/Web/Mac/iPad)
 ## 6. Дорожная карта / статус
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
-**Текущее состояние (2026-06-27):** сквозной путь работает end-to-end — надстройка **загружается в PowerPoint
-Online** (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), а **API задеплоен на собственный VDS**
-(`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt; деплой по SSH через GitHub Actions).
-`/api/commands` отвечает, CORS для GitHub Pages работает.
+**Текущее состояние (2026-06-28):** сквозной путь **подтверждён в живом PowerPoint Online** — надстройка
+загружается (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), тянет каталог из **API на собственном
+VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt, деплой по SSH через GitHub Actions),
+рендерит 76 команд по категориям. Команды `ServerLayout` (alignment/resize/distribute) исполняются:
+Office.js читает выделение → API/`LayoutEngine` → запись обратно по `id`. Инфраструктурный эпик завершён.
+
+**Следующий фокус — Sprint 02 (функциональность):** довести **функциональный паритет команд** (многие команды
+Format/Text/Slides ещё «not wired up yet» в `runCommand.ts`). Хендофф для архитектора новой сессии —
+`sprints/sprint-02-functionality/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S01-008:** dev/prod манифесты разделены; production URL подставляются при сборке (`ADDIN_BASE_URL`, `API_BASE_URL`).

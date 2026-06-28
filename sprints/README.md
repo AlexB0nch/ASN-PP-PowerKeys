@@ -23,7 +23,10 @@ sprints/
 
 | Спринт | Фокус | Статус |
 |--------|-------|--------|
-| Sprint 01 | MVP: Core, Alignment, Resize, Ribbon | Planned |
-| Sprint 02 | Objects, Format, Shortcut Manager | Planned |
-| Sprint 03 | v1.5: Smart Color Picker, Profiles | Planned |
+| Sprint 01 | Инфраструктура Web Add-in: Core/Api/AddIn, манифест, деплой статики + API на VDS | **Done** |
+| Sprint 02 | Функциональный паритет команд (Objects, Format, Text, Slides) | **Active** — см. `sprint-02-functionality/ARCHITECT-KICKOFF.md` |
+| Sprint 03 | v1.5: Smart Color Picker, профили/шорткаты, персистентность | Planned |
 | Sprint 04 | v2.0: Backup, Multi-slide, Statistics | Planned |
+
+> Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до
+> рабочего состояния в PowerPoint Online (исходные VSTO-цели переосмыслены). Детали — в его `retrospective.md`.

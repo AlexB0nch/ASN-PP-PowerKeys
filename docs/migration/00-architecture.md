@@ -104,6 +104,9 @@ Sideload `src/PptPowerKeys.AddIn/manifest.dev.xml` (или `manifest.xml`) в Po
 - [x] **Реальный sideload в PowerPoint Online подтверждён** (2026-06-27): production-манифест
       `manifest.prod.xml` грузится, task pane «PptPowerKeys (Web)» открывается и рендерит UI
       (S01-008/009/010). Статика — на GitHub Pages.
-- [ ] **API задеплоен на публичный HTTPS-хост** — пока нет: панель показывает «Cannot reach backend»
-      (`pptpowerkeys-api.azurewebsites.net` не поднят). Следующая задача — S01-011.
-- [ ] Полный функциональный паритет команд (выполнение layout-операций в живом PowerPoint) — Phase 4.
+- [x] **API задеплоен на публичный HTTPS** (2026-06-27, S01-011/012): собственный VDS
+      `https://95.140.152.103.sslip.io` (Docker Compose: Caddy auto-HTTPS + Kestrel), деплой по SSH через
+      GitHub Actions. Панель тянет `/api/commands`, CORS работает.
+- [x] **Команды `ServerLayout` исполняются в живом PowerPoint Online** (2026-06-28): выделение → API → запись.
+- [ ] **Полный функциональный паритет команд** — часть Format/Text/Slides ещё не реализована
+      (`runCommand.ts` → «not wired up yet»). Это фокус Sprint 02.
