@@ -160,6 +160,32 @@ app.MapPost("/api/settings/reset", (IUserSettingsStore store, [FromHeader(Name =
     .WithName("ResetSettings")
     .WithTags("Settings");
 
+app.MapGet("/api/settings/profile-presets", () =>
+    {
+        var presets = new Dictionary<string, ProfilePresetEntry>();
+        foreach (var name in ConsultingProfilePresets.KnownProfiles)
+        {
+            if (name == ConsultingProfilePresets.Custom)
+            {
+                continue;
+            }
+
+            presets[name] = new ProfilePresetEntry
+            {
+                Profile = name,
+                Shortcuts = ConsultingProfilePresets.GetShortcuts(name),
+            };
+        }
+
+        return Results.Ok(new ProfilePresetsResponse
+        {
+            Profiles = ConsultingProfilePresets.KnownProfiles,
+            Presets = presets,
+        });
+    })
+    .WithName("GetProfilePresets")
+    .WithTags("Settings");
+
 app.Run();
 
 // Exposed for integration testing via WebApplicationFactory.

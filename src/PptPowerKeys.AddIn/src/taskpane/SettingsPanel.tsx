@@ -2,18 +2,26 @@ import * as React from "react";
 import {
   Button,
   Caption1,
-  Input,
+  Dropdown,
   MessageBar,
   MessageBarBody,
+  Option,
   Spinner,
   Subtitle2,
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
 import { api } from "../services/api";
-import { CommandDescriptor, UserSettings } from "../services/types";
+import {
+  CommandDescriptor,
+  ProfilePresetsResponse,
+  ShortcutBinding,
+  UserSettings,
+} from "../services/types";
 import { CommandOutcome, outcomeError, outcomeSuccess } from "./runCommand";
 import { ShortcutManager } from "./ShortcutManager";
+
+const CUSTOM_PROFILE = "Custom";
 
 const useStyles = makeStyles({
   root: {
@@ -46,20 +54,42 @@ interface SettingsPanelProps {
   onFeedback?: (outcome: CommandOutcome) => void;
 }
 
+function isPresetProfile(profile: string, presets: ProfilePresetsResponse | null): boolean {
+  return presets !== null && profile in presets.presets;
+}
+
+function normalizeProfile(profile: string, presets: ProfilePresetsResponse | null): string {
+  if (presets?.profiles.includes(profile)) {
+    return profile;
+  }
+  return CUSTOM_PROFILE;
+}
+
+function cloneShortcuts(shortcuts: ShortcutBinding[]): ShortcutBinding[] {
+  return shortcuts.map((s) => ({ ...s }));
+}
+
 export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanelProps>(
   function SettingsPanel({ commands, onFeedback }, ref) {
     const styles = useStyles();
     const shortcutsRef = React.useRef<HTMLDivElement>(null);
     const [settings, setSettings] = React.useState<UserSettings | null>(null);
+    const [presets, setPresets] = React.useState<ProfilePresetsResponse | null>(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
     const [busy, setBusy] = React.useState<"save" | "reset" | null>(null);
+    const [presetWarning, setPresetWarning] = React.useState(false);
 
     const loadSettings = React.useCallback(async () => {
       setError(null);
       try {
-        const data = await api.getSettings();
+        const [data, presetData] = await Promise.all([
+          api.getSettings(),
+          api.getProfilePresets(),
+        ]);
         setSettings(data);
+        setPresets(presetData);
+        setPresetWarning(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -85,6 +115,30 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
       [loadSettings],
     );
 
+    const onProfileChange = (profile: string) => {
+      if (!settings || !presets) {
+        return;
+      }
+
+      if (profile === CUSTOM_PROFILE) {
+        setSettings((prev) => (prev ? { ...prev, profile: CUSTOM_PROFILE } : prev));
+        setPresetWarning(false);
+        return;
+      }
+
+      const preset = presets.presets[profile];
+      if (!preset) {
+        setSettings((prev) => (prev ? { ...prev, profile } : prev));
+        return;
+      }
+
+      setSettings({
+        profile,
+        shortcuts: cloneShortcuts(preset.shortcuts),
+      });
+      setPresetWarning(true);
+    };
+
     const onSave = async () => {
       if (!settings) {
         return;
@@ -93,6 +147,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
       try {
         const saved = await api.saveSettings(settings);
         setSettings(saved);
+        setPresetWarning(false);
         onFeedback?.(outcomeSuccess("Settings saved."));
       } catch (err) {
         onFeedback?.(
@@ -108,6 +163,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
       try {
         const reset = await api.resetSettings();
         setSettings(reset);
+        setPresetWarning(false);
         onFeedback?.(outcomeSuccess("Settings reset to defaults."));
       } catch (err) {
         onFeedback?.(
@@ -138,9 +194,12 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
       );
     }
 
-    if (!settings) {
+    if (!settings || !presets) {
       return null;
     }
+
+    const profileOptions = presets.profiles;
+    const selectedProfile = normalizeProfile(settings.profile, presets);
 
     return (
       <div className={styles.root} id="settings-panel">
@@ -154,15 +213,33 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
           </MessageBarBody>
         </MessageBar>
 
+        {presetWarning && isPresetProfile(settings.profile, presets) ? (
+          <MessageBar intent="warning">
+            <MessageBarBody>
+              Applying preset replaces current shortcuts. Click Save to persist.
+            </MessageBarBody>
+          </MessageBar>
+        ) : null}
+
         <div className={styles.row}>
           <Caption1>Profile</Caption1>
-          <Input
+          <Dropdown
             size="small"
-            value={settings.profile}
-            onChange={(_e, data) =>
-              setSettings((prev) => (prev ? { ...prev, profile: data.value } : prev))
-            }
-          />
+            selectedOptions={[selectedProfile]}
+            value={selectedProfile}
+            onOptionSelect={(_e, data) => {
+              const profile = data.optionValue;
+              if (profile) {
+                onProfileChange(profile);
+              }
+            }}
+          >
+            {profileOptions.map((profile) => (
+              <Option key={profile} value={profile} text={profile}>
+                {profile}
+              </Option>
+            ))}
+          </Dropdown>
         </div>
 
         <div className={styles.row} ref={shortcutsRef} id="settings-shortcuts">

@@ -64,6 +64,16 @@ export interface UserSettings {
   shortcuts: ShortcutBinding[];
 }
 
+export interface ProfilePresetEntry {
+  profile: string;
+  shortcuts: ShortcutBinding[];
+}
+
+export interface ProfilePresetsResponse {
+  profiles: string[];
+  presets: Record<string, ProfilePresetEntry>;
+}
+
 export interface BuildPaletteRequest {
   themeColors?: string[];
   recentColors?: string[];

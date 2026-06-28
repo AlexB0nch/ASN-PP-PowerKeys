@@ -5,6 +5,7 @@ import {
   BuildPaletteResponse,
   CommandDescriptor,
   LayoutResult,
+  ProfilePresetsResponse,
   ShapeBounds,
   UserSettings,
 } from "./types";
@@ -82,4 +83,7 @@ export const api = {
     settingsRequest<UserSettings>("/api/settings/reset", {
       method: "POST",
     }),
+
+  getProfilePresets: () =>
+    request<ProfilePresetsResponse>("/api/settings/profile-presets"),
 };
