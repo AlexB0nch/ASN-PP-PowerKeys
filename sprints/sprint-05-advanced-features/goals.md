@@ -4,35 +4,48 @@
 > Кикофф — [`ARCHITECT-KICKOFF.md`](./ARCHITECT-KICKOFF.md).
 
 ## Цель спринта
+
 Реализовать **продвинутые продуктовые фичи** поверх базового паритета команд (Sprint 02):
-Consulting Mode, Slide Backup Manager, Multi-slide операции — с учётом ограничений Office.js на Web.
+Consulting Mode (профили + snap-to-grid), Slide Backup Manager, Multi-slide операции — с **явной деградацией**
+на PowerPoint Web там, где Office.js не даёт полного API.
 
-## Кандидаты (architect декомпозирует в `S05-0YY`)
+## Office.js feasibility (зафиксировано architect, 2026-06-28)
 
-### A) Consulting Mode
-- Профили шорткатов **McKinsey / BCG / Custom** (расширение `UserSettings.profile` + presets в Core)
-- Snap to grid **0.1 cm** при layout (Core + ServerLayout или HostScript apply)
-- Snap to nearest object — оценить feasibility; может быть отложено
+| Тема | Desktop | PowerPoint Web | Решение |
+|------|---------|----------------|---------|
+| **Consulting profiles** (McKinsey/BCG → shortcuts) | Full | Full | Settings API + Core presets; **без** новых CommandIds |
+| **Snap-to-grid 0.1 cm** | Full | Full | Core math на `ShapeBounds`; post-process в layout pipeline; настройка в `UserSettings` |
+| **Snap-to-nearest-object** | Partial (VSTO) | **None** | **Anti-scope Sprint 05** — нет drag-hook / proximity API |
+| **Slide Backup — move to end** | Partial | Partial | `slide.moveTo` (Api 1.8+) / export+delete+insert fallback; **новый** `MoveSlidesToBackup` |
+| **Slide Backup — named section** | Full (COM) | **None** | Anti-scope: Office.js **нет** slide sections API |
+| **Hide/show Backup section** | Full (COM) | **None** | **Anti-scope Sprint 05** |
+| **Multi-slide paste shape** | Partial | Partial | `getSelectedSlides()` + `cloneShapeOnSlide` per slide; **новый** `PasteShapeToSelectedSlides` |
+| **Multi-slide remove by name** | Partial | Partial | Iterate slides + delete by `shape.name`; **новый** `RemoveShapeFromSelectedSlides` |
+| **Smart Duplicate gap memory** | Partial | Partial | Wire `gap` в HostScript + task-pane state; **без** нового CommandId |
 
-### B) Slide Backup Manager
-- Перемещение выделенных слайдов в «Backup» секцию в конце deck (README)
-- Быстрое hide/show backup section — оценить Office.js API
+## Декомпозиция `S05-0YY` (приоритет)
 
-### C) Multi-slide
-- Paste/copy shape на несколько выделенных слайдов
-- Remove object with same id/name across slides — оценить API
+| Приоритет | ID | Тема | CommandCatalog | Feasibility |
+|-----------|-----|------|----------------|-------------|
+| **P1** | S05-001 | Consulting profiles (McKinsey/BCG presets) | UI-only / Settings | Full |
+| **P1** | S05-002 | Snap-to-grid 0.1 cm | UI-only (`UserSettings`) | Full |
+| **P2** | S05-003 | Slide Backup Manager (move to end) | **+** `MoveSlidesToBackup` | Partial |
+| **P2** | S05-004 | Multi-slide paste / remove | **+** 2 CommandIds | Partial |
+| **P3** | S05-005 | Smart Duplicate gap memory (stretch) | existing Duplicate* | Partial |
 
-### D) Вне scope Sprint 05 (backlog)
-- Smart Duplicate с памятью gap (есть `DuplicationEngine` + `gap` param, не wired)
-- Object Statistics beyond Addup (MIN/MAX/AVG UI)
+## Anti-scope (явно не в Sprint 05)
+
+- Snap-to-nearest-object при drag/move
+- Slide sections (создание/именование «Backup» section) и hide/show backup block
+- Import/export settings JSON (README stretch)
+- Object Statistics MIN/MAX/AVG UI
 - Eyedropper / HEX (Sprint 04 deferred)
-
-## Ограничения
-- Office Web: multi-slide и slide sections **Partial** — явная деградация где None
-- Математика snap/grid — **Core** (`ShapeBounds`), тесты без PowerPoint
-- `VstoLegacy*` не трогать
+- `VstoLegacy*` — frozen
 
 ## Definition of Done спринта
-- Architect выбрал и закрыл приоритетный подмножество (не обязательно все три темы)
-- Каждая реализованная фича: task → PR → merge + тесты где применимо
-- `docs/PRODUCT_CONTEXT.md` обновлён
+
+- [ ] Закрыты **минимум P1** задачи (S05-001, S05-002) + **одна из P2** (S05-003 или S05-004) — architect фиксирует в retrospective
+- [ ] Каждая реализованная фича: task → PR → merge + тесты где применимо
+- [ ] Новые команды зарегистрированы в `CommandCatalog` с корректным `OfficeJsSupport`
+- [ ] Web limitations — `unsupportedWebCommands` или Partial с конкретным сообщением (не «not wired up yet»)
+- [ ] `docs/PRODUCT_CONTEXT.md` обновлён по итогам спринта

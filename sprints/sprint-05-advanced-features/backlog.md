@@ -1,7 +1,18 @@
 # Sprint 05 — Backlog
 
-> Architect декомпозирует Sprint 05 и заводит задачи `S05-0YY`.
+> Architect декомпозировал Sprint 05 (2026-06-28). Старт: **S05-001 In Progress**.
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| _(architect планирует S05-001…)_ | | | | |
+| S05-001 | Consulting profiles (McKinsey/BCG presets → UserSettings) | Core + Api + AddIn + Tests | **In Progress** | — |
+| S05-002 | Snap-to-grid 0.1 cm (Core + layout apply) | Core + Api + AddIn + Tests | Todo | — |
+| S05-003 | Slide Backup Manager (`MoveSlidesToBackup`) | Core + AddIn + Tests | Todo | — |
+| S05-004 | Multi-slide shape paste/remove | Core + AddIn + Tests | Todo | — |
+| S05-005 | Smart Duplicate gap memory (optional stretch) | AddIn + Tests | Todo | — |
+
+## Порядок исполнения (рекомендация architect)
+
+1. **S05-001** — низкий risk, builds on S03 Settings; разблокирует Consulting Mode UX
+2. **S05-002** — Core snap math; зависит от S05-001 только по `UserSettings` shape (можно параллельно после 001)
+3. **S05-003** или **S05-004** — Partial Office.js; выбрать обе если capacity
+4. **S05-005** — stretch после P2
