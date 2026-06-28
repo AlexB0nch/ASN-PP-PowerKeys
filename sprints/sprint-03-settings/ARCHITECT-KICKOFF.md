@@ -14,7 +14,7 @@
 |----|--------|------------|
 | S03-001 | **Done (#23)** | Persistent store + Docker volume |
 | S03-002 | **Done (#25)** | Settings panel UI + wiring Settings commands |
-| **S03-003** | **Todo** | Shortcut Manager (edit bindings, conflict hints) |
+| **S03-003** | **In Progress** | Shortcut Manager (edit bindings, conflict hints) |
 
 ## 3. Следующая задача — S03-003
 Shortcut Manager UI: редактирование key bindings, conflict hints. Опирается на Settings panel (S03-002)
