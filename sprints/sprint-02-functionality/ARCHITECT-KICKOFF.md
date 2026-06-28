@@ -39,10 +39,10 @@
 2. `/builder выполни S02-0YY`.
 3. Приёмка + merge PR; обновить `docs/PRODUCT_CONTEXT.md` при продуктовых решениях.
 
-## 7. Полезные файлы
-- `src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts`, `src/office/powerpoint.ts`
-- `src/PptPowerKeys.Core/Commands/CommandCatalog.cs`
-- `docs/migration/01-vsto-to-officejs-mapping.md` (секция Slides)
+## 7. Полезные файлы (S02-006)
+- `src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts` — разрозненные `case` деградации
+- `src/PptPowerKeys.AddIn/src/taskpane/App.tsx` — бейджи `supportColor`, status bar
+- `src/PptPowerKeys.Core/Commands/CommandCatalog.cs` — источник `OfficeJsSupport`
 
 ## 8. Долги (необязательно)
 - Пин SSH host key в `deploy-vds.yml`
