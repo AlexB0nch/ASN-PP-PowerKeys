@@ -8,9 +8,9 @@
 | **Task ID** | `S03-003` |
 | **Спринт** | `sprint-03-settings` |
 | **Компонент** | AddIn (+ опционально Core/Tests) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | #26 |
-| **PR** | TBD |
+| **PR** | #27 |
 
 ## Цель
 Заменить read-only секцию shortcuts в Settings panel на полноценный **Shortcut Manager**:
@@ -77,15 +77,21 @@
 - `src/PptPowerKeys.Tests/ShortcutBindingValidatorTests.cs` (опционально)
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] Пользователь может edit/add/remove shortcut bindings и **Save** → `GET /api/settings` возвращает те же `shortcuts`.
-2. [ ] Duplicate `keys` → **видимое warning**, Save **не блокируется**.
-3. [ ] Human-readable **title** команд из каталога (не только `commandId`).
-4. [ ] MessageBar про Office Web global hotkeys сохранён.
-5. [ ] `OpenShortcutManager` скроллит к editable shortcuts.
-6. [ ] Reset to defaults восстанавливает bindings из `CreateDefaults()`.
-7. [ ] `dotnet test PptPowerKeys.sln` — зелёный (61+ tests).
-8. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-9. [ ] PR в `main`, ветка `cursor/S03-003-shortcut-manager-*`, Task ID `S03-003`, `Closes #<issue>`.
+1. [x] Пользователь может edit/add/remove shortcut bindings и **Save** → `GET /api/settings` возвращает те же `shortcuts`.
+2. [x] Duplicate `keys` → **видимое warning**, Save **не блокируется**.
+3. [x] Human-readable **title** команд из каталога (не только `commandId`).
+4. [x] MessageBar про Office Web global hotkeys сохранён.
+5. [x] `OpenShortcutManager` скроллит к editable shortcuts.
+6. [x] Reset to defaults восстанавливает bindings из `CreateDefaults()`.
+7. [x] `dotnet test PptPowerKeys.sln` — зелёный (67 passed).
+8. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+9. [x] PR #27 merged в `main`, ветка `cursor/S03-003-shortcut-manager-1dae`, Task ID `S03-003`, Closes #26.
+
+## Приёмка (architect, 2026-06-28)
+- PR #27 merged в `main` (commit `a09e4ac`).
+- CHECKLIST: scope соблюдён — AddIn + Core validator; Api/persistence/VstoLegacy не тронуты.
+- `ShortcutManager.tsx` с edit/add/remove; duplicate-key warning (non-blocking); `ShortcutBindingValidator` + 6 тестов.
+- Локально повторены `dotnet test` (67), `npm run typecheck`, `npm run validate:prod` — зелёные.
 
 ## Зависимости
 - **S03-001 Done** (PR #23) — persistent settings API.

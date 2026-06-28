@@ -69,12 +69,13 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 (не красный Error). Default «not wired up yet» — safety-net для неизвестных id.
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
-**Sprint 03 — Settings UI, персистентный SettingsStore, Shortcut Manager.** S03-001 Done (PR #23:
-`FileUserSettingsStore` + Docker volume). **S03-002 Done (PR #25):** Settings panel UI + wiring Settings-команд
-(`X-User-Id` в localStorage, Save/Reset, read-only shortcuts). Следующий шаг — **S03-003 Shortcut Manager**.
-Хендофф — `sprints/sprint-03-settings/ARCHITECT-KICKOFF.md`.
+**Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, персистентный store, Shortcut Manager.
+**Sprint 04** — Smart Color Picker / Slide Master palette (следующий спринт).
+Хендофф — `sprints/sprint-03-settings/retrospective.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S03-003:** `ShortcutManager.tsx` — editable bindings (title из каталога, edit keys, add/remove);
+  duplicate-key warning non-blocking; `ShortcutBindingValidator` в Core + 6 unit-тестов; Save через существующий API.
 - **S03-002:** Settings panel в AddIn (`SettingsPanel.tsx`); `getUserId()` → `localStorage` + header `X-User-Id`;
   `resetSettings()`; Settings-команды wired (`OpenShortcutManager` scroll, `ResetToDefaults` API reset,
   `OpenColorScheme` stub Sprint 04); UI hint — Office Web не перехватывает global hotkeys как VSTO.
