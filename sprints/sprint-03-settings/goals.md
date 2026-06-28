@@ -9,11 +9,11 @@
 
 ## Цели (декомпозирует architect в задачи `S03-0YY`)
 - [x] **Персистентный `SettingsStore`** — JSON на диске (Docker volume на VDS), переживает рестарт API. (S03-001, PR #23)
-- [ ] **Settings panel** в AddIn — загрузка при старте, save/reset через `/api/settings`.
-- [ ] **Shortcut Manager UI** — список команд + keys, редактирование, валидация, сохранение.
-- [ ] Wiring Settings-команд: `OpenShortcutManager`, `ResetToDefaults` (и `OpenColorScheme` — stub или минимальный UI).
-- [ ] Тесты Api/Core для persistence; `dotnet test`, `npm run typecheck/validate:prod`.
-- [ ] Документация деплоя (volume path, env vars).
+- [ ] **Settings panel** в AddIn — S03-002 (Todo в backlog).
+- [ ] **Shortcut Manager UI** — S03-003 (или часть S03-002).
+- [ ] Wiring Settings-команд — S03-002.
+- [x] Тесты persistence — S03-001 (61 tests).
+- [x] Документация деплоя (volume, `SETTINGS_DATA_PATH`) — S03-001.
 
 ## Ограничение Office Web (важно)
 Office Web Add-in **не перехватывает глобальные hotkeys** как VSTO. Shortcut Manager в Sprint 03 —
