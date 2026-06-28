@@ -34,4 +34,4 @@
 
 ## Следующий спринт
 
-**Sprint 05** — TBD (Consulting Mode, Backup, Multi-slide — см. goals Sprint 04 «вне фокуса»).
+**Sprint 05** — Consulting Mode, Backup, Multi-slide — см. `sprints/sprint-05-advanced-features/`.

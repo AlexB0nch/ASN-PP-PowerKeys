@@ -70,8 +70,9 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
-**Sprint 04 завершён (2026-06-28):** S04-001…003 Done (PR #29–#31). Smart Color Picker: theme read,
-`ColorPickerPanel`, persist recent. Ретроспектива — `sprints/sprint-04-smart-color-picker/retrospective.md`.
+**Sprint 04 завершён (2026-06-28):** S04-001…003 Done (PR #29–#31). Smart Color Picker.
+**Sprint 05 — Consulting Mode, Backup, Multi-slide** (планирование). Хендофф —
+`sprints/sprint-05-advanced-features/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S04-003:** Recent colors (max 5) persist in browser `localStorage` key `ppt-powerkeys-recent-colors`
