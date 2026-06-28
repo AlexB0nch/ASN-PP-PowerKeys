@@ -48,6 +48,11 @@ public static class LayoutEngine
             CommandIds.AlignBottom => AlignEach(request, s => s with { Top = Anchor(request).Bottom - s.Height }),
             CommandIds.AlignMiddleVertical => AlignEach(request, s => s with { Top = Anchor(request).CenterY - (s.Height / 2.0) }),
 
+            CommandIds.AlignLeftToRight => AlignEach(request, s => s with { Left = Anchor(request).Right }),
+            CommandIds.AlignRightToLeft => AlignEach(request, s => s with { Left = Anchor(request).Left - s.Width }),
+            CommandIds.AlignTopToBottom => AlignEach(request, s => s with { Top = Anchor(request).Bottom }),
+            CommandIds.AlignBottomToTop => AlignEach(request, s => s with { Top = Anchor(request).Top - s.Height }),
+
             CommandIds.DistributeHorizontal => Distribute(request, horizontal: true),
             CommandIds.DistributeVertical => Distribute(request, horizontal: false),
 
@@ -85,6 +90,8 @@ public static class LayoutEngine
     {
         CommandIds.AlignLeft or CommandIds.AlignRight or CommandIds.AlignCenterHorizontal
             or CommandIds.AlignTop or CommandIds.AlignBottom or CommandIds.AlignMiddleVertical
+            or CommandIds.AlignLeftToRight or CommandIds.AlignRightToLeft
+            or CommandIds.AlignTopToBottom or CommandIds.AlignBottomToTop
             or CommandIds.DistributeHorizontal or CommandIds.DistributeVertical
             or CommandIds.SameWidth or CommandIds.SameHeight
             or CommandIds.SameWidthKeepAspect or CommandIds.SameHeightKeepAspect

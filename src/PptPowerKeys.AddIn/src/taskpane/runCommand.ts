@@ -4,7 +4,9 @@ import {
   applyFillColor,
   applyLineColor,
   applyShapeBounds,
+  applyShapeBoundsOnSlide,
   applyTextColor,
+  cloneSelectedShapesAtSourcePositions,
   copyObjectPosition,
   duplicateShapesAtPositions,
   getPositionClipboard,
@@ -97,6 +99,41 @@ async function runPaletteColorCommand(kind: ColorCommandKind): Promise<CommandOu
   return {
     ok: true,
     message: `${kind === "FillColor" ? "Fill" : kind === "LineColor" ? "Line" : "Text"} color ${normalized} applied to ${count} shape(s).`,
+  };
+}
+
+const COPY_AND_ALIGN_LAYOUT: Record<
+  "CopyAndAlignLeft" | "CopyAndAlignRight" | "CopyAndAlignTop" | "CopyAndAlignBottom",
+  string
+> = {
+  CopyAndAlignLeft: "AlignLeft",
+  CopyAndAlignRight: "AlignRight",
+  CopyAndAlignTop: "AlignTop",
+  CopyAndAlignBottom: "AlignBottom",
+};
+
+async function runCopyAndAlign(
+  commandId: keyof typeof COPY_AND_ALIGN_LAYOUT,
+): Promise<CommandOutcome> {
+  const originals = await getSelectedShapeBounds();
+  if (originals.length === 0) {
+    return { ok: false, message: "Select one or more shapes first." };
+  }
+
+  const clones = await cloneSelectedShapesAtSourcePositions();
+  const combined = [...originals, ...clones];
+  const anchorIndex = originals.length - 1;
+  const layoutCommand = COPY_AND_ALIGN_LAYOUT[commandId];
+
+  const result = await api.applyLayout(layoutCommand, combined, anchorIndex);
+  if (!result.changed) {
+    return { ok: true, message: result.message ?? "Nothing to change." };
+  }
+
+  await applyShapeBoundsOnSlide(result.shapes);
+  return {
+    ok: true,
+    message: `Duplicated and aligned ${clones.length} shape(s).`,
   };
 }
 
@@ -212,6 +249,11 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
       const count = await toggleSubscript();
       return { ok: true, message: `Toggled subscript on ${count} shape(s).` };
     }
+    case "CopyAndAlignLeft":
+    case "CopyAndAlignRight":
+    case "CopyAndAlignTop":
+    case "CopyAndAlignBottom":
+      return await runCopyAndAlign(descriptor.id as keyof typeof COPY_AND_ALIGN_LAYOUT);
     default:
       return {
         ok: false,
