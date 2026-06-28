@@ -420,6 +420,66 @@ export async function duplicateShapesAtPositions(
   return duplicated;
 }
 
+/**
+ * Clones each selected shape on the current slide at the source position (offset 0).
+ * Returns bounds for the new clones in selection order.
+ */
+export async function cloneSelectedShapesAtSourcePositions(): Promise<ShapeBounds[]> {
+  const clones: ShapeBounds[] = [];
+
+  await PowerPoint.run(async (context) => {
+    const slide = context.presentation.getSelectedSlides().getItemAt(0);
+    const selected = context.presentation.getSelectedShapes();
+    selected.load("items/id,items/left,items/top,items/width,items/height");
+    await context.sync();
+
+    if (selected.items.length === 0) {
+      throw new Error("Select one or more shapes first.");
+    }
+
+    for (const sourceShape of selected.items) {
+      const copy = await cloneShapeOnSlide(context, sourceShape, slide);
+      copy.left = sourceShape.left;
+      copy.top = sourceShape.top;
+      copy.load("id,left,top,width,height");
+      await context.sync();
+
+      clones.push({
+        id: copy.id,
+        left: copy.left,
+        top: copy.top,
+        width: copy.width,
+        height: copy.height,
+      });
+    }
+  });
+
+  if (clones.length === 0) {
+    throw new Error("Could not duplicate the selected shapes.");
+  }
+
+  return clones;
+}
+
+/**
+ * Applies computed geometry to shapes on the current slide by id (not limited to selection).
+ */
+export async function applyShapeBoundsOnSlide(bounds: ShapeBounds[]): Promise<void> {
+  await PowerPoint.run(async (context) => {
+    const slide = context.presentation.getSelectedSlides().getItemAt(0);
+
+    for (const target of bounds) {
+      const shape = slide.shapes.getItemOrNullObject(target.id);
+      shape.left = target.left;
+      shape.top = target.top;
+      shape.width = target.width;
+      shape.height = target.height;
+    }
+
+    await context.sync();
+  });
+}
+
 /** Saves the anchor (last selected) shape position to the in-memory clipboard. */
 export async function copyObjectPosition(): Promise<PositionSnapshot> {
   const shapes = await getSelectedShapeBounds();

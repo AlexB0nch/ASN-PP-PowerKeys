@@ -29,10 +29,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export const api = {
   getCommands: () => request<CommandDescriptor[]>("/api/commands"),
 
-  applyLayout: (command: string, shapes: ShapeBounds[]) =>
+  applyLayout: (command: string, shapes: ShapeBounds[], anchorIndex?: number) =>
     request<LayoutResult>("/api/layout/apply", {
       method: "POST",
-      body: JSON.stringify({ command, shapes }),
+      body: JSON.stringify({
+        command,
+        shapes,
+        ...(anchorIndex !== undefined ? { anchorIndex } : {}),
+      }),
     }),
 
   duplicateOffset: (command: string, source: ShapeBounds, gap = 0) =>

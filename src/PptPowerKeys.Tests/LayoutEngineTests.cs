@@ -39,6 +39,58 @@ public class LayoutEngineTests
     }
 
     [Fact]
+    public void AlignLeftToRight_PlacesLeftEdgeAtAnchorRight()
+    {
+        var a = new ShapeBounds("a", 0, 0, 50, 20);
+        var anchor = new ShapeBounds("anchor", 100, 0, 80, 20); // right = 180
+
+        var result = LayoutEngine.Apply(Request(CommandIds.AlignLeftToRight, a, anchor));
+
+        Assert.True(result.Changed);
+        Assert.Equal(180, result.Shapes[0].Left, 6);
+        Assert.Equal(100, result.Shapes[1].Left, 6); // anchor unchanged
+    }
+
+    [Fact]
+    public void AlignRightToLeft_PlacesRightEdgeAtAnchorLeft()
+    {
+        var a = new ShapeBounds("a", 200, 0, 50, 20);
+        var anchor = new ShapeBounds("anchor", 100, 0, 80, 20); // left = 100
+
+        var result = LayoutEngine.Apply(Request(CommandIds.AlignRightToLeft, a, anchor));
+
+        Assert.True(result.Changed);
+        Assert.Equal(50, result.Shapes[0].Left, 6); // a.right == anchor.left
+        Assert.Equal(100, result.Shapes[0].Right, 6);
+    }
+
+    [Fact]
+    public void AlignTopToBottom_PlacesTopEdgeAtAnchorBottom()
+    {
+        var a = new ShapeBounds("a", 0, 0, 50, 20);
+        var anchor = new ShapeBounds("anchor", 0, 100, 80, 40); // bottom = 140
+
+        var result = LayoutEngine.Apply(Request(CommandIds.AlignTopToBottom, a, anchor));
+
+        Assert.True(result.Changed);
+        Assert.Equal(140, result.Shapes[0].Top, 6);
+        Assert.Equal(100, result.Shapes[1].Top, 6); // anchor unchanged
+    }
+
+    [Fact]
+    public void AlignBottomToTop_PlacesBottomEdgeAtAnchorTop()
+    {
+        var a = new ShapeBounds("a", 0, 200, 50, 30);
+        var anchor = new ShapeBounds("anchor", 0, 100, 80, 40); // top = 100
+
+        var result = LayoutEngine.Apply(Request(CommandIds.AlignBottomToTop, a, anchor));
+
+        Assert.True(result.Changed);
+        Assert.Equal(70, result.Shapes[0].Top, 6); // a.bottom == anchor.top
+        Assert.Equal(100, result.Shapes[0].Bottom, 6);
+    }
+
+    [Fact]
     public void AlignCenterHorizontal_CentersOnAnchorCenter()
     {
         var a = new ShapeBounds("a", 0, 0, 40, 20);
@@ -198,6 +250,10 @@ public class LayoutEngineTests
 
     [Theory]
     [InlineData(CommandIds.AlignLeft, true)]
+    [InlineData(CommandIds.AlignLeftToRight, true)]
+    [InlineData(CommandIds.AlignRightToLeft, true)]
+    [InlineData(CommandIds.AlignTopToBottom, true)]
+    [InlineData(CommandIds.AlignBottomToTop, true)]
     [InlineData(CommandIds.SameWidth, true)]
     [InlineData(CommandIds.DistributeVertical, true)]
     [InlineData(CommandIds.FillColor, false)]
