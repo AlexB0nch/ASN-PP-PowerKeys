@@ -1,12 +1,23 @@
 import { api } from "../services/api";
 import { CommandDescriptor } from "../services/types";
 import {
+  applyFillColor,
+  applyLineColor,
   applyShapeBounds,
+  applyTextColor,
   getSelectedShapeBounds,
+  getSelectedShapeIds,
   getSelectedShapeTexts,
   insertShape,
   setZOrder,
+  toggleFillBlackWhite,
 } from "../office/powerpoint";
+import {
+  ColorCommandKind,
+  nextPaletteColor,
+  normalizeHex,
+  recordRecentColor,
+} from "../office/formatColorState";
 
 export interface CommandOutcome {
   ok: boolean;
@@ -49,6 +60,35 @@ async function runServerLayout(descriptor: CommandDescriptor): Promise<CommandOu
   return { ok: true, message: `${descriptor.title} applied to ${result.shapes.length} shape(s).` };
 }
 
+async function runPaletteColorCommand(kind: ColorCommandKind): Promise<CommandOutcome> {
+  const shapeIds = await getSelectedShapeIds();
+  if (shapeIds.length === 0) {
+    return { ok: false, message: "Select one or more shapes first." };
+  }
+
+  const color = nextPaletteColor(kind, shapeIds);
+  const normalized = normalizeHex(color);
+
+  let count: number;
+  switch (kind) {
+    case "FillColor":
+      count = await applyFillColor(normalized);
+      break;
+    case "LineColor":
+      count = await applyLineColor(normalized);
+      break;
+    case "TextColor":
+      count = await applyTextColor(normalized);
+      break;
+  }
+
+  recordRecentColor(normalized);
+  return {
+    ok: true,
+    message: `${kind === "FillColor" ? "Fill" : kind === "LineColor" ? "Line" : "Text"} color ${normalized} applied to ${count} shape(s).`,
+  };
+}
+
 async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutcome> {
   switch (descriptor.id) {
     case "InsertRectangle":
@@ -82,6 +122,20 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
         message: `Sum ${stats.sum} · avg ${stats.average} · min ${stats.min} · max ${stats.max} (${stats.count} numbers).`,
       };
     }
+    case "ToggleFillBlackWhite": {
+      const count = await toggleFillBlackWhite();
+      return { ok: true, message: `Toggled fill on ${count} shape(s).` };
+    }
+    case "FillColor":
+    case "LineColor":
+    case "TextColor": {
+      return await runPaletteColorCommand(descriptor.id as ColorCommandKind);
+    }
+    case "FormatPainter":
+      return {
+        ok: false,
+        message: "Format painter is not supported on PowerPoint Web.",
+      };
     default:
       return {
         ok: false,
