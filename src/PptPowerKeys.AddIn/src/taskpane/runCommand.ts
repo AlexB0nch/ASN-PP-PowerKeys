@@ -15,8 +15,12 @@ import {
   insertShape,
   insertTextBox,
   pasteObjectPosition,
+  pasteUnformattedText,
+  replaceSelectedTextWithEllipsis,
   setZOrder,
   toggleFillBlackWhite,
+  toggleSubscript,
+  toggleSuperscript,
   ungroupSelectedShape,
 } from "../office/powerpoint";
 import {
@@ -187,6 +191,27 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
         ok: false,
         message: "Format painter is not supported on PowerPoint Web.",
       };
+    case "PasteUnformatted": {
+      const count = await pasteUnformattedText();
+      return { ok: true, message: `Pasted plain text into ${count} shape(s).` };
+    }
+    case "PasteFormatted":
+      return {
+        ok: false,
+        message: "Paste formatted is not supported on PowerPoint Web.",
+      };
+    case "ReplaceWithEllipsis": {
+      const count = await replaceSelectedTextWithEllipsis();
+      return { ok: true, message: `Replaced text with "..." on ${count} shape(s).` };
+    }
+    case "ToggleSuperscript": {
+      const count = await toggleSuperscript();
+      return { ok: true, message: `Toggled superscript on ${count} shape(s).` };
+    }
+    case "ToggleSubscript": {
+      const count = await toggleSubscript();
+      return { ok: true, message: `Toggled subscript on ${count} shape(s).` };
+    }
     default:
       return {
         ok: false,
