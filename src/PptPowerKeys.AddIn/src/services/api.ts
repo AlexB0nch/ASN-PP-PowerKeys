@@ -6,6 +6,7 @@ import {
   ShapeBounds,
   UserSettings,
 } from "./types";
+import { getUserId } from "./userId";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -24,6 +25,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   return (await response.json()) as T;
+}
+
+function settingsRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  return request<T>(path, {
+    ...init,
+    headers: {
+      "X-User-Id": getUserId(),
+      ...(init?.headers ?? {}),
+    },
+  });
 }
 
 export const api = {
@@ -51,11 +62,16 @@ export const api = {
       body: JSON.stringify({ texts }),
     }),
 
-  getSettings: () => request<UserSettings>("/api/settings"),
+  getSettings: () => settingsRequest<UserSettings>("/api/settings"),
 
   saveSettings: (settings: UserSettings) =>
-    request<UserSettings>("/api/settings", {
+    settingsRequest<UserSettings>("/api/settings", {
       method: "PUT",
       body: JSON.stringify(settings),
+    }),
+
+  resetSettings: () =>
+    settingsRequest<UserSettings>("/api/settings/reset", {
+      method: "POST",
     }),
 };
