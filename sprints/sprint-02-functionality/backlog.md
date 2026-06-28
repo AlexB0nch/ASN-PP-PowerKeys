@@ -9,3 +9,5 @@
 | S02-002 | Format: fill/line/text color, toggle black-white | AddIn | Done | [task](./tasks/S02-002-format-colors.md) / PR #17 |
 | S02-003 | Text: paste unformatted, ellipsis, superscript/subscript | AddIn | Done | [task](./tasks/S02-003-text-commands.md) / PR #18 |
 | S02-004 | Alignment: edge align + copy-and-align | Core + AddIn | Done | [task](./tasks/S02-004-alignment-hostscript.md) / PR #19 |
+| S02-005 | Slides: CopySlide + деградация view/print | AddIn | In Progress | [task](./tasks/S02-005-slides-commands.md) / #20 |
+| S02-006 | Единая деградация support=None + UX бейджи | AddIn | Todo | — |
