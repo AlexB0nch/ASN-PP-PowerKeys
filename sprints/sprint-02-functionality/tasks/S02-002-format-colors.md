@@ -8,7 +8,7 @@
 | **Task ID** | `S02-002` |
 | **Спринт** | `sprint-02-functionality` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Реализовать исполнение команд категории **Format**, которые сейчас падают в «not wired up yet».
@@ -67,14 +67,21 @@
 - `FormatPainter` — None.
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `ToggleFillBlackWhite`, `FillColor`, `LineColor`, `TextColor` не попадают в default «not wired up yet».
-2. [ ] `FormatPainter` возвращает явное сообщение о неподдержке на Web.
-3. [ ] Fill/Line/Text color циклируют палитру при повторном нажатии с тем же выделением; recent colors обновляются.
-4. [ ] Toggle black/white работает на выделенных фигурах с заливкой.
-5. [ ] Понятные ошибки при пустом выделении / TextColor без текста.
-6. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-7. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-8. [ ] PR: ветка `cursor/S02-002-format-colors-a065`, Task ID `S02-002`.
+1. [x] `ToggleFillBlackWhite`, `FillColor`, `LineColor`, `TextColor` не попадают в default «not wired up yet».
+2. [x] `FormatPainter` возвращает явное сообщение о неподдержке на Web.
+3. [x] Fill/Line/Text color циклируют палитру при повторном нажатии с тем же выделением; recent colors обновляются.
+4. [x] Toggle black/white работает на выделенных фигурах с заливкой.
+5. [x] Понятные ошибки при пустом выделении / TextColor без текста.
+6. [x] `dotnet test PptPowerKeys.sln` — зелёный (47 passed).
+7. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+8. [x] PR #17: ветка `cursor/S02-002-format-colors-a065`, Task ID `S02-002`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #16 (S02-001) смерджен в `main` перед приёмкой S02-002; конфликт в `runCommand.ts` разрешён (объединены Objects + Format handlers).
+- PR #17, ветка `cursor/S02-002-format-colors-a065`, коммит `63f20e5` (+ merge `6286ebd`).
+- Локально повторены `dotnet test` (47 passed), `npm run typecheck`, `npm run validate:prod` — зелёные.
+- CHECKLIST: scope соблюдён, Core/Api не тронуты, палитра + recent + fingerprint cycle в `formatColorState.ts`, FormatPainter — явная деградация.
+- Ручная проверка в PowerPoint Online — post-merge (deploy Pages + VDS).
 
 ## Зависимости
 - Нет блокеров от S02-001 (Format независим).
