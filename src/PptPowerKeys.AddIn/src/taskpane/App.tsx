@@ -17,6 +17,7 @@ import {
 import { api } from "../services/api";
 import { CommandCategory, CommandDescriptor, OfficeJsSupport } from "../services/types";
 import { runCommand, CommandOutcome, outcomeSuccess } from "./runCommand";
+import { ColorPickerPanel, ColorPickerPanelHandle } from "./ColorPickerPanel";
 import { SettingsPanel, SettingsPanelHandle } from "./SettingsPanel";
 
 const useStyles = makeStyles({
@@ -97,6 +98,7 @@ function commandTooltip(cmd: CommandDescriptor): string {
 export const App: React.FC = () => {
   const styles = useStyles();
   const settingsPanelRef = React.useRef<SettingsPanelHandle>(null);
+  const colorPickerPanelRef = React.useRef<ColorPickerPanelHandle>(null);
   const [commands, setCommands] = React.useState<CommandDescriptor[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -129,8 +131,13 @@ export const App: React.FC = () => {
         await settingsPanelRef.current?.reload();
         return outcomeSuccess("Settings reset to defaults.");
       },
-      openColorScheme: () =>
-        outcomeSuccess("Smart Color Picker — planned (Sprint 04)"),
+      openColorScheme: async () => {
+        setOpenAccordionItems((prev) =>
+          prev.includes("Settings") ? prev : [...prev, "Settings"],
+        );
+        window.setTimeout(() => colorPickerPanelRef.current?.focus(), 150);
+        return outcomeSuccess("Color picker opened.");
+      },
     }),
     [],
   );
@@ -228,11 +235,14 @@ export const App: React.FC = () => {
                 ))}
               </div>
               {category === "Settings" && (
-                <SettingsPanel
-                  ref={settingsPanelRef}
-                  commands={commands}
-                  onFeedback={setStatus}
-                />
+                <>
+                  <ColorPickerPanel ref={colorPickerPanelRef} onFeedback={setStatus} />
+                  <SettingsPanel
+                    ref={settingsPanelRef}
+                    commands={commands}
+                    onFeedback={setStatus}
+                  />
+                </>
               )}
             </AccordionPanel>
           </AccordionItem>

@@ -121,6 +121,31 @@ function buildSyncFallbackPalette(): string[] {
   return palette;
 }
 
+/** Theme colors from the presentation (or {@link DEFAULT_PALETTE} when using fallback). */
+export function getThemePaletteColors(): string[] {
+  const source = themeColors ?? [...DEFAULT_PALETTE];
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const color of source) {
+    const normalized = normalizeHex(color);
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      result.push(normalized);
+    }
+    if (result.length >= 10) {
+      break;
+    }
+  }
+
+  return result;
+}
+
+/** Recently applied colors (newest first, max 5). */
+export function getRecentColors(): string[] {
+  return recentColors.map((c) => normalizeHex(c));
+}
+
 /** Theme + recent colors merged via Core (cached after bootstrap / recent updates). */
 export function getActivePalette(): string[] {
   if (activePaletteCache) {
