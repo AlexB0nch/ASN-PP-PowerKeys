@@ -49,11 +49,20 @@ export function outcomeError(message: string): CommandOutcome {
   return { kind: "error", message };
 }
 
+export interface SettingsCommandActions {
+  openShortcutManager: () => CommandOutcome | Promise<CommandOutcome>;
+  resetToDefaults: () => CommandOutcome | Promise<CommandOutcome>;
+  openColorScheme: () => CommandOutcome | Promise<CommandOutcome>;
+}
+
 /**
  * Executes a catalog command. ServerLayout commands round-trip geometry through
  * the backend layout engine; HostScript commands run directly against Office.js.
  */
-export async function runCommand(descriptor: CommandDescriptor): Promise<CommandOutcome> {
+export async function runCommand(
+  descriptor: CommandDescriptor,
+  settingsActions?: SettingsCommandActions,
+): Promise<CommandOutcome> {
   try {
     switch (descriptor.execution) {
       case "ServerLayout":
@@ -61,12 +70,32 @@ export async function runCommand(descriptor: CommandDescriptor): Promise<Command
       case "HostScript":
         return await runHostScript(descriptor);
       case "Settings":
-        return outcomeSuccess("Open the settings panel below.");
+        return await runSettingsCommand(descriptor, settingsActions);
       default:
         return outcomeError(`Unknown execution kind for ${descriptor.id}.`);
     }
   } catch (err) {
     return outcomeError(err instanceof Error ? err.message : String(err));
+  }
+}
+
+async function runSettingsCommand(
+  descriptor: CommandDescriptor,
+  actions?: SettingsCommandActions,
+): Promise<CommandOutcome> {
+  if (!actions) {
+    return outcomeError("Settings UI is not ready.");
+  }
+
+  switch (descriptor.id) {
+    case "OpenShortcutManager":
+      return await actions.openShortcutManager();
+    case "ResetToDefaults":
+      return await actions.resetToDefaults();
+    case "OpenColorScheme":
+      return await actions.openColorScheme();
+    default:
+      return outcomeError(`Unknown settings command: ${descriptor.id}.`);
   }
 }
 

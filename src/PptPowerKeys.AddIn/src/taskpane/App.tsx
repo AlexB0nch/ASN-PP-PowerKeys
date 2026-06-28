@@ -16,7 +16,8 @@ import {
 } from "@fluentui/react-components";
 import { api } from "../services/api";
 import { CommandCategory, CommandDescriptor, OfficeJsSupport } from "../services/types";
-import { runCommand, CommandOutcome } from "./runCommand";
+import { runCommand, CommandOutcome, outcomeSuccess } from "./runCommand";
+import { SettingsPanel, SettingsPanelHandle } from "./SettingsPanel";
 
 const useStyles = makeStyles({
   root: {
@@ -95,11 +96,16 @@ function commandTooltip(cmd: CommandDescriptor): string {
 
 export const App: React.FC = () => {
   const styles = useStyles();
+  const settingsPanelRef = React.useRef<SettingsPanelHandle>(null);
   const [commands, setCommands] = React.useState<CommandDescriptor[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<CommandOutcome | null>(null);
   const [busy, setBusy] = React.useState<string | null>(null);
+  const [openAccordionItems, setOpenAccordionItems] = React.useState<CommandCategory[]>([
+    "Alignment",
+    "Resize",
+  ]);
 
   React.useEffect(() => {
     api
@@ -109,12 +115,35 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const onRun = React.useCallback(async (descriptor: CommandDescriptor) => {
-    setBusy(descriptor.id);
-    const outcome = await runCommand(descriptor);
-    setStatus(outcome);
-    setBusy(null);
-  }, []);
+  const settingsActions = React.useMemo(
+    () => ({
+      openShortcutManager: async () => {
+        setOpenAccordionItems((prev) =>
+          prev.includes("Settings") ? prev : [...prev, "Settings"],
+        );
+        window.setTimeout(() => settingsPanelRef.current?.scrollToShortcuts(), 150);
+        return outcomeSuccess("Shortcut manager opened.");
+      },
+      resetToDefaults: async () => {
+        await api.resetSettings();
+        await settingsPanelRef.current?.reload();
+        return outcomeSuccess("Settings reset to defaults.");
+      },
+      openColorScheme: () =>
+        outcomeSuccess("Smart Color Picker — planned (Sprint 04)"),
+    }),
+    [],
+  );
+
+  const onRun = React.useCallback(
+    async (descriptor: CommandDescriptor) => {
+      setBusy(descriptor.id);
+      const outcome = await runCommand(descriptor, settingsActions);
+      setStatus(outcome);
+      setBusy(null);
+    },
+    [settingsActions],
+  );
 
   const byCategory = React.useMemo(() => {
     const map = new Map<CommandCategory, CommandDescriptor[]>();
@@ -169,7 +198,12 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      <Accordion multiple collapsible defaultOpenItems={["Alignment", "Resize"]}>
+      <Accordion
+        multiple
+        collapsible
+        openItems={openAccordionItems}
+        onToggle={(_e, data) => setOpenAccordionItems(data.openItems as CommandCategory[])}
+      >
         {CATEGORY_ORDER.filter((cat) => byCategory.has(cat)).map((category) => (
           <AccordionItem value={category} key={category}>
             <AccordionHeader>{category}</AccordionHeader>
@@ -193,6 +227,9 @@ export const App: React.FC = () => {
                   </Tooltip>
                 ))}
               </div>
+              {category === "Settings" && (
+                <SettingsPanel ref={settingsPanelRef} onFeedback={setStatus} />
+              )}
             </AccordionPanel>
           </AccordionItem>
         ))}
