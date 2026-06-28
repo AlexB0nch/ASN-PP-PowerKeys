@@ -70,9 +70,8 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
-**Sprint 04 — Smart Color Picker** (в работе): S04-001 Done (PR #29) — `ColorPaletteBuilder`, Api
-`/api/colors/build-palette`, Office.js theme read + bootstrap; S04-002 ColorPicker UI In Progress;
-S04-003 persist recent. `OpenColorScheme` пока stub.
+**Sprint 04 — Smart Color Picker** (в работе): S04-001 Done (#29), S04-002 Done (#30) — picker UI wired;
+S04-003 In Progress — persist recent.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S04-001:** `ColorPaletteBuilder` (Core) merge theme≤10 + recent≤5; Api `POST /api/colors/build-palette`;

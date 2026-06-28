@@ -8,7 +8,7 @@
 | **Task ID** | `S04-002` |
 | **Спринт** | `sprint-04-smart-color-picker` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 React-панель **Smart Color Picker**: сетка swatches (theme + recent), apply Fill/Line/Text к выделению;
@@ -26,10 +26,14 @@ React-панель **Smart Color Picker**: сетка swatches (theme + recent),
 - VstoLegacy.
 
 ## Критерии приёмки
-1. `OpenColorScheme` открывает рабочий picker (не stub).
-2. Swatches отражают theme + recent palette.
-3. Apply buttons меняют цвет выделения через HostScript.
-4. `npm run typecheck`, `npm run build` — зелёные.
+1. [x] `OpenColorScheme` открывает рабочий picker (не stub).
+2. [x] Swatches отражают theme + recent palette.
+3. [x] Apply buttons меняют цвет выделения через HostScript.
+4. [x] `npm run typecheck`, `npm run build` — зелёные.
+
+## Приёмка (architect, 2026-06-28)
+- PR #30 merged в `main`.
+- `ColorPickerPanel.tsx` + wire в `App.tsx`; fallback MessageBar.
 
 ## Зависимости
 - S04-001 (theme colors + palette merge).

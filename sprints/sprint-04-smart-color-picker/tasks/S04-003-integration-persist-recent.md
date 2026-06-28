@@ -8,7 +8,7 @@
 | **Task ID** | `S04-003` |
 | **Спринт** | `sprint-04-smart-color-picker` |
 | **Компонент** | AddIn (+ опционально Core/Api для UserSettings) |
-| **Статус** | Todo |
+| **Статус** | In Progress |
 
 ## Цель
 Полная интеграция VSTO parity: `Alt+G`/`Alt+L` cycle по theme+recent; **persist** 5 recent colors
