@@ -85,6 +85,32 @@ public class SettingsAndCatalogTests
         Assert.NotNull(CommandCatalog.Find("ALIGNLEFT"));
     }
 
+    [Fact]
+    public void Catalog_NoneSupportCommands_AreExactlyNineKnownIds()
+    {
+        var noneIds = CommandCatalog.All
+            .Where(c => c.Support == OfficeJsSupport.None)
+            .Select(c => c.Id.ToString())
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
+
+        string[] expected =
+        [
+            "FormatPainter",
+            "PasteFormatted",
+            "PrintSlide",
+            "Regroup",
+            "StartSlideShow",
+            "ToggleGrid",
+            "ToggleGuides",
+            "ToggleSlideSorter",
+            "ToggleZoom",
+        ];
+
+        Assert.Equal(expected.Length, noneIds.Length);
+        Assert.Equal(expected, noneIds);
+    }
+
     [Theory]
     [InlineData("#ffffff", "#000000")] // white bg -> black text
     [InlineData("#000000", "#FFFFFF")] // black bg -> white text
