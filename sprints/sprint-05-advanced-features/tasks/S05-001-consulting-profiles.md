@@ -8,7 +8,8 @@
 | **Task ID** | `S05-001` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + Api + AddIn + Tests |
-| **Статус** | In Progress |
+| **Статус** | Done |
+| **PR** | #32 |
 
 ## Цель
 
@@ -98,13 +99,17 @@
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] Core presets McKinsey/BCG с валидными CommandId; ≥6 unit-тестов.
-2. [ ] Api `GET /api/settings/profile-presets` зелёный в integration tests.
-3. [ ] Settings UI: dropdown McKinsey/BCG/Custom; выбор McKinsey/BCG подставляет shortcuts; Custom не затирает.
-4. [ ] Save/Reset round-trip через API сохраняет `profile` + `shortcuts`.
-5. [ ] `dotnet test PptPowerKeys.sln` — все зелёные.
-6. [ ] `npm run typecheck` и `npm run validate:prod` — зелёные.
-7. [ ] PR в `main` с `Sprint: sprint-05-advanced-features`, `Task ID: S05-001`, `Closes #<issue>`.
+1. [x] Core presets McKinsey/BCG с валидными CommandId; 10 unit-тестов.
+2. [x] Api `GET /api/settings/profile-presets` зелёный в integration tests.
+3. [x] Settings UI: dropdown McKinsey/BCG/Custom; выбор McKinsey/BCG подставляет shortcuts; Custom не затирает.
+4. [x] Save/Reset round-trip через API сохраняет `profile` + `shortcuts`.
+5. [x] `dotnet test PptPowerKeys.sln` — 93 passed.
+6. [x] `npm run typecheck` и `npm run validate:prod` — зелёные.
+7. [x] PR #32 merged в `main`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #32 merged. Scope соблюдён: Core presets + Api endpoint + Settings dropdown; CommandCatalog не тронут.
+- CHECKLIST: explicit degradation hint сохранён; VstoLegacy не тронут.
 
 ## Зависимости
 

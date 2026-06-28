@@ -71,11 +71,14 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
 **Sprint 04 завершён (2026-06-28):** S04-001…003 Done (PR #29–#31). Smart Color Picker.
-**Sprint 05 — Planning → In Progress (2026-06-28):** декомпозиция S05-001…005 в
-`sprints/sprint-05-advanced-features/`; старт **S05-001** Consulting profiles. Anti-scope: snap-to-nearest-object,
-slide sections hide/show. Новые CommandIds: S05-003 `MoveSlidesToBackup`, S05-004 multi-slide paste/remove.
+**Sprint 05 — In Progress (2026-06-28):** S05-001 Done (PR #32) Consulting profiles McKinsey/BCG.
+Следующая: S05-002 snap-to-grid. Anti-scope: snap-to-nearest-object, slide sections hide/show.
+Новые CommandIds: S05-003 `MoveSlidesToBackup`, S05-004 multi-slide paste/remove.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S05-001:** `ConsultingProfilePresets` (Core) — McKinsey/BCG shortcut presets; `GET /api/settings/profile-presets`;
+  Settings dropdown: McKinsey/BCG заменяют shortcuts в editor (warning + Save); Custom только меняет label.
+  Без новых CommandIds; 93 dotnet tests.
 - **S04-003:** Recent colors (max 5) persist in browser `localStorage` key `ppt-powerkeys-recent-colors`
   (per device, no Api/UserSettings round-trip — VSTO parity for session reload). `loadPersistedRecentColors()`
   in `bootstrapThemeColors()`; `recordRecentColor` saves; `resetFormatColorState` clears for tests.

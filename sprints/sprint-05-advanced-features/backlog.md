@@ -4,7 +4,7 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| S05-001 | Consulting profiles (McKinsey/BCG presets → UserSettings) | Core + Api + AddIn + Tests | **In Progress** | — |
+| S05-001 | Consulting profiles (McKinsey/BCG presets → UserSettings) | Core + Api + AddIn + Tests | **Done** | PR #32 |
 | S05-002 | Snap-to-grid 0.1 cm (Core + layout apply) | Core + Api + AddIn + Tests | Todo | — |
 | S05-003 | Slide Backup Manager (`MoveSlidesToBackup`) | Core + AddIn + Tests | Todo | — |
 | S05-004 | Multi-slide shape paste/remove | Core + AddIn + Tests | Todo | — |
