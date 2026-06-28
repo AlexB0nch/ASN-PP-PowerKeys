@@ -64,8 +64,8 @@ PowerPoint (Desktop/Web/Mac/iPad)
 **Текущее состояние (2026-06-28):** сквозной путь **подтверждён в живом PowerPoint Online** — надстройка
 загружается (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), тянет каталог из **API на собственном
 VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt, деплой по SSH через GitHub Actions),
-рендерит 76 команд по категориям. Команды `ServerLayout` (alignment/resize/distribute) исполняются:
-Office.js читает выделение → API/`LayoutEngine` → запись обратно по `id`. Инфраструктурный эпик завершён.
+рендерит 76 команд по категориям. **ServerLayout** (alignment/resize/distribute + edge-align S02-004) и **HostScript**
+(Objects, Format, Text, copy-and-align) исполняются; остаётся категория **Slides** (S02-005).
 
 **Следующий фокус — Sprint 02 (функциональность):** закрыты S02-001 (Objects), S02-002 (Format),
 S02-003 (Text), **S02-004 (Alignment: edge-align + copy-and-align)**. Следующий приоритет — Slides
