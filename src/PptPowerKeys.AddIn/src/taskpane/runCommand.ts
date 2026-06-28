@@ -5,12 +5,19 @@ import {
   applyLineColor,
   applyShapeBounds,
   applyTextColor,
+  copyObjectPosition,
+  duplicateShapesAtPositions,
+  getPositionClipboard,
   getSelectedShapeBounds,
   getSelectedShapeIds,
   getSelectedShapeTexts,
+  groupSelectedShapes,
   insertShape,
+  insertTextBox,
+  pasteObjectPosition,
   setZOrder,
   toggleFillBlackWhite,
+  ungroupSelectedShape,
 } from "../office/powerpoint";
 import {
   ColorCommandKind,
@@ -102,6 +109,50 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
     case "InsertArrow":
       await insertShape("line");
       return { ok: true, message: "Line inserted." };
+    case "InsertTextbox":
+      await insertTextBox();
+      return { ok: true, message: "Text box inserted." };
+    case "Group": {
+      const count = await groupSelectedShapes();
+      return { ok: true, message: `Grouped ${count} shape(s).` };
+    }
+    case "Ungroup":
+      await ungroupSelectedShape();
+      return { ok: true, message: "Ungrouped." };
+    case "Regroup":
+      return {
+        ok: false,
+        message: "Regroup is not supported on PowerPoint Web.",
+      };
+    case "DuplicateRight":
+    case "DuplicateLeft":
+    case "DuplicateDown":
+    case "DuplicateUp": {
+      const shapes = await getSelectedShapeBounds();
+      if (shapes.length === 0) {
+        return { ok: false, message: "Select one or more shapes first." };
+      }
+      const targets = await Promise.all(
+        shapes.map((source) => api.duplicateOffset(descriptor.id, source, 0)),
+      );
+      const count = await duplicateShapesAtPositions(shapes, targets);
+      return { ok: true, message: `Duplicated ${count} shape(s).` };
+    }
+    case "CopyObjectPosition": {
+      const position = await copyObjectPosition();
+      return {
+        ok: true,
+        message: `Copied position (${position.left.toFixed(1)}, ${position.top.toFixed(1)}).`,
+      };
+    }
+    case "PasteObjectPosition": {
+      const position = getPositionClipboard();
+      if (!position) {
+        return { ok: false, message: "Copy a position first (Copy object position)." };
+      }
+      const count = await pasteObjectPosition(position);
+      return { ok: true, message: `Pasted position to ${count} shape(s).` };
+    }
     case "BringToFront":
       await setZOrder("front");
       return { ok: true, message: "Brought to front." };
