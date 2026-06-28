@@ -8,7 +8,7 @@
 | **Task ID** | `S04-001` |
 | **Спринт** | `sprint-04-smart-color-picker` |
 | **Компонент** | Core + AddIn + Tests |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Заменить фиксированную `DEFAULT_PALETTE` в `formatColorState.ts` на **реальные theme colors
@@ -77,14 +77,19 @@ Color Picker UI (S04-002) и интеграции Fill/Line/Text (S04-003).
 - `src/PptPowerKeys.AddIn/src/taskpane/App.tsx` или `index.tsx` — bootstrap theme read (минимально)
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] Core `ColorPaletteBuilder` merge: theme (≤10) + recent (≤5), dedupe, normalize; ≥5 unit-тестов.
-2. [ ] Api `POST /api/colors/build-palette` вызывает Core; integration test зелёный.
-3. [ ] AddIn `readPresentationThemeColors()` читает accent1–6 + dark1/2 + light1/2 с slide master при PowerPointApi 1.10; при ошибке — `DEFAULT_PALETTE` + `source: 'fallback'`.
-4. [ ] `getActivePalette()` использует theme colors после bootstrap (не только hardcoded defaults).
-5. [ ] `FillColor`/`LineColor`/`TextColor` **продолжают работать** (regression); cycle использует расширенную палитру если theme прочитан.
-6. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-7. [ ] `npm run typecheck` — зелёный.
-8. [ ] PR: ветка `cursor/S04-001-theme-colors-from-presentation-6fba`, Task ID `S04-001`, `Closes #<issue>`.
+1. [x] Core `ColorPaletteBuilder` merge: theme (≤10) + recent (≤5), dedupe, normalize; 7 unit-тестов.
+2. [x] Api `POST /api/colors/build-palette` вызывает Core; 2 integration tests зелёные.
+3. [x] AddIn `readPresentationThemeColors()` читает accent1–6 + dark1/2 + light1/2 с slide master при PowerPointApi 1.10; при ошибке — `DEFAULT_PALETTE` + `source: 'fallback'`.
+4. [x] `getActivePalette()` использует theme colors после bootstrap (не только hardcoded defaults).
+5. [x] `FillColor`/`LineColor`/`TextColor` **продолжают работать** (regression); cycle использует расширенную палитру если theme прочитан.
+6. [x] `dotnet test PptPowerKeys.sln` — 76 passed.
+7. [x] `npm run typecheck` — зелёный.
+8. [x] PR #29 merged в `main`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #29 merged (commit `24a5a45`).
+- CHECKLIST: scope соблюдён — Core merge + Api endpoint + Office.js read; stub OpenColorScheme сохранён; VstoLegacy не тронут.
+- CI зелёный (Core + AddIn jobs).
 
 ## Зависимости
 - S02-002 (`formatColorState.ts`, color HostScript) — в main.

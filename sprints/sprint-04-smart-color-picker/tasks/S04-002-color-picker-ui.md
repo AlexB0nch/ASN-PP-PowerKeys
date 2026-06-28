@@ -8,7 +8,7 @@
 | **Task ID** | `S04-002` |
 | **Спринт** | `sprint-04-smart-color-picker` |
 | **Компонент** | AddIn |
-| **Статус** | Todo |
+| **Статус** | In Progress |
 
 ## Цель
 React-панель **Smart Color Picker**: сетка swatches (theme + recent), apply Fill/Line/Text к выделению;
