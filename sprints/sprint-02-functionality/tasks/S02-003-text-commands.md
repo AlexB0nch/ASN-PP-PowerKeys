@@ -8,7 +8,7 @@
 | **Task ID** | `S02-003` |
 | **Спринт** | `sprint-02-functionality` |
 | **Комponent** | AddIn |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Реализовать исполнение команд категории **Text**, которые сейчас падают в «not wired up yet».
@@ -62,14 +62,20 @@ superscript/subscript; для `PasteFormatted` — явная деградаци
 - `PasteFormatted` — None.
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] `PasteUnformatted`, `ReplaceWithEllipsis`, `ToggleSuperscript`, `ToggleSubscript` **не** попадают в default «not wired up yet».
-2. [ ] `PasteFormatted` возвращает явное сообщение о неподдержке на Web.
-3. [ ] `ReplaceWithEllipsis` заменяет текст выделенных фигур на `"..."`.
-4. [ ] `PasteUnformatted` вставляет plain text из clipboard в выделение; понятная ошибка при пустом clipboard / denied permission.
-5. [ ] Superscript/subscript toggle работает на выделенных фигурах с текстом; взаимоисключение super/sub.
-6. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-7. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-8. [ ] PR: ветка `cursor/S02-003-text-commands-7bcb`, Task ID `S02-003`.
+1. [x] `PasteUnformatted`, `ReplaceWithEllipsis`, `ToggleSuperscript`, `ToggleSubscript` **не** попадают в default «not wired up yet».
+2. [x] `PasteFormatted` возвращает явное сообщение о неподдержке на Web.
+3. [x] `ReplaceWithEllipsis` заменяет текст выделенных фигур на `"..."`.
+4. [x] `PasteUnformatted` вставляет plain text из clipboard в выделение; понятная ошибка при пустом clipboard / denied permission.
+5. [x] Superscript/subscript toggle работает на выделенных фигурах с текстом; взаимоисключение super/sub.
+6. [x] `dotnet test PptPowerKeys.sln` — зелёный (47 passed).
+7. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+8. [x] PR #18: ветка `cursor/S02-003-text-commands-7bcb`, Task ID `S02-003`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #18, ветка `cursor/S02-003-text-commands-7bcb`, коммит `e0641fd` — **смержен в `main`** (`da97de4`).
+- Локально повторены `dotnet test` (47 passed), `npm run typecheck`, `npm run validate:prod` — зелёные.
+- CHECKLIST: scope соблюдён, Core/Api не тронуты, PasteFormatted — явная деградация, clipboard errors обработаны.
+- Ручная проверка в PowerPoint Online — post-merge (deploy Pages + VDS).
 
 ## Зависимости
 - Нет блокеров; S02-001/S02-002 в main.

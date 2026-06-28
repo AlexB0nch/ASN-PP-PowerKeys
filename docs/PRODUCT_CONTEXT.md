@@ -67,11 +67,13 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 рендерит 76 команд по категориям. Команды `ServerLayout` (alignment/resize/distribute) исполняются:
 Office.js читает выделение → API/`LayoutEngine` → запись обратно по `id`. Инфраструктурный эпик завершён.
 
-**Следующий фокус — Sprint 02 (функциональность):** довести **функциональный паритет команд** (многие команды
-Format/Text/Slides ещё «not wired up yet» в `runCommand.ts`). Хендофф для архитектора новой сессии —
+**Следующий фокус — Sprint 02 (функциональность):** закрыты S02-001 (Objects), S02-002 (Format), **S02-003 (Text)**.
+Следующий приоритет — Alignment HostScript (`AlignLeftToRight` и др.) или Slides. Хендофф —
 `sprints/sprint-02-functionality/ARCHITECT-KICKOFF.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S02-003:** Text HostScript — `PasteUnformatted` через `navigator.clipboard.readText()` (Partial, user gesture);
+  `ReplaceWithEllipsis` → `"..."`; superscript/subscript toggle с взаимоисключением; `PasteFormatted` — явная деградация (None).
 - **S01-008:** dev/prod манифесты разделены; production URL подставляются при сборке (`ADDIN_BASE_URL`, `API_BASE_URL`).
   Для PowerPoint on the web достаточно `DesktopFormFactor` + публичные HTTPS URL (отдельный `WebFormFactor` в add-in only manifest не требуется).
 - **S01-009:** prod-манифесту дан отдельный `<Id>` (`5b0ca36f-...`), отличный от dev (`92d7d44c-...`) — Office Online
