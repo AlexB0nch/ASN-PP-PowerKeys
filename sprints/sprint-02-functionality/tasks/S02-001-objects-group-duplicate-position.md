@@ -8,7 +8,7 @@
 | **Task ID** | `S02-001` |
 | **Спринт** | `sprint-02-functionality` |
 | **Комponent** | AddIn (+ существующий Api/Core для duplicate-offset) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 Закрыть первый блок функционального паритета Sprint 02: команды **Objects** и связанные
@@ -71,14 +71,20 @@ settings gap позже.
 - **Copy/Paste position**: только setters `left`/`top` — Full.
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] Команды `Group`, `Ungroup`, `DuplicateRight/Left/Down/Up`, `CopyObjectPosition`, `PasteObjectPosition`, `InsertTextbox` **не** попадают в default «not wired up yet».
-2. [ ] `Regroup` возвращает явное сообщение о неподдержке на Web (не generic «not wired up yet»).
-3. [ ] Duplicate использует `POST /api/objects/duplicate-offset` для расчёта позиции (не дублирует математику на клиенте).
-4. [ ] Copy/Paste position: copy сохраняет позицию **последней** выделенной; paste применяет left/top к выделенным без изменения размеров.
-5. [ ] Понятные ошибки при пустом/некорректном выделении (group ≥2, ungroup — группа, duplicate — ≥1).
-6. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-7. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-8. [ ] PR: ветка `cursor/S02-001-objects-group-duplicate-position`, описание по `.github/PULL_REQUEST_TEMPLATE.md`, Task ID `S02-001`.
+1. [x] Команды `Group`, `Ungroup`, `DuplicateRight/Left/Down/Up`, `CopyObjectPosition`, `PasteObjectPosition`, `InsertTextbox` **не** попадают в default «not wired up yet».
+2. [x] `Regroup` возвращает явное сообщение о неподдержке на Web (не generic «not wired up yet»).
+3. [x] Duplicate использует `POST /api/objects/duplicate-offset` для расчёта позиции (не дублирует математику на клиенте).
+4. [x] Copy/Paste position: copy сохраняет позицию **последней** выделенной; paste применяет left/top к выделенным без изменения размеров.
+5. [x] Понятные ошибки при пустом/некорректном выделении (group ≥2, ungroup — группа, duplicate — ≥1).
+6. [x] `dotnet test PptPowerKeys.sln` — зелёный (47 passed).
+7. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+8. [x] PR #16: ветка `cursor/S02-001-objects-group-duplicate-position-a065`, Task ID `S02-001`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #16, ветка `cursor/S02-001-objects-group-duplicate-position-a065`, коммит `2574897`.
+- Локально повторены `dotnet test` (47 passed), `npm run typecheck`, `npm run validate:prod` — зелёные.
+- CHECKLIST: scope соблюдён, Core/Api не тронуты, duplicate-offset используется корректно, Regroup — явная деградация.
+- Ручная проверка в PowerPoint Online — post-merge (deploy Pages + VDS).
 
 ## Зависимости
 - Нет блокеров; API duplicate-offset и DuplicationEngineTests уже в main.

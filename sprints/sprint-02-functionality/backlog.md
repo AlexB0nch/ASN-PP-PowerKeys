@@ -5,4 +5,4 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| S02-001 | Objects: group/ungroup, duplicate, copy/paste position | AddIn | In Progress | [task](./tasks/S02-001-objects-group-duplicate-position.md) |
+| S02-001 | Objects: group/ungroup, duplicate, copy/paste position | AddIn | Done | [task](./tasks/S02-001-objects-group-duplicate-position.md) / PR #16 |
