@@ -9,12 +9,12 @@
 из презентации где возможно (Office.js), recent colors, интеграция с `FillColor`/`LineColor`/`TextColor`.
 
 ## Цели (декомпозирует architect в задачи `S04-0YY`)
-- [ ] Чтение theme/slide colors через Office.js (Partial на Web — graceful fallback)
-- [ ] Color Picker UI (swatches + recent + apply to selection)
-- [ ] Wiring `OpenColorScheme` — открыть picker вместо stub
-- [ ] Интеграция палитры с `formatColorState` / color commands (10 theme + 5 recent как VSTO)
-- [ ] Персистентность recent colors (localStorage и/или `UserSettings` extension — architect решает)
-- [ ] Тесты Core (palette logic); `dotnet test`, `npm run typecheck/validate:prod`
+- [x] Чтение theme/slide colors через Office.js (Partial на Web — graceful fallback)
+- [x] Color Picker UI (swatches + recent + apply to selection)
+- [x] Wiring `OpenColorScheme` — открыть picker вместо stub
+- [x] Интеграция палитры с `formatColorState` / color commands (10 theme + 5 recent как VSTO)
+- [x] Персистентность recent colors (`localStorage` key `ppt-powerkeys-recent-colors`)
+- [x] Тесты Core (palette logic); `dotnet test`, `npm run typecheck/validate:prod`
 
 ## Ограничения Office Web
 - Чтение Slide Master palette **ограничено** vs VSTO COM — см. `CommandCatalog` (`FillColor` = Partial).
