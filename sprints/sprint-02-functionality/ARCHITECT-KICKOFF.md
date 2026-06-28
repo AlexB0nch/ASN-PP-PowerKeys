@@ -8,7 +8,7 @@
 - **Add-in** — GitHub Pages: `https://alexb0nch.github.io/ASN-PP-PowerKeys/` (`manifest.prod.xml`, Id `5b0ca36f-...`).
 - **API** — VDS `https://95.140.152.103.sslip.io` (Caddy + Docker, deploy `deploy-vds.yml` на push в `main`).
 - **CORS** для GitHub Pages — настроен.
-- Панель рендерит **76 команд**; **S02-001…005 Done** (Objects, Format, Text, Alignment, Slides). Следующий — **S02-006** (единый UX `support=None`).
+- Панель рендерит **76 команд**; **S02-001…006 Done** — Sprint 02 завершён. Следующий — **Sprint 03** (Settings UI).
 
 ## 2. Главная проблема (фокус Sprint 02)
 **Функциональный паритет закрыт (S02-001…005).** Default «not wired up yet» — только safety-net.
@@ -36,7 +36,9 @@
 | S02-003 | Done (#18) | Text |
 | S02-004 | Done (#19) | Alignment: edge-align + copy-and-align |
 | **S02-005** | **Done (#21)** | **Slides: CopySlide + деградация view/print** |
-| **S02-006** | **Todo** | **Единая деградация `support=None` + UX бейджи** |
+| **S02-006** | **Done (#22)** | **Единая деградация `support=None` + UX бейджи** |
+
+**Sprint 02 завершён.** Следующий — Sprint 03 (Settings UI).
 
 ## 6. Процесс
 1. Task-файл в `sprints/sprint-02-functionality/tasks/` + строка в `backlog.md`.

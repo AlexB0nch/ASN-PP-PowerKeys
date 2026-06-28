@@ -13,8 +13,8 @@
 - [x] **Text** — S02-003, PR #18
 - [x] **Alignment** (edge-align + copy-and-align) — S02-004, PR #19
 - [x] **Slides** — S02-005, PR #21
-- [ ] Единая деградация `support=None` + UX — **S02-006**
-- [x] Юнит-тесты новой логики в `PptPowerKeys.Tests` (55 tests после S02-004)
+- [x] Единая деградация `support=None` + UX — **S02-006, PR #22**
+- [x] Юнит-тесты новой логики в `PptPowerKeys.Tests` (56 tests после S02-006)
 - [x] Контракт `Api/Contracts` ↔ `AddIn/src/services/types.ts` синхронизирован по мере задач
 
 ## Вне фокуса (следующие спринты)

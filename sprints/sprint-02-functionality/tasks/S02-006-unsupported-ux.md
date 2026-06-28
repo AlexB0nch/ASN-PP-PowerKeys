@@ -8,7 +8,7 @@
 | **Task ID** | `S02-006` |
 | **Спринт** | `sprint-02-functionality` |
 | **Компонент** | AddIn (+ опционально Tests guard) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 
 ## Цель
 После S02-001…005 **функциональный паритет закрыт** — все 76 каталоговых команд wired.
@@ -108,12 +108,21 @@ Helper `runUnsupportedWebCommand` возвращает `{ kind: "unsupported", m
 - `src/PptPowerKeys.Tests/SettingsAndCatalogTests.cs` (guard, опционально)
 
 ## Критерии приёмки (Definition of Done)
-1. [ ] Все 9 None-команд обрабатываются через единый реестр/helper (нет отдельных case).
-2. [ ] Легенда бейджей видна в UI (Full / Partial / Not on Web).
-3. [ ] Клик по None-команде не показывает красный «Error» — warning «Not on Web» или disabled + tooltip.
-4. [ ] Существующие сообщения деградации сохранены по смыслу (as-is из таблицы).
-5. [ ] `dotnet test PptPowerKeys.sln` (55+), `npm run typecheck`, `npm run validate:prod` — зелёные.
-6. [ ] PR: ветка `cursor/S02-006-unsupported-ux-3541`, Task ID `S02-006`, Closes #<issue>.
+1. [x] Все 9 None-команд обрабатываются через единый реестр/helper (нет отдельных case).
+2. [x] Легенда бейджей видна в UI (Full / Partial / Not on Web).
+3. [x] Клик по None-команде не показывает красный «Error» — warning «Not on Web» или disabled + tooltip.
+4. [x] Существующие сообщения деградации сохранены по смыслу (as-is из таблицы).
+5. [x] `dotnet test PptPowerKeys.sln` (56 passed), `npm run typecheck`, `npm run validate:prod` — зелёные.
+6. [x] PR #22: ветка `cursor/S02-006-unsupported-ux-3541`, Task ID `S02-006`, merge commit `5087590`.
+
+## Приёмка (architect, 2026-06-28)
+- PR #22, ветка `cursor/S02-006-unsupported-ux-3541`, merge commit `5087590` — **смержен в `main`**.
+- Локально повторены `dotnet test` (56 passed), `npm run typecheck`, `npm run validate:prod` — зелёные; CI на PR — зелёный.
+- CHECKLIST: scope соблюдён, Core/Api/VstoLegacy не тронуты; `CommandCatalog` ↔ `types.ts` без изменений.
+- `unsupportedWebCommands.ts` — единый реестр 9 None-команд; `CommandOutcome.kind` различает success/unsupported/error.
+- App: легенда бейджей, warning status bar для None, tooltip «Not available on PowerPoint Web» + notes.
+- Guard: `Catalog_NoneSupportCommands_AreExactlyNineKnownIds` в `SettingsAndCatalogTests`.
+- **Sprint 02 функционально завершён** — все S02-001…006 Done.
 
 ## Зависимости
 - S02-001…005 — Done в `main`.

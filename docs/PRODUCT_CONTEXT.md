@@ -64,16 +64,17 @@ PowerPoint (Desktop/Web/Mac/iPad)
 **Текущее состояние (2026-06-28):** сквозной путь **подтверждён в живом PowerPoint Online** — надстройка
 загружается (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), тянет каталог из **API на собственном
 VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt, деплой по SSH через GitHub Actions),
-рендерит 76 команд по категориям. **ServerLayout** (alignment/resize/distribute + edge-align S02-004) и **HostScript**
-(Objects, Format, Text, copy-and-align, **Slides S02-005**) исполняются; default «not wired up yet» больше не срабатывает
-для каталоговых команд — остаётся **S02-006** (единый UX деградации `support=None`).
+рендерит 76 команд по категориям. **ServerLayout**, **HostScript** (Objects, Format, Text, Alignment, Slides)
+и **Settings** исполняются; 9 команд `support=None` — через единый реестр `unsupportedWebCommands.ts` с warning-UX
+(не красный Error). Default «not wired up yet» — safety-net для неизвестных id.
 
-**Следующий фокус — Sprint 02 (функциональность):** закрыты S02-001 (Objects), S02-002 (Format),
-S02-003 (Text), S02-004 (Alignment), **S02-005 (Slides: CopySlide + view/print degradation)**. Следующий приоритет —
-**S02-006** (единая деградация + UX бейджи). Хендофф —
-`sprints/sprint-02-functionality/ARCHITECT-KICKOFF.md`.
+**Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
+Следующий фокус — **Sprint 03** (Settings UI, персистентность, шорткаты). Хендофф —
+`sprints/sprint-02-functionality/retrospective.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S02-006:** Единый реестр `unsupportedWebCommands.ts` для 9 None-команд; `CommandOutcome.kind`
+  (`success` | `unsupported` | `error`); легенда бейджей и warning status bar вместо красного Error для ожидаемой деградации.
 - **S02-005:** Slides HostScript — `CopySlide` через `exportAsBase64` + `insertSlidesFromBase64` (Partial);
   view/zoom/sorter/slideshow/grid/guides/print — явная деградация с конкретными сообщениями (None).
 - **S02-004:** Edge-align (`AlignLeftToRight` и др.) — математика в `LayoutEngine`, execution `ServerLayout`;
