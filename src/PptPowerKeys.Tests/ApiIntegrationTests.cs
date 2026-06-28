@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using PptPowerKeys.Core.Geometry;
+using PptPowerKeys.Core.Settings;
 using Xunit;
 
 namespace PptPowerKeys.Tests;
@@ -71,6 +72,42 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
 
         var result = await response.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal(15.5, result.GetProperty("sum").GetDouble(), 6);
+    }
+
+    [Fact]
+    public async Task ProfilePresets_ReturnsKnownProfilesAndShortcutPresets()
+    {
+        var client = _factory.CreateClient();
+        var result = await client.GetFromJsonAsync<JsonElement>("/api/settings/profile-presets");
+
+        var profiles = result.GetProperty("profiles");
+        Assert.Equal(3, profiles.GetArrayLength());
+        Assert.Equal(ConsultingProfilePresets.McKinsey, profiles[0].GetString());
+        Assert.Equal(ConsultingProfilePresets.BCG, profiles[1].GetString());
+        Assert.Equal(ConsultingProfilePresets.Custom, profiles[2].GetString());
+
+        var presets = result.GetProperty("presets");
+        Assert.True(presets.GetProperty(ConsultingProfilePresets.McKinsey).GetProperty("shortcuts").GetArrayLength() >= 5);
+        Assert.True(presets.GetProperty(ConsultingProfilePresets.BCG).GetProperty("shortcuts").GetArrayLength() >= 5);
+        Assert.False(presets.TryGetProperty(ConsultingProfilePresets.Custom, out _));
+    }
+
+    [Fact]
+    public async Task Settings_Reset_ReturnsCustomProfile()
+    {
+        var client = _factory.CreateClient();
+        await client.PutAsJsonAsync("/api/settings", new
+        {
+            profile = ConsultingProfilePresets.McKinsey,
+            shortcuts = new[] { new { commandId = "AlignLeft", keys = "Alt+1" } },
+        });
+
+        var reset = await client.PostAsync("/api/settings/reset", null);
+        reset.EnsureSuccessStatusCode();
+
+        var settings = await reset.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal(ConsultingProfilePresets.Custom, settings.GetProperty("profile").GetString());
+        Assert.True(settings.GetProperty("shortcuts").GetArrayLength() > 1);
     }
 
     [Fact]
