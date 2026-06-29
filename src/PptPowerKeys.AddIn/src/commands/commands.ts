@@ -1,17 +1,13 @@
 /* global Office */
 
-// Function-file entry point for ribbon button commands. Currently the add-in is
-// driven entirely from the task pane, but registering an action here keeps the
-// manifest's FunctionFile contract satisfied and provides a home for future
-// ribbon-triggered commands.
+// Function-file entry for ribbon commands. With shared runtime, this module is
+// bundled into taskpane.js and registerRibbonActions() is called from bootstrap.
 
 function showTaskpane(event: Office.AddinCommands.Event): void {
-  // Placeholder ribbon command; the manifest points its button at the task pane
-  // directly, so this simply completes.
   event.completed();
 }
 
-// Must run after Office.js is ready — calling associate earlier breaks PowerPoint Online.
-Office.onReady(() => {
+/** Satisfies manifest FunctionFile contract; safe to call when KeyboardShortcuts API is absent. */
+export function registerRibbonActions(): void {
   Office.actions.associate("showTaskpane", showTaskpane);
-});
+}
