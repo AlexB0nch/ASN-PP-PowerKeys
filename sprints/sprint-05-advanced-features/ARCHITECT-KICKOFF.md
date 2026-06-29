@@ -6,12 +6,10 @@
 ## 1. Где мы (2026-06-28)
 | Sprint | PR | Итог |
 |--------|-----|------|
-| 01 | #7–#15 | Infra, PowerPoint Online, VDS |
-| 02 | #16–#22 | 76 commands wired |
-| 03 | #23–#27 | Settings, Shortcut Manager |
-| 04 | #29–#31 | Smart Color Picker, theme+recent |
+| 01–04 | #7–#31 | Infra → 76 commands → Settings → Color Picker |
+| **05** | **#32** | **S05-001 Done** — Consulting profiles McKinsey/BCG |
 
-**76 tests** passed. AddIn + Api + Core стабильны.
+**93 tests** passed. **Следующая задача: S05-002** (snap-to-grid 0.1 cm). См. `backlog.md`.
 
 ## 2. Продуктовый backlog (README)
 | Фича | Описание | Office Web (ожидание) |

@@ -44,8 +44,7 @@ Consulting Mode (профили + snap-to-grid), Slide Backup Manager, Multi-sli
 
 ## Definition of Done спринта
 
-- [ ] Закрыты **минимум P1** задачи (S05-001, S05-002) + **одна из P2** (S05-003 или S05-004) — architect фиксирует в retrospective
-- [ ] Каждая реализованная фича: task → PR → merge + тесты где применимо
-- [ ] Новые команды зарегистрированы в `CommandCatalog` с корректным `OfficeJsSupport`
-- [ ] Web limitations — `unsupportedWebCommands` или Partial с конкретным сообщением (не «not wired up yet»)
-- [ ] `docs/PRODUCT_CONTEXT.md` обновлён по итогам спринта
+- [x] **S05-001** — Consulting profiles (PR #32)
+- [ ] **S05-002** — Snap-to-grid 0.1 cm (P1)
+- [ ] **Одна из P2:** S05-003 (Backup) или S05-004 (Multi-slide)
+- [ ] (Optional) S05-005 — Smart Duplicate gap
