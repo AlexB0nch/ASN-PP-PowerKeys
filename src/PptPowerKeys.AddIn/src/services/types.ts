@@ -80,6 +80,11 @@ export interface ProfilePresetsResponse {
   presets: Record<string, ProfilePresetEntry>;
 }
 
+export interface SettingsImportResponse {
+  settings: UserSettings;
+  warnings: string[];
+}
+
 export interface BuildPaletteRequest {
   themeColors?: string[];
   recentColors?: string[];

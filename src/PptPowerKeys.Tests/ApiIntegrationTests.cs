@@ -144,6 +144,49 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
+    public async Task Settings_Import_ValidatesWithoutSaving()
+    {
+        var client = _factory.CreateClient();
+
+        var importBody = new
+        {
+            schemaVersion = 1,
+            profile = "ImportedProfile",
+            snapToGrid = true,
+            shortcuts = new[]
+            {
+                new { commandId = "AlignLeft", keys = "Alt+1" },
+                new { commandId = "UnknownCommand", keys = "Alt+9" },
+            },
+        };
+
+        var import = await client.PostAsJsonAsync("/api/settings/import", importBody);
+        import.EnsureSuccessStatusCode();
+
+        var imported = await import.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("ImportedProfile", imported.GetProperty("settings").GetProperty("profile").GetString());
+        Assert.True(imported.GetProperty("settings").GetProperty("snapToGrid").GetBoolean());
+        Assert.Equal(1, imported.GetProperty("settings").GetProperty("shortcuts").GetArrayLength());
+        Assert.Equal(1, imported.GetProperty("warnings").GetArrayLength());
+
+        var stored = await client.GetFromJsonAsync<JsonElement>("/api/settings");
+        Assert.NotEqual("ImportedProfile", stored.GetProperty("profile").GetString());
+    }
+
+    [Fact]
+    public async Task Settings_Import_InvalidJson_ReturnsBadRequest()
+    {
+        var client = _factory.CreateClient();
+        var response = await client.PostAsync(
+            "/api/settings/import",
+            new StringContent("{ not json", System.Text.Encoding.UTF8, "application/json"));
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var body = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("Invalid JSON", body.GetProperty("error").GetString());
+    }
+
+    [Fact]
     public async Task Settings_Reset_ReturnsCustomProfile()
     {
         var client = _factory.CreateClient();

@@ -24,6 +24,35 @@ import { syncKeyboardShortcuts } from "../runtime/syncKeyboardShortcuts";
 import { ShortcutManager } from "./ShortcutManager";
 
 const CUSTOM_PROFILE = "Custom";
+const SETTINGS_SCHEMA_VERSION = 1;
+
+function sanitizeProfileForFilename(profile: string): string {
+  const trimmed = profile.trim();
+  if (!trimmed || trimmed === CUSTOM_PROFILE) {
+    return "";
+  }
+
+  const sanitized = trimmed.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "");
+  return sanitized;
+}
+
+function buildSettingsExportFilename(profile: string): string {
+  const slug = sanitizeProfileForFilename(profile);
+  return slug ? `ppt-powerkeys-settings-${slug}.json` : "ppt-powerkeys-settings.json";
+}
+
+function buildSettingsExportPayload(settings: UserSettings): string {
+  return JSON.stringify(
+    {
+      schemaVersion: SETTINGS_SCHEMA_VERSION,
+      profile: settings.profile,
+      snapToGrid: settings.snapToGrid ?? false,
+      shortcuts: settings.shortcuts,
+    },
+    null,
+    2,
+  );
+}
 
 const useStyles = makeStyles({
   root: {
@@ -76,12 +105,15 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
   function SettingsPanel({ commands, onFeedback, onSettingsUpdated }, ref) {
     const styles = useStyles();
     const shortcutsRef = React.useRef<HTMLDivElement>(null);
+    const importInputRef = React.useRef<HTMLInputElement>(null);
     const [settings, setSettings] = React.useState<UserSettings | null>(null);
     const [presets, setPresets] = React.useState<ProfilePresetsResponse | null>(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
-    const [busy, setBusy] = React.useState<"save" | "reset" | null>(null);
+    const [busy, setBusy] = React.useState<"save" | "reset" | "import" | null>(null);
     const [presetWarning, setPresetWarning] = React.useState(false);
+    const [importWarning, setImportWarning] = React.useState(false);
+    const [importWarnings, setImportWarnings] = React.useState<string[]>([]);
 
     const loadSettings = React.useCallback(async () => {
       setError(null);
@@ -93,6 +125,8 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         setSettings(data);
         setPresets(presetData);
         setPresetWarning(false);
+        setImportWarning(false);
+        setImportWarnings([]);
         onSettingsUpdated?.(data);
         await syncKeyboardShortcuts(data);
       } catch (err) {
@@ -143,6 +177,52 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         snapToGrid: settings.snapToGrid,
       });
       setPresetWarning(true);
+      setImportWarning(false);
+      setImportWarnings([]);
+    };
+
+    const onExportJson = () => {
+      if (!settings) {
+        return;
+      }
+
+      const payload = buildSettingsExportPayload(settings);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = buildSettingsExportFilename(settings.profile);
+      link.click();
+      URL.revokeObjectURL(url);
+    };
+
+    const onImportJsonClick = () => {
+      importInputRef.current?.click();
+    };
+
+    const onImportFileSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      event.target.value = "";
+      if (!file) {
+        return;
+      }
+
+      setBusy("import");
+      try {
+        const jsonText = await file.text();
+        const result = await api.importSettings(jsonText);
+        setSettings(result.settings);
+        setImportWarnings(result.warnings);
+        setImportWarning(true);
+        setPresetWarning(false);
+        onFeedback?.(outcomeSuccess("Settings imported into the editor."));
+      } catch (err) {
+        onFeedback?.(
+          outcomeError(err instanceof Error ? err.message : String(err)),
+        );
+      } finally {
+        setBusy(null);
+      }
     };
 
     const onSave = async () => {
@@ -154,6 +234,8 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         const saved = await api.saveSettings(settings);
         setSettings(saved);
         setPresetWarning(false);
+        setImportWarning(false);
+        setImportWarnings([]);
         onSettingsUpdated?.(saved);
         await syncKeyboardShortcuts(saved);
         onFeedback?.(outcomeSuccess("Settings saved."));
@@ -172,6 +254,8 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         const reset = await api.resetSettings();
         setSettings(reset);
         setPresetWarning(false);
+        setImportWarning(false);
+        setImportWarnings([]);
         onSettingsUpdated?.(reset);
         await syncKeyboardShortcuts(reset);
         onFeedback?.(outcomeSuccess("Settings reset to defaults."));
@@ -226,6 +310,17 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
           <MessageBar intent="warning">
             <MessageBarBody>
               Applying preset replaces current shortcuts. Click Save to persist.
+            </MessageBarBody>
+          </MessageBar>
+        ) : null}
+
+        {importWarning ? (
+          <MessageBar intent="warning">
+            <MessageBarBody>
+              Imported — click Save to persist.
+              {importWarnings.length > 0
+                ? ` ${importWarnings.join(" ")}`
+                : null}
             </MessageBarBody>
           </MessageBar>
         ) : null}
@@ -291,6 +386,29 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
           >
             {busy === "reset" ? "Resetting…" : "Reset to defaults"}
           </Button>
+          <Button
+            size="small"
+            appearance="secondary"
+            disabled={busy !== null}
+            onClick={onExportJson}
+          >
+            Export JSON
+          </Button>
+          <Button
+            size="small"
+            appearance="secondary"
+            disabled={busy !== null}
+            onClick={onImportJsonClick}
+          >
+            {busy === "import" ? "Importing…" : "Import JSON"}
+          </Button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".json,application/json"
+            style={{ display: "none" }}
+            onChange={(event) => void onImportFileSelected(event)}
+          />
         </div>
       </div>
     );
