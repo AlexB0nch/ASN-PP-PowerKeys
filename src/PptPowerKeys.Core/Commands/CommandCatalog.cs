@@ -131,6 +131,9 @@ public static class CommandCatalog
             Host(CommandIds.ToggleGuides, "Toggle guides", CommandCategory.Slides, OfficeJsSupport.None),
             Host(CommandIds.CopySlide, "Copy/duplicate slide", CommandCategory.Slides, OfficeJsSupport.Partial,
                 notes: "presentation.slides has insert/clone in newer API; otherwise workaround."),
+            Host(CommandIds.MoveSlidesToBackup, "Move slides to backup (end of deck)", CommandCategory.Slides,
+                OfficeJsSupport.Partial,
+                notes: "Move to end of deck only; slide sections are not available on PowerPoint Web."),
             Host(CommandIds.PrintSlide, "Print slide", CommandCategory.Slides, OfficeJsSupport.None,
                 notes: "No print API; rely on host/browser print."),
 

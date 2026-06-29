@@ -9,6 +9,7 @@ import {
   cloneSelectedShapesAtSourcePositions,
   copyObjectPosition,
   duplicateSelectedSlide,
+  moveSelectedSlidesToBackup,
   duplicateShapesAtPositions,
   getPositionClipboard,
   getSelectedShapeBounds,
@@ -289,6 +290,10 @@ async function runHostScript(
     case "CopySlide":
       await duplicateSelectedSlide();
       return outcomeSuccess("Slide duplicated.");
+    case "MoveSlidesToBackup": {
+      const movedCount = await moveSelectedSlidesToBackup();
+      return outcomeSuccess(`Moved ${movedCount} slide(s) to backup (end of deck).`);
+    }
     default:
       // Safety-net for unknown ids — should never fire for catalog commands after S02-005.
       return outcomeError(

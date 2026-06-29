@@ -682,6 +682,10 @@ type SlideExportCapable = PowerPoint.Slide & {
   exportAsBase64?: () => OfficeExtension.ClientResult<string>;
 };
 
+type SlideMoveCapable = PowerPoint.Slide & {
+  moveTo?: (slideIndex: number) => void;
+};
+
 type PresentationInsertCapable = PowerPoint.Presentation & {
   insertSlidesFromBase64?: (
     base64File: string,
@@ -730,5 +734,91 @@ export async function duplicateSelectedSlide(): Promise<void> {
       formatting: "KeepSourceFormatting",
     });
     await context.sync();
+  });
+}
+
+/**
+ * Moves all selected slides to the end of the presentation (backup area).
+ * Prefers slide.moveTo (PowerPointApi 1.8+); falls back to export → insert → delete.
+ */
+export async function moveSelectedSlidesToBackup(): Promise<number> {
+  return PowerPoint.run(async (context) => {
+    const selectedSlides = context.presentation.getSelectedSlides();
+    selectedSlides.load("items");
+    await context.sync();
+
+    if (selectedSlides.items.length === 0) {
+      throw new Error("Select one or more slides first.");
+    }
+
+    const selected: { id: string; index: number }[] = [];
+    for (const slide of selectedSlides.items) {
+      slide.load("id,index");
+    }
+    await context.sync();
+
+    for (const slide of selectedSlides.items) {
+      selected.push({ id: slide.id, index: slide.index });
+    }
+
+    selected.sort((a, b) => b.index - a.index);
+    const moveCount = selected.length;
+
+    const probeSlide = selectedSlides.getItemAt(0) as SlideMoveCapable;
+    const probeExportSlide = selectedSlides.getItemAt(0) as SlideExportCapable;
+    const presentationApi = context.presentation as PresentationInsertCapable;
+
+    const hasMoveTo = typeof probeSlide.moveTo === "function";
+    const hasExportInsert =
+      typeof probeExportSlide.exportAsBase64 === "function" &&
+      typeof presentationApi.insertSlidesFromBase64 === "function";
+
+    if (!hasMoveTo && !hasExportInsert) {
+      throw new Error("Slide move is not supported on this PowerPoint version.");
+    }
+
+    if (hasMoveTo) {
+      for (const entry of selected) {
+        const slides = context.presentation.slides;
+        slides.load("items");
+        await context.sync();
+
+        const lastIndex = slides.items.length - 1;
+        const slide = slides.getItem(entry.id) as SlideMoveCapable;
+        slide.moveTo!(lastIndex);
+        await context.sync();
+      }
+      return moveCount;
+    }
+
+    for (const entry of selected) {
+      const slides = context.presentation.slides;
+      slides.load("items");
+      await context.sync();
+
+      const lastSlide = slides.getItemAt(slides.items.length - 1);
+      lastSlide.load("id");
+      await context.sync();
+
+      const slide = slides.getItem(entry.id) as SlideExportCapable;
+      const base64Result = slide.exportAsBase64!();
+      await context.sync();
+
+      const base64 = base64Result.value;
+      if (!base64) {
+        throw new Error("Slide move is not supported on this PowerPoint version.");
+      }
+
+      presentationApi.insertSlidesFromBase64!(base64, {
+        targetSlideId: lastSlide.id,
+        formatting: "KeepSourceFormatting",
+      });
+      await context.sync();
+
+      slide.delete();
+      await context.sync();
+    }
+
+    return moveCount;
   });
 }
