@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="OnLoad">
+  <ribbon>
+    <tabs>
+      <tab id="tabPowerKeys" label="PowerKeys" insertAfterMso="TabHome">
+        <group id="grpBootstrap" label="Bootstrap">
+          <button id="btnBootstrap"
+                  label="Test"
+                  onAction="OnBootstrapAction"
+                  size="large"
+                  imageMso="HappyFace"
+                  screentip="PptPowerKeys.Windows bootstrap"
+                  supertip="Confirms the VSTO add-in and shared Core catalog are loaded (S07-002)." />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

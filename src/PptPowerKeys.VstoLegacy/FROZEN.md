@@ -16,3 +16,4 @@ New work belongs in:
 - `src/PptPowerKeys.Core` — business logic (.NET 8, pure C#)
 - `src/PptPowerKeys.Api` — ASP.NET Core backend
 - `src/PptPowerKeys.AddIn` — Office Web Add-in (TypeScript + React)
+- **`src/PptPowerKeys.Windows`** — **new** LTSC VSTO line (Product Line B, ADR-001); do **not** add features here in `VstoLegacy*`

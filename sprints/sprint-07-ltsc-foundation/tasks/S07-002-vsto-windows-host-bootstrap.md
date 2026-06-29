@@ -9,7 +9,7 @@
 | **Task ID** | `S07-002` |
 | **Спринт** | `sprint-07-ltsc-foundation` |
 | **Компонент** | Windows (new VSTO project) |
-| **Статус** | Todo |
+| **Статус** | Done |
 
 ## Цель
 
@@ -41,11 +41,11 @@
 
 ## Критерии приёмки
 
-- [ ] Solution builds on Windows + VS + VSTO workload (document in PR manual note)
-- [ ] Add-in loads in PowerPoint; ribbon button visible
-- [ ] Project references Core netstandard2.0
-- [ ] `dotnet test PptPowerKeys.sln` still green (unaffected)
-- [ ] FROZEN.md / ADR clarify new project vs legacy
+- [x] Solution builds on Windows + VS + VSTO workload (document in PR manual note)
+- [x] Add-in loads in PowerPoint; ribbon button visible
+- [x] Project references Core netstandard2.0
+- [x] `dotnet test PptPowerKeys.sln` still green (unaffected)
+- [x] FROZEN.md / ADR clarify new project vs legacy
 
 ## Зависимости
 
