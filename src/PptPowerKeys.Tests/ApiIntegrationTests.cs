@@ -56,6 +56,57 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
+    public async Task ApplyLayout_AlignLeft_WithSnapToGrid_SnapsResult()
+    {
+        var client = _factory.CreateClient();
+        var body = new
+        {
+            command = "AlignLeft",
+            shapes = new[]
+            {
+                new { id = "a", left = 101.2, top = 10.3, width = 50.4, height = 20.6 },
+                new { id = "b", left = 30.7, top = 200.1, width = 80.2, height = 40.3 },
+            },
+            options = new { snapToGrid = true },
+        };
+
+        var response = await client.PostAsJsonAsync("/api/layout/apply", body);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.True(result.GetProperty("changed").GetBoolean());
+
+        double gridStep = 0.1 * (72.0 / 2.54);
+        double Snap(double v) => Math.Round(v / gridStep) * gridStep;
+
+        var moved = result.GetProperty("shapes")[0];
+        Assert.Equal(Snap(30.7), moved.GetProperty("left").GetDouble(), 6);
+        Assert.Equal(Snap(10.3), moved.GetProperty("top").GetDouble(), 6);
+        Assert.Equal(Snap(50.4), moved.GetProperty("width").GetDouble(), 6);
+        Assert.Equal(Snap(20.6), moved.GetProperty("height").GetDouble(), 6);
+    }
+
+    [Fact]
+    public async Task Settings_SnapToGrid_RoundTrips()
+    {
+        var client = _factory.CreateClient();
+
+        var put = await client.PutAsJsonAsync("/api/settings", new
+        {
+            profile = "Custom",
+            snapToGrid = true,
+            shortcuts = new[] { new { commandId = "AlignLeft", keys = "Alt+1" } },
+        });
+        put.EnsureSuccessStatusCode();
+
+        var saved = await put.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.True(saved.GetProperty("snapToGrid").GetBoolean());
+
+        var loaded = await client.GetFromJsonAsync<JsonElement>("/api/settings");
+        Assert.True(loaded.GetProperty("snapToGrid").GetBoolean());
+    }
+
+    [Fact]
     public async Task ApplyLayout_NoneCommand_ReturnsBadRequest()
     {
         var client = _factory.CreateClient();

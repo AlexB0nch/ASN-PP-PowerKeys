@@ -15,6 +15,8 @@ public sealed class UserSettings
 {
     public string Profile { get; set; } = "Custom";
 
+    public bool SnapToGrid { get; set; } = false;
+
     public List<ShortcutBinding> Shortcuts { get; set; } = new();
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -52,6 +54,7 @@ public sealed class UserSettings
     public static UserSettings CreateDefaults() => new()
     {
         Profile = "Custom",
+        SnapToGrid = false,
         Shortcuts = CommandCatalog.All
             .Where(c => !string.IsNullOrWhiteSpace(c.DefaultShortcut))
             .Select(c => new ShortcutBinding { CommandId = c.Key, Keys = c.DefaultShortcut! })
