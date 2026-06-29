@@ -41,7 +41,7 @@ Office **Keyboard Shortcuts API** + **Shared Runtime**, синхронизиро
 ## Definition of Done спринта
 
 - [x] **S06-001** — Shared Runtime + Tier 1 defaults (`shortcuts.json`, `associate` → `runCommand`) — PR #46
-- [ ] **S06-002** — Save/load Shortcut Manager → `Office.actions.replaceShortcuts` (все 79 action ids)
+- [x] **S06-002** — Save/load Shortcut Manager → `Office.actions.replaceShortcuts` (76 hotkey-eligible actions) — PR #49
 - [ ] Трассировка `S06-0YY` → Issue → PR → merge
 - [ ] `dotnet test PptPowerKeys.sln` — зелёный
 - [ ] AddIn: `typecheck`, `validate:prod`, `build:prod` — зелёные

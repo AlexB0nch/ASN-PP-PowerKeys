@@ -9,9 +9,9 @@
 | **Task ID** | `S06-002` |
 | **Спринт** | `sprint-06-keyboard-shortcuts` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
-| **Issue** | #48 |
-| **PR** | — |
+| **Статус** | Done |
+| **Issue** | #48 (closed) |
+| **PR** | #49 |
 
 ## Цель
 
@@ -133,18 +133,24 @@ Associate + replaceShortcuts разрешены; handler → `runCommand` → ex
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] `shortcuts.json` declares **76** actions; Tier 1 default keys unchanged.
-2. [ ] `registerCommandActions` associates **76** ids → `executeCommandById`.
-3. [ ] `syncKeyboardShortcuts` вызывает `replaceShortcuts` from `UserSettings.shortcuts`.
-4. [ ] Sync on: bootstrap (post-load), Save, Reset.
-5. [ ] McKinsey/BCG profile + Save → BCG keys active (e.g. `Ctrl+Alt+B` for SameWidth).
-6. [ ] Feature detection: no crash on Web without API.
-7. [ ] (Optional) `areShortcutsInUse` warning in Shortcut Manager.
-8. [ ] Settings MessageBar updated.
-9. [ ] `dotnet test PptPowerKeys.sln` — зелёный (114+).
-10. [ ] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
-11. [ ] PR: `cursor/S06-002-replace-shortcuts-user-settings-<suffix>`, `Closes #<issue>`.
-12. [ ] CHECKLIST; manual QA note PP Desktop 2601+.
+1. [x] `shortcuts.json` declares **76** actions; Tier 1 default keys unchanged.
+2. [x] `registerCommandActions` associates **76** ids → `executeCommandById`.
+3. [x] `syncKeyboardShortcuts` вызывает `replaceShortcuts` from `UserSettings.shortcuts`.
+4. [x] Sync on: bootstrap (post-load), Save, Reset.
+5. [x] McKinsey/BCG profile + Save → BCG keys active (e.g. `Ctrl+Alt+B` for SameWidth).
+6. [x] Feature detection: no crash on Web without API.
+7. [x] (Optional) `areShortcutsInUse` warning in Shortcut Manager.
+8. [x] Settings MessageBar updated.
+9. [x] `dotnet test PptPowerKeys.sln` — зелёный (114+).
+10. [x] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
+11. [x] PR: #49 merged в `main`, `Closes #48`.
+12. [ ] Manual test: PP Desktop Win 2601+ (post-merge, вне CI)
+
+## Приёмка (architect, 2026-06-29)
+
+- PR #49 merged. Scope соблюдён: 76 actions, `syncKeyboardShortcuts`, все call sites, feature detection, docs.
+- CHECKLIST: VstoLegacy не тронут; validate:prod зелёный; Settings commands исключены; нет дублирования runCommand.
+- Красные флаги не обнаружены. Manual QA на PP Desktop 2601+ — пользователю после deploy Pages.
 
 ## Зависимости
 

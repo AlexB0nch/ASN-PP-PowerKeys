@@ -77,10 +77,17 @@ S05-004 Done — multi-slide paste/remove (PR #39); S05-005 Done — Smart Dupli
 Anti-scope: snap-to-nearest-object, slide sections hide/show.
 
 **Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
-(14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); Desktop Windows 2601+ target.
-S06-002 Todo — `replaceShortcuts` sync с UserSettings / Shortcut Manager.
+(14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); S06-002 Done (PR #49) —
+`replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
+S06-003 Todo — import/export settings JSON.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S06-002:** `replaceShortcuts` ↔ UserSettings — 76 hotkey-eligible CommandIds (79 − 3 Settings);
+  `shortcuts.json` declares 76 `actions[]`; Tier 1 defaults (14) in `shortcuts[]` unchanged; 62 без default key;
+  `syncKeyboardShortcuts()` → `bindingsToOfficeMap` + `Office.actions.replaceShortcuts` (feature-gated 1.1);
+  sync on bootstrap, Save, Reset, App settings update; McKinsey/BCG profile → Save → live hotkeys;
+  optional `areShortcutsInUse` warning in Shortcut Manager; `toOfficeShortcutKey()` for Office format;
+  empty keys → null; duplicate keys last wins. Web/Mac — no-op без crash.
 - **S06-001:** Tier 1 global hotkeys — Shared Runtime (`lifetime long`, taskpane.html unified bootstrap);
   manifest `SharedRuntime 1.1` + `KeyboardShortcuts 1.1` + `ExtendedOverrides` → `shortcuts.json` (14 actions:
   catalog `DefaultShortcut` Alt+1…Alt+8, Alt+B/H/G, F1 + McKinsey Alt+D/A); `actionId === CommandId`;
