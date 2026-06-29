@@ -1,4 +1,5 @@
 import { ShapeBounds } from "../services/types";
+import { isValidHex, normalizeHex } from "./formatColorState";
 import { getPositionClipboard, PositionSnapshot, setPositionClipboard } from "./positionClipboard";
 
 /* global PowerPoint, Office */
@@ -235,6 +236,57 @@ export async function toggleFillBlackWhite(): Promise<number> {
 
     await context.sync();
     return selected.items.length;
+  });
+}
+
+export type ColorPickSource = "fill" | "line" | "text";
+
+/**
+ * Reads fill, line, or text color from the first selected shape.
+ * Returns normalized `#RRGGBB` or throws with a clear message.
+ */
+export async function readColorFromSelection(source: ColorPickSource): Promise<string> {
+  return PowerPoint.run(async (context) => {
+    const selected = context.presentation.getSelectedShapes();
+    selected.load("items/id");
+    await context.sync();
+
+    if (selected.items.length === 0) {
+      throw new Error("Select a shape first.");
+    }
+
+    const shape = selected.items[0];
+    let raw: string;
+
+    if (source === "fill") {
+      shape.fill.load("foregroundColor");
+      await context.sync();
+      raw = shape.fill.foregroundColor ?? "";
+    } else if (source === "line") {
+      shape.lineFormat.load("color");
+      await context.sync();
+      raw = shape.lineFormat.color ?? "";
+    } else {
+      try {
+        shape.textFrame.textRange.font.load("color");
+        await context.sync();
+        raw = shape.textFrame.textRange.font.color ?? "";
+      } catch {
+        throw new Error("Selected shape has no text frame.");
+      }
+    }
+
+    if (!raw) {
+      const label = source === "fill" ? "fill" : source === "line" ? "line" : "text";
+      throw new Error(`No ${label} color on selected shape.`);
+    }
+
+    const normalized = normalizeHex(raw);
+    if (!isValidHex(normalized)) {
+      throw new Error(`Could not read a valid ${source} color from the shape.`);
+    }
+
+    return normalized;
   });
 }
 
