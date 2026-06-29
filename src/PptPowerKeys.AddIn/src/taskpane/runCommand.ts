@@ -10,6 +10,8 @@ import {
   copyObjectPosition,
   duplicateSelectedSlide,
   moveSelectedSlidesToBackup,
+  pasteShapeToSelectedSlides,
+  removeShapeFromSelectedSlides,
   duplicateShapesAtPositions,
   getPositionClipboard,
   getSelectedShapeBounds,
@@ -293,6 +295,16 @@ async function runHostScript(
     case "MoveSlidesToBackup": {
       const movedCount = await moveSelectedSlidesToBackup();
       return outcomeSuccess(`Moved ${movedCount} slide(s) to backup (end of deck).`);
+    }
+    case "PasteShapeToSelectedSlides": {
+      const count = await pasteShapeToSelectedSlides();
+      return outcomeSuccess(`Pasted shape to ${count} slide(s).`);
+    }
+    case "RemoveShapeFromSelectedSlides": {
+      const { slidesProcessed, shapesRemoved } = await removeShapeFromSelectedSlides();
+      return outcomeSuccess(
+        `Removed ${shapesRemoved} shape(s) from ${slidesProcessed} slide(s).`,
+      );
     }
     default:
       // Safety-net for unknown ids — should never fire for catalog commands after S02-005.

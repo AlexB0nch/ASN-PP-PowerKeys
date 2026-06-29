@@ -97,6 +97,12 @@ public static class CommandCatalog
             Host(CommandIds.SendToBack, "Send to back", CommandCategory.Objects, OfficeJsSupport.Full, notes: "shape.setZOrder(toBack)."),
             Host(CommandIds.BringForward, "Bring forward", CommandCategory.Objects, OfficeJsSupport.Full, notes: "shape.setZOrder(bringForward)."),
             Host(CommandIds.SendBackward, "Send backward", CommandCategory.Objects, OfficeJsSupport.Full, notes: "shape.setZOrder(sendBackward)."),
+            Host(CommandIds.PasteShapeToSelectedSlides, "Paste shape to selected slides", CommandCategory.Objects,
+                OfficeJsSupport.Partial,
+                notes: "Multi-slide via getSelectedSlides(); clones source shape to each target slide."),
+            Host(CommandIds.RemoveShapeFromSelectedSlides, "Remove shape from selected slides (by name)",
+                CommandCategory.Objects, OfficeJsSupport.Partial,
+                notes: "Deletes all shapes matching shape.name on each selected slide."),
 
             // ── Format ───────────────────────────────────────────────────────
             Host(CommandIds.FillColor, "Fill color", CommandCategory.Format, OfficeJsSupport.Partial, "Alt+G",
