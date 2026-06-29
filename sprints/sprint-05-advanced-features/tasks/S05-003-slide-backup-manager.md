@@ -8,8 +8,9 @@
 | **Task ID** | `S05-003` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + AddIn + Tests |
-| **Статус** | In Progress |
+| **Статус** | In Review |
 | **Issue** | #35 |
+| **PR** | #36 |
 
 ## Цель
 
