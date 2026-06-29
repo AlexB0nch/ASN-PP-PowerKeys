@@ -9,8 +9,9 @@
 | **Task ID** | `S06-001` |
 | **Спринт** | `sprint-06-keyboard-shortcuts` |
 | **Компонент** | AddIn + manifest + scripts (+ optional Core Tests) |
-| **Статус** | In Progress |
-| **Issue** | #44 |
+| **Статус** | Done |
+| **Issue** | #44 (closed) |
+| **PR** | #46 |
 
 ## Цель
 
@@ -167,17 +168,23 @@ if (Office.context.requirements.isSetSupported("KeyboardShortcuts", "1.1")) {
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] Manifest: `SharedRuntime 1.1` + `KeyboardShortcuts 1.1`; `ExtendedOverrides` → `shortcuts.json`
-2. [ ] `npm run validate:prod` — зелёный
-3. [ ] Tier 1: `Office.actions.associate` → `executeCommandById` → `runCommand` path
-4. [ ] `shortcuts.json` содержит Tier 1 defaults; build script воспроизводим (`npm run build:prod`)
-5. [ ] Feature detection: без API — no crash, task pane OK (Web regression guard)
-6. [ ] Settings MessageBar отражает платформенные ограничения
-7. [ ] `dotnet test PptPowerKeys.sln` — зелёный
-8. [ ] `npm run typecheck`, `npm run validate:prod`, `npm run build:prod` — зелёные
-9. [ ] PR: `cursor/S06-001-shared-runtime-keyboard-shortcuts-<suffix>`, `Closes #<issue>`
-10. [ ] `.github/review/CHECKLIST.md` пройден
-11. [ ] Manual test note в PR: PP Desktop Win 2601+ (post-merge, вне CI)
+1. [x] Manifest: `SharedRuntime 1.1` + `KeyboardShortcuts 1.1`; `ExtendedOverrides` → `shortcuts.json`
+2. [x] `npm run validate:prod` — зелёный
+3. [x] Tier 1: `Office.actions.associate` → `executeCommandById` → `runCommand` path
+4. [x] `shortcuts.json` содержит Tier 1 defaults; build script воспроизводим (`npm run build:prod`)
+5. [x] Feature detection: без API — no crash, task pane OK (Web regression guard)
+6. [x] Settings MessageBar отражает платформенные ограничения
+7. [x] `dotnet test PptPowerKeys.sln` — 114 passed
+8. [x] `npm run typecheck`, `npm run validate:prod`, `npm run build:prod` — зелёные
+9. [x] PR #46 merged в `main`
+10. [x] `.github/review/CHECKLIST.md` пройден (Web Add-in scope)
+11. [ ] Manual test: PP Desktop Win 2601+ (post-merge, вне CI)
+
+## Приёмка (architect, 2026-06-29)
+
+- PR #46 merged. Scope соблюдён: shared runtime, Tier 1 shortcuts (14), `associate` → `runCommand` wrapper, feature detection, docs.
+- CHECKLIST: VstoLegacy не тронут; validate:prod зелёный; Settings commands исключены.
+- Красные флаги не обнаружены. Manual QA на PP Desktop 2601+ — пользователю после deploy Pages.
 
 ## Зависимости
 

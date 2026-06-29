@@ -76,7 +76,16 @@ S05-002 Done — snap-to-grid 0.1 cm (PR #34); S05-003 Done — `MoveSlidesToBac
 S05-004 Done — multi-slide paste/remove (PR #39); S05-005 Done — Smart Duplicate gap memory (PR #42).
 Anti-scope: snap-to-nearest-object, slide sections hide/show.
 
+**Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
+(14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); Desktop Windows 2601+ target.
+S06-002 Todo — `replaceShortcuts` sync с UserSettings / Shortcut Manager.
+
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S06-001:** Tier 1 global hotkeys — Shared Runtime (`lifetime long`, taskpane.html unified bootstrap);
+  manifest `SharedRuntime 1.1` + `KeyboardShortcuts 1.1` + `ExtendedOverrides` → `shortcuts.json` (14 actions:
+  catalog `DefaultShortcut` Alt+1…Alt+8, Alt+B/H/G, F1 + McKinsey Alt+D/A); `actionId === CommandId`;
+  `registerCommandActions()` only when `KeyboardShortcuts 1.1` supported; `executeCommandById` → `runCommand`.
+  Settings commands excluded; `replaceShortcuts` / all 79 ids — S06-002. Web/Mac — task pane unchanged.
 - **S05-005:** Smart Duplicate gap memory — per-`CommandId` in-memory state в task pane (`duplicateGapMemory.ts`);
   первый duplicate в направлении gap=0, повторный — remembered gap; `DuplicationEngine.InferGap` в Core (inverse
   of `ComputeDuplicate`); status bar «(gap X pt)» при gap>0. Без localStorage/UserSettings; каталог 79 команд без изменений.
