@@ -6,7 +6,7 @@
 |----|--------|-----------|--------|------------|
 | S07-001 | Core multitarget netstandard2.0 | Core + Tests | **Done** | PR |
 | S07-002 | PptPowerKeys.Windows VSTO bootstrap | Windows (new) | **In Progress** | — |
-| S07-003 | ComHost ShapeBounds spike + AlignLeft POC | Windows + Core | **Todo** | — |
+| S07-003 | ComHost ShapeBounds spike + AlignLeft POC | Windows + Core | **In Progress** | — |
 | S07-004 | Track 0 LTSC deploy checklist (Central Deployment) | docs | **Todo** | — |
 
 ## Порядок исполнения
