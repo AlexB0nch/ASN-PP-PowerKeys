@@ -9,7 +9,7 @@
 | **Task ID** | `S07-004` |
 | **Спринт** | `sprint-07-ltsc-foundation` |
 | **Компонент** | docs |
-| **Статус** | Todo |
+| **Статус** | Done |
 
 ## Цель
 
@@ -32,9 +32,9 @@
 
 ## Критерии приёмки
 
-- [ ] Checklist actionable for IT admin
-- [ ] Clear decision tree: Track 0 Web vs Product Line B native
-- [ ] Cross-links from README / PRODUCT_CONTEXT
+- [x] Checklist actionable for IT admin
+- [x] Clear decision tree: Track 0 Web vs Product Line B native
+- [x] Cross-links from README / PRODUCT_CONTEXT
 
 ## Зависимости
 

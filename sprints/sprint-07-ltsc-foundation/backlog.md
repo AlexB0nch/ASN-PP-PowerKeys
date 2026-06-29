@@ -4,10 +4,10 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| S07-001 | Core multitarget netstandard2.0 | Core + Tests | **Done** | PR |
-| S07-002 | PptPowerKeys.Windows VSTO bootstrap | Windows (new) | **In Progress** | — |
-| S07-003 | ComHost ShapeBounds spike + AlignLeft POC | Windows + Core | **In Progress** | — |
-| S07-004 | Track 0 LTSC deploy checklist (Central Deployment) | docs | **Todo** | — |
+| S07-001 | Core multitarget netstandard2.0 | Core + Tests | **Done** | PR #59 |
+| S07-002 | PptPowerKeys.Windows VSTO bootstrap | Windows (new) | **Done** | PR #60 |
+| S07-003 | ComHost ShapeBounds spike + AlignLeft POC | Windows + Core | **Done** | PR #61 |
+| S07-004 | Track 0 LTSC deploy checklist (Central Deployment) | docs | **Done** | PR |
 
 ## Порядок исполнения
 
