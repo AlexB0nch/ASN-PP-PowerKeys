@@ -17,3 +17,11 @@ public sealed class ProfilePresetEntry
 
     public IReadOnlyList<ShortcutBinding> Shortcuts { get; init; } = Array.Empty<ShortcutBinding>();
 }
+
+/// <summary>Response body for <c>POST /api/settings/import</c> (validate-only, does not persist).</summary>
+public sealed class SettingsImportResponse
+{
+    public UserSettings Settings { get; init; } = new();
+
+    public IReadOnlyList<string> Warnings { get; init; } = Array.Empty<string>();
+}

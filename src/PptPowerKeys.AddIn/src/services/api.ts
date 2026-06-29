@@ -7,6 +7,7 @@ import {
   LayoutResult,
   LayoutOptions,
   ProfilePresetsResponse,
+  SettingsImportResponse,
   ShapeBounds,
   UserSettings,
 } from "./types";
@@ -93,4 +94,10 @@ export const api = {
 
   getProfilePresets: () =>
     request<ProfilePresetsResponse>("/api/settings/profile-presets"),
+
+  importSettings: (jsonText: string) =>
+    request<SettingsImportResponse>("/api/settings/import", {
+      method: "POST",
+      body: jsonText,
+    }),
 };

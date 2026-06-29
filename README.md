@@ -329,7 +329,7 @@ _(Не в ShortcutTools, но логично добавить)_
 ### Backlog (Sprint 06+, не начато)
 
 - [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
-- [ ] Import/export settings JSON
+- [x] Import/export settings JSON
 - [ ] Color Picker: eyedropper / HEX input
 - [ ] Object Statistics MIN/MAX/AVG UI (Addup в status bar уже есть)
 - [ ] Snap-to-nearest-object при drag

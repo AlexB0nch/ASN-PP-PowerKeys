@@ -160,6 +160,22 @@ app.MapPost("/api/settings/reset", (IUserSettingsStore store, [FromHeader(Name =
     .WithName("ResetSettings")
     .WithTags("Settings");
 
+app.MapPost("/api/settings/import", async (HttpRequest request) =>
+    {
+        using var reader = new StreamReader(request.Body);
+        var json = await reader.ReadToEndAsync();
+        var result = UserSettingsImporter.Import(json);
+        return result.Settings is null
+            ? Results.BadRequest(new { error = result.Error ?? "Import failed." })
+            : Results.Ok(new SettingsImportResponse
+            {
+                Settings = result.Settings,
+                Warnings = result.Warnings,
+            });
+    })
+    .WithName("ImportSettings")
+    .WithTags("Settings");
+
 app.MapGet("/api/settings/profile-presets", () =>
     {
         var presets = new Dictionary<string, ProfilePresetEntry>();
