@@ -33,4 +33,21 @@ public static class DuplicationEngine
             or CommandIds.DuplicateDown or CommandIds.DuplicateUp => true,
         _ => false,
     };
+
+    /// <summary>
+    /// Infers the gap between <paramref name="source"/> and a duplicate at
+    /// <paramref name="target"/> for duplicate commands. Returns <c>null</c> for
+    /// non-duplicate commands. Inverse of <see cref="ComputeDuplicate"/>.
+    /// </summary>
+    public static double? InferGap(CommandIds command, ShapeBounds source, ShapeBounds target)
+    {
+        return command switch
+        {
+            CommandIds.DuplicateRight => target.Left - (source.Left + source.Width),
+            CommandIds.DuplicateLeft => (source.Left - target.Left) - source.Width,
+            CommandIds.DuplicateDown => target.Top - (source.Top + source.Height),
+            CommandIds.DuplicateUp => (source.Top - target.Top) - source.Height,
+            _ => null,
+        };
+    }
 }

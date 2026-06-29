@@ -36,6 +36,7 @@ import {
   recordRecentColor,
 } from "../office/formatColorState";
 import { isUnsupportedWebCommand, runUnsupportedWebCommand } from "./unsupportedWebCommands";
+import { getDuplicateGap, setDuplicateGap } from "../office/duplicateGapMemory";
 
 export type CommandOutcomeKind = "success" | "unsupported" | "error";
 
@@ -220,11 +221,14 @@ async function runHostScript(
       if (shapes.length === 0) {
         return outcomeError("Select one or more shapes first.");
       }
+      const gap = getDuplicateGap(descriptor.id);
       const targets = await Promise.all(
-        shapes.map((source) => api.duplicateOffset(descriptor.id, source, 0)),
+        shapes.map((source) => api.duplicateOffset(descriptor.id, source, gap)),
       );
       const count = await duplicateShapesAtPositions(shapes, targets);
-      return outcomeSuccess(`Duplicated ${count} shape(s).`);
+      setDuplicateGap(descriptor.id, gap);
+      const gapNote = gap > 0 ? ` (gap ${gap} pt)` : "";
+      return outcomeSuccess(`Duplicated ${count} shape(s)${gapNote}.`);
     }
     case "CopyObjectPosition": {
       const position = await copyObjectPosition();

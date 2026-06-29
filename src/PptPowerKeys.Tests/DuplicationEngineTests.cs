@@ -41,4 +41,38 @@ public class DuplicationEngineTests
     {
         Assert.Equal(expected, DuplicationEngine.IsDuplicateCommand(command));
     }
+
+    [Theory]
+    [InlineData(CommandIds.DuplicateRight)]
+    [InlineData(CommandIds.DuplicateLeft)]
+    [InlineData(CommandIds.DuplicateDown)]
+    [InlineData(CommandIds.DuplicateUp)]
+    public void InferGap_RoundTripsWithComputeDuplicate(CommandIds command)
+    {
+        const double gap = 5;
+        var target = DuplicationEngine.ComputeDuplicate(command, Source, gap);
+        Assert.NotNull(target);
+
+        var inferred = DuplicationEngine.InferGap(command, Source, target!.Value);
+        Assert.NotNull(inferred);
+        Assert.Equal(gap, inferred!.Value, 6);
+    }
+
+    [Fact]
+    public void InferGap_TouchingDuplicate_ReturnsZero()
+    {
+        var target = DuplicationEngine.ComputeDuplicate(CommandIds.DuplicateRight, Source);
+        Assert.NotNull(target);
+
+        var inferred = DuplicationEngine.InferGap(CommandIds.DuplicateRight, Source, target!.Value);
+        Assert.NotNull(inferred);
+        Assert.Equal(0, inferred!.Value, 6);
+    }
+
+    [Fact]
+    public void InferGap_NonDuplicateCommand_ReturnsNull()
+    {
+        var target = new ShapeBounds("b", Left: 200, Top: 100, Width: 40, Height: 20);
+        Assert.Null(DuplicationEngine.InferGap(CommandIds.AlignLeft, Source, target));
+    }
 }
