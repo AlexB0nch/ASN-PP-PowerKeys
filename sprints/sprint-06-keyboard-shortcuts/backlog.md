@@ -14,13 +14,15 @@
 
 1. **S06-001** — инфраструктура shared runtime + Tier 1 defaults; блокирует S06-002
 2. **S06-002** — live sync Shortcut Manager; consulting profile apply → `replaceShortcuts`
-3. **S06-003 / S06-004** — P2 stretch после P1
+3. **S06-004** — P2, следующая задача (Addup display mode UI)
 4. **S06-005** — P3 deferred из Sprint 04
 
-## Черновик S06-002 (постановка после merge S06-001)
+## Черновик S06-004 (постановка после merge S06-003)
 
-- Объявить runtime actions для **всех 79** CommandIds в manifest / shortcuts schema
-- On Settings Save + on task pane load: `Office.actions.replaceShortcuts(map from UserSettings.shortcuts)`
-- `Office.actions.areShortcutsInUse()` → warning в Shortcut Manager (non-blocking)
-- Consulting profile apply (McKinsey/BCG) → `replaceShortcuts` после Save
-- 9 `support=None` команд — handler вызывает existing unsupported path через `runCommand`
+> Полная спецификация: [`tasks/S06-004-object-statistics-min-max-avg-ui.md`](./tasks/S06-004-object-statistics-min-max-avg-ui.md)
+
+- Core `NumberAggregator` + API `/api/text/addup` — **готовы**; status bar показывает все метрики сразу
+- UI: dropdown **All | Sum | Min | Max | Average** в Settings (+ optional «Last addup» в Text)
+- Persist `addupDisplayMode` в `UserSettings` (export/import v1 compatible)
+- Core `AddupStatusFormatter` + tests; `runCommand` форматирует status по режиму
+- **Анти-scope:** новые CommandIds; запись stats в shapes
