@@ -76,12 +76,17 @@ S05-002 Done — snap-to-grid 0.1 cm (PR #34); S05-003 Done — `MoveSlidesToBac
 S05-004 Done — multi-slide paste/remove (PR #39); S05-005 Done — Smart Duplicate gap memory (PR #42).
 Anti-scope: snap-to-nearest-object, slide sections hide/show.
 
-**Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
-(14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); S06-002 Done (PR #49) —
-`replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
+**Sprint 06 завершён (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts;
+S06-002 Done (PR #49) — `replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
 S06-003 Done — import/export settings JSON (PR #52). S06-004 Done — Object Statistics MIN/MAX/AVG UI (PR #55).
+S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S06-005:** Color Picker HEX + eyedropper — `isValidHex()` в AddIn (mirror `ThemeColor.IsValidHex`);
+  `ColorPickerPanel` Custom HEX input (live preview, Enter/Set, inline error); **pick from shape** (path A) —
+  `readColorFromSelection(fill|line|text)` читает цвет первой выделенной фигуры; **screen pick** (path B, bonus) —
+  Browser `EyeDropper` API с feature-detect (WebView2/Chromium); unsupported → disabled + hint; native PP eyedropper
+  out of scope; picked/typed → `recordRecentColor()`; без новых CommandIds / UserSettings persist. 143 dotnet tests.
 - **S06-004:** Object Statistics display mode — `UserSettings.addupDisplayMode` (`all`|`sum`|`min`|`max`|`average`,
   default `all`); Core `AddupStatusFormatter` + TS mirror `addupStatus.ts`; Settings dropdown «Object statistics display»;
   `AddupTextFields` + hotkey Alt+A format status by mode; `all` preserves legacy string; export/import JSON v1;

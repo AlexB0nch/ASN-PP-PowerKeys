@@ -8,7 +8,7 @@
 | S06-002 | `replaceShortcuts` ↔ UserSettings (все bindings) | AddIn | **Done** | #48 / PR #49 |
 | S06-003 | Import/export settings JSON | Core + Api + AddIn | **Done** | #51 / PR #52 |
 | S06-004 | Object Statistics MIN/MAX/AVG UI | Core + AddIn | **Done** | #54 / PR #55 |
-| S06-005 | Color Picker eyedropper / HEX (stretch) | AddIn | **In Progress** | #56 |
+| S06-005 | Color Picker eyedropper / HEX (stretch) | AddIn | **Done** | #56 / PR #57 |
 
 ## Порядок исполнения (рекомендация architect)
 

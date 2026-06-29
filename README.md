@@ -313,25 +313,25 @@ _(Не в ShortcutTools, но логично добавить)_
 
 ## Этапы разработки (Roadmap)
 
-> Статус **Office Web Add-in** (Sprint 01–05, 2026-06-29). VSTO-колонка — legacy frozen.
+> Статус **Office Web Add-in** (Sprint 01–06, 2026-06-29). VSTO-колонка — legacy frozen.
 
-### Web Add-in — сделано (Sprint 01–05)
+### Web Add-in — сделано (Sprint 01–06)
 
 - [x] Core + Api + AddIn + CI + деплой (Pages + VDS)
 - [x] **79 команд** каталога (Alignment, Resize, Objects, Format, Text, Slides, Settings)
 - [x] Settings UI, persistent store, Shortcut Manager
-- [x] Smart Color Picker (theme + recent colors)
+- [x] Smart Color Picker (theme + recent colors + HEX input + eyedropper)
 - [x] Consulting profiles McKinsey/BCG + snap-to-grid 0.1 cm
 - [x] Slide Backup (`MoveSlidesToBackup`), multi-slide paste/remove
 - [x] Smart Duplicate gap memory
+- [x] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
+- [x] Import/export settings JSON
+- [x] Object Statistics MIN/MAX/AVG UI (`addupDisplayMode` in Settings; Addup status by mode)
+- [x] Color Picker: eyedropper / HEX input
 - [x] Sideload: PowerPoint Online + **Desktop Windows/Mac** (`manifest.prod.xml`)
 
-### Backlog (Sprint 06+, не начато)
+### Backlog (Sprint 07+, не начато)
 
-- [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
-- [x] Import/export settings JSON
-- [ ] Color Picker: eyedropper / HEX input
-- [x] Object Statistics MIN/MAX/AVG UI (`addupDisplayMode` in Settings; Addup status by mode)
 - [ ] Snap-to-nearest-object при drag
 - [ ] Slide Backup: named section + hide/show (нет Office.js API)
 - [ ] Разрезание объектов (VSTO parity)

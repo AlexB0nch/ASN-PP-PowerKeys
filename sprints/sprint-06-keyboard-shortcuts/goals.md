@@ -44,9 +44,10 @@ Office **Keyboard Shortcuts API** + **Shared Runtime**, синхронизиро
 - [x] **S06-002** — Save/load Shortcut Manager → `Office.actions.replaceShortcuts` (76 hotkey-eligible actions) — PR #49
 - [x] **S06-003** — Import/export settings JSON (`UserSettingsImporter`, validate-only API, Settings Export/Import UI) — PR #52
 - [x] **S06-004** — Object Statistics MIN/MAX/AVG UI (`addupDisplayMode`, `AddupStatusFormatter`, Settings dropdown) — PR #55
-- [ ] `dotnet test PptPowerKeys.sln` — зелёный
-- [ ] AddIn: `typecheck`, `validate:prod`, `build:prod` — зелёные
-- [ ] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` обновлены post-merge
-- [ ] Manual QA note: PP Desktop Win 2601+ (вне CI)
+- [x] **S06-005** — Color Picker HEX input + eyedropper (`isValidHex`, pick from shape, optional Screen pick) — PR #57
+- [x] `dotnet test PptPowerKeys.sln` — зелёный (143)
+- [x] AddIn: `typecheck`, `validate:prod`, `build:prod` — зелёные
+- [x] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` обновлены post-merge
+- [x] Manual QA note: PP Desktop Win 2601+ (вне CI); HEX обязательно, eyedropper best effort
 
 **Stretch (P2/P3):** S06-003…005 — только если capacity после P1.

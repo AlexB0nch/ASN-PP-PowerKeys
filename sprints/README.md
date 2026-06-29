@@ -28,7 +28,7 @@ sprints/
 | Sprint 03 | Settings UI, persistent SettingsStore, Shortcut Manager | **Done** — `sprint-03-settings/retrospective.md` |
 | Sprint 04 | Smart Color Picker / Slide Master palette | **Done** — `sprint-04-smart-color-picker/retrospective.md` |
 | Sprint 05 | Consulting Mode, Backup, Multi-slide | **Done** — `sprint-05-advanced-features/retrospective.md` |
-| Sprint 06 | Global keyboard shortcuts (Windows Desktop) | **In Progress** — `sprint-06-keyboard-shortcuts/ARCHITECT-KICKOFF.md` |
+| Sprint 06 | Global keyboard shortcuts (Windows Desktop) | **Done** — `sprint-06-keyboard-shortcuts/retrospective.md` |
 
 > Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до
 > рабочего состояния в PowerPoint Online (исходные VSTO-цели переосмыслены). Детали — в его `retrospective.md`.

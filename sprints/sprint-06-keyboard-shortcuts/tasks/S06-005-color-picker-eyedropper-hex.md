@@ -9,9 +9,9 @@
 | **Task ID** | `S06-005` |
 | **Спринт** | `sprint-06-keyboard-shortcuts` |
 | **Компонент** | AddIn |
-| **Статус** | In Progress |
-| **Issue** | #56 |
-| **PR** | TBD |
+| **Статус** | Done |
+| **Issue** | #56 (closed) |
+| **PR** | #57 |
 
 ## Цель
 
@@ -103,26 +103,31 @@ interface EyeDropper {
 ## Критерии приёмки (Definition of Done)
 
 ### AddIn — HEX
-- [ ] Text field HEX + Enter или кнопка → valid color в preview + можно Apply Fill/Line/Text
-- [ ] Invalid HEX → inline error / MessageBar; panel не ломается
-- [ ] Typed color после Apply → `recordRecentColor()` → появляется в Recent
+- [x] Text field HEX + Enter или кнопка → valid color в preview + можно Apply Fill/Line/Text
+- [x] Invalid HEX → inline error / MessageBar; panel не ломается
+- [x] Typed color после Apply → `recordRecentColor()` → появляется в Recent
 
 ### AddIn — Eyedropper
-- [ ] «Pick from shape» (fill/line/text) работает на Desktop + Web при валидном выделении
-- [ ] (Optional) EyeDropper API с feature gate; unsupported → disabled + hint
-- [ ] Picked color → preview + recent list
+- [x] «Pick from shape» (fill/line/text) работает на Desktop + Web при валидном выделении
+- [x] (Optional) EyeDropper API с feature gate; unsupported → disabled + hint
+- [x] Picked color → preview + recent list
 
 ### Регрессия
-- [ ] Theme/recent swatches + Apply Fill/Line/Text без регрессии
-- [ ] Fill/Line/Text cycle commands (hotkeys) без регрессии
+- [x] Theme/recent swatches + Apply Fill/Line/Text без регрессии
+- [x] Fill/Line/Text cycle commands (hotkeys) без регрессии
 
 ### CI
-- [ ] `dotnet test PptPowerKeys.sln` — зелёный (143+)
-- [ ] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные
+- [x] `dotnet test PptPowerKeys.sln` — зелёный (143)
+- [x] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные
 
 ### PR
-- [ ] Ветка: `cursor/S06-005-color-picker-eyedropper-hex-6c25`
-- [ ] `Closes #<issue>`; CHECKLIST; manual note: PP Desktop + Online (HEX обязательно; eyedropper — best effort)
+- [x] Ветка: `cursor/S06-005-color-picker-eyedropper-hex-6c25`
+- [x] `Closes #56`; CHECKLIST; manual note: PP Desktop + Online (HEX обязательно; eyedropper — best effort)
+
+## Приёмка (architect, 2026-06-29)
+
+- PR #57 merged. Scope соблюдён: HEX input, pick from shape, optional Screen pick; no new CommandIds.
+- `dotnet test` 143 passed; AddIn typecheck/validate:prod/build:prod green.
 
 ## Красные флаги (reject)
 

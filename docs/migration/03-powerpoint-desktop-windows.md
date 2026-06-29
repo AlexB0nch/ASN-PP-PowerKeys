@@ -157,10 +157,10 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 
 Глобальные клавиши не перехватывались — только клики в task pane на всех платформах.
 
-#### Дальнейшая работа (S06-003+)
+#### Дальнейшая работа (post Sprint 06)
 
-- Import/export shortcuts JSON.
-- Расширенная диагностика конфликтов hotkeys.
+- Расширенная диагностика конфликтов hotkeys (beyond `areShortcutsInUse` warning).
+- Snap-to-nearest-object, slide sections hide/show — нет Office.js API (см. README backlog).
 
 #### Путь B — VSTO legacy (не рекомендуется)
 
