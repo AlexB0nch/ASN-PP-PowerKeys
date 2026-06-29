@@ -245,7 +245,7 @@ PPT PowerKeys/
 - Профили: **McKinsey**, **BCG**, **Custom** (presets из Core)
 - Предупреждение о duplicate keys при сохранении
 - **Глобальный перехват Alt+… в PowerPoint** — **не работает** в текущей версии; команды через task pane. План: Office `KeyboardShortcuts` API + Shared Runtime ([runbook](docs/migration/03-powerpoint-desktop-windows.md#глобальные-шорткаты-windows))
-- Импорт/экспорт `.json` — в backlog (не реализовано)
+- Импорт/экспорт `.json` — **Settings → Export JSON / Import JSON**; Save для persist и hotkeys (Desktop 2601+)
 
 ---
 

@@ -9,9 +9,9 @@
 | **Task ID** | `S06-003` |
 | **Спринт** | `sprint-06-keyboard-shortcuts` |
 | **Компонент** | Core + Api + AddIn |
-| **Статус** | In Progress |
-| **Issue** | #51 |
-| **PR** | — |
+| **Статус** | Done |
+| **Issue** | #51 (closed) |
+| **PR** | #52 |
 
 ## Цель
 
@@ -135,26 +135,32 @@ public sealed record SettingsImportResult(
 | AddIn | `src/PptPowerKeys.AddIn/src/taskpane/SettingsPanel.tsx`, `src/services/api.ts`, `types.ts` |
 | Docs | `README.md` (import/export line), `docs/PRODUCT_CONTEXT.md` (post-merge) |
 
+## Приёмка (architect, 2026-06-29)
+
+- PR #52 merged. Scope соблюдён: `UserSettingsImporter`, validate-only API, Export/Import UI, Save-to-persist flow.
+- Красные флаги не обнаружены: no auto-save on import; warnings for unknown commandIds; no hotkey sync until Save.
+- `dotnet test` 125 passed; AddIn typecheck/validate:prod/build:prod green.
+
 ## Критерии приёмки (Definition of Done)
 
 ### Core
-- [ ] `UserSettingsImporter` + unit tests (valid, invalid JSON, unknown commandId, snapToGrid roundtrip, duplicate keys last wins).
+- [x] `UserSettingsImporter` + unit tests (valid, invalid JSON, unknown commandId, snapToGrid roundtrip, duplicate keys last wins).
 
 ### Api
-- [ ] `POST /api/settings/import` — validate-only, integration test.
+- [x] `POST /api/settings/import` — validate-only, integration test.
 
 ### AddIn
-- [ ] Settings UI: Export downloads `.json`; Import loads + validates + editor update.
-- [ ] Import → Save → settings persist via `GET /api/settings`; hotkeys sync on Save (Desktop).
-- [ ] Import errors — понятные сообщения; no crash task pane.
+- [x] Settings UI: Export downloads `.json`; Import loads + validates + editor update.
+- [x] Import → Save → settings persist via `GET /api/settings`; hotkeys sync on Save (Desktop).
+- [x] Import errors — понятные сообщения; no crash task pane.
 
 ### CI
-- [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-- [ ] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
+- [x] `dotnet test PptPowerKeys.sln` — зелёный (125).
+- [x] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
 
 ### PR
-- [ ] Ветка: `cursor/S06-003-import-export-settings-json-<suffix>`.
-- [ ] `Closes #<issue>`; CHECKLIST; docs post-merge.
+- [x] Ветка: `cursor/S06-003-import-export-settings-json-d409`.
+- [x] `Closes #51`; CHECKLIST; docs post-merge.
 
 ## Красные флаги (reject)
 

@@ -47,7 +47,7 @@ PowerPoint (Desktop/Web/Mac/iPad)
 | POST | `/api/layout/apply` | применить геометрическую команду к `ShapeBounds[]` |
 | POST | `/api/objects/duplicate-offset` | позиция дубликата (smart-duplicate) |
 | POST | `/api/text/addup` | сумма/мин/макс/среднее чисел из текста |
-| GET/PUT | `/api/settings`, POST `/api/settings/reset` | профиль + шорткаты; file-backed JSON per user (`SETTINGS_DATA_PATH`, Docker volume `settings_data`) |
+| GET/PUT | `/api/settings`, POST `/api/settings/reset`, POST `/api/settings/import` | профиль + шорткаты; file-backed JSON per user (`SETTINGS_DATA_PATH`, Docker volume `settings_data`); import — validate-only |
 
 ## 5. Окружение и команды
 Подробности и нюансы Cloud — в `AGENTS.md`. Кратко:
@@ -79,9 +79,13 @@ Anti-scope: snap-to-nearest-object, slide sections hide/show.
 **Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
 (14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); S06-002 Done (PR #49) —
 `replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
-S06-003 Todo — import/export settings JSON.
+S06-003 Done — import/export settings JSON (PR #52).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S06-003:** Import/export settings JSON — `UserSettingsImporter` (Core) validates file against `CommandCatalog`;
+  unknown `commandId` → skip + warning; duplicate keys last wins; `POST /api/settings/import` validate-only (no persist);
+  Settings Export (editor state + `schemaVersion: 1`) / Import → editor; MessageBar «Imported — click Save to persist»;
+  hotkeys via `syncKeyboardShortcuts` only on Save (not import preview); VSTO on-disk JSON shape preserved.
 - **S06-002:** `replaceShortcuts` ↔ UserSettings — 76 hotkey-eligible CommandIds (79 − 3 Settings);
   `shortcuts.json` declares 76 `actions[]`; Tier 1 defaults (14) in `shortcuts[]` unchanged; 62 без default key;
   `syncKeyboardShortcuts()` → `bindingsToOfficeMap` + `Office.actions.replaceShortcuts` (feature-gated 1.1);
