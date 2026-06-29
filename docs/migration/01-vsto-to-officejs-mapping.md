@@ -97,6 +97,7 @@
 | StartSlideShow | `SlideShowSettings.Run` | — | ❌ None | HostScript |
 | ToggleGrid / ToggleGuides | настройки вида | — | ❌ None | HostScript |
 | CopySlide | `Slide.Duplicate` | `slides.insert/clone` (новые API) | ⚠️ Partial | HostScript |
+| MoveSlidesToBackup | — (README parity) | `slide.moveTo` / export+insert+delete | ⚠️ Partial | HostScript |
 | PrintSlide | `PrintOut` | — | ❌ None | HostScript |
 
 ### Settings

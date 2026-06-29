@@ -94,6 +94,7 @@ public enum CommandIds
     ToggleGrid,
     ToggleGuides,
     CopySlide,
+    MoveSlidesToBackup,
     PrintSlide,
 
     // Settings
