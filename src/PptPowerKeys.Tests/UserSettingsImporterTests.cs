@@ -1,4 +1,5 @@
 using PptPowerKeys.Core.Settings;
+using PptPowerKeys.Core.Text;
 using Xunit;
 
 namespace PptPowerKeys.Tests;
@@ -97,6 +98,81 @@ public class UserSettingsImporterTests
         Assert.Null(result.Error);
         Assert.NotNull(result.Settings);
         Assert.False(result.Settings!.SnapToGrid);
+    }
+
+    [Fact]
+    public void Import_AddupDisplayMode_RoundTrips()
+    {
+        const string json = """
+            {
+              "profile": "Custom",
+              "addupDisplayMode": "min",
+              "shortcuts": []
+            }
+            """;
+
+        var result = UserSettingsImporter.Import(json);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Settings);
+        Assert.Equal("min", result.Settings!.AddupDisplayMode);
+        Assert.Empty(result.Warnings);
+    }
+
+    [Fact]
+    public void Import_MissingAddupDisplayMode_DefaultsAll()
+    {
+        const string json = """
+            {
+              "profile": "Custom",
+              "shortcuts": []
+            }
+            """;
+
+        var result = UserSettingsImporter.Import(json);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Settings);
+        Assert.Equal("all", result.Settings!.AddupDisplayMode);
+        Assert.Empty(result.Warnings);
+    }
+
+    [Fact]
+    public void Import_InvalidAddupDisplayMode_DefaultsAllWithWarning()
+    {
+        const string json = """
+            {
+              "profile": "Custom",
+              "addupDisplayMode": "median",
+              "shortcuts": []
+            }
+            """;
+
+        var result = UserSettingsImporter.Import(json);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Settings);
+        Assert.Equal("all", result.Settings!.AddupDisplayMode);
+        Assert.Single(result.Warnings);
+        Assert.Equal(AddupStatusFormatter.UnknownModeWarning, result.Warnings[0]);
+    }
+
+    [Fact]
+    public void Import_AddupDisplayMode_NormalizesCase()
+    {
+        const string json = """
+            {
+              "profile": "Custom",
+              "addupDisplayMode": "MAX",
+              "shortcuts": []
+            }
+            """;
+
+        var result = UserSettingsImporter.Import(json);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Settings);
+        Assert.Equal("max", result.Settings!.AddupDisplayMode);
     }
 
     [Fact]

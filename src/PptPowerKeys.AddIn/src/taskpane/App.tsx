@@ -111,6 +111,7 @@ export const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<CommandOutcome | null>(null);
+  const [lastAddupResult, setLastAddupResult] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState<string | null>(null);
   const [openAccordionItems, setOpenAccordionItems] = React.useState<CommandCategory[]>([
     "Alignment",
@@ -177,14 +178,20 @@ export const App: React.FC = () => {
   }, [settingsActions]);
 
   const layoutOptions = React.useMemo(
-    () => ({ snapToGrid: userSettings?.snapToGrid ?? false }),
-    [userSettings?.snapToGrid],
+    () => ({
+      snapToGrid: userSettings?.snapToGrid ?? false,
+      addupDisplayMode: userSettings?.addupDisplayMode ?? "all",
+    }),
+    [userSettings?.snapToGrid, userSettings?.addupDisplayMode],
   );
 
   const onRun = React.useCallback(
     async (descriptor: CommandDescriptor) => {
       setBusy(descriptor.id);
       const outcome = await runCommand(descriptor, settingsActions, layoutOptions);
+      if (descriptor.id === "AddupTextFields" && outcome.kind === "success") {
+        setLastAddupResult(outcome.message);
+      }
       setStatus(outcome);
       setBusy(null);
     },
@@ -273,6 +280,9 @@ export const App: React.FC = () => {
                   </Tooltip>
                 ))}
               </div>
+              {category === "Text" && lastAddupResult ? (
+                <Caption1>Last addup result: {lastAddupResult}</Caption1>
+              ) : null}
               {category === "Settings" && (
                 <>
                   <ColorPickerPanel ref={colorPickerPanelRef} onFeedback={setStatus} />

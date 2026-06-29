@@ -29,7 +29,10 @@ export function updateUserSettings(settings: UserSettings): void {
 }
 
 export function getLayoutOptions(): LayoutOptions {
-  return { snapToGrid: userSettings?.snapToGrid ?? false };
+  return {
+    snapToGrid: userSettings?.snapToGrid ?? false,
+    addupDisplayMode: userSettings?.addupDisplayMode ?? "all",
+  };
 }
 
 export function setSettingsActions(actions: SettingsCommandActions): void {

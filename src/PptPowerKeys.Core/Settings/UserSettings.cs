@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Text;
 
 namespace PptPowerKeys.Core.Settings;
 
@@ -16,6 +17,10 @@ public sealed class UserSettings
     public string Profile { get; set; } = "Custom";
 
     public bool SnapToGrid { get; set; } = false;
+
+    public string AddupDisplayMode { get; set; } = AddupDisplayModeDefault;
+
+    public const string AddupDisplayModeDefault = "all";
 
     public List<ShortcutBinding> Shortcuts { get; set; } = new();
 
@@ -55,6 +60,7 @@ public sealed class UserSettings
     {
         Profile = "Custom",
         SnapToGrid = false,
+        AddupDisplayMode = AddupDisplayModeDefault,
         Shortcuts = CommandCatalog.All
             .Where(c => !string.IsNullOrWhiteSpace(c.DefaultShortcut))
             .Select(c => new ShortcutBinding { CommandId = c.Key, Keys = c.DefaultShortcut! })
