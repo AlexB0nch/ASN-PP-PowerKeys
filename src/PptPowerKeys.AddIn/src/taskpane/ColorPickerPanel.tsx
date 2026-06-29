@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   Button,
   Caption1,
+  Input,
   MessageBar,
   MessageBarBody,
   Spinner,
@@ -13,6 +14,7 @@ import {
   getRecentColors,
   getThemeColorSource,
   getThemePaletteColors,
+  isValidHex,
   normalizeHex,
   recordRecentColor,
   refreshActivePalette,
@@ -23,9 +25,25 @@ import {
   applyFillColor,
   applyLineColor,
   applyTextColor,
+  ColorPickSource,
   getSelectedShapeIds,
+  readColorFromSelection,
 } from "../office/powerpoint";
 import { CommandOutcome, outcomeError, outcomeSuccess } from "./runCommand";
+
+interface EyeDropperResult {
+  sRGBHex: string;
+}
+
+interface EyeDropperInstance {
+  open(): Promise<EyeDropperResult>;
+}
+
+type EyeDropperConstructor = new () => EyeDropperInstance;
+
+function isEyeDropperSupported(): boolean {
+  return typeof window !== "undefined" && "EyeDropper" in window;
+}
 
 const useStyles = makeStyles({
   root: {
@@ -77,6 +95,22 @@ const useStyles = makeStyles({
     gap: "8px",
     flexWrap: "wrap",
   },
+  hexRow: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+  },
+  hexInput: {
+    flex: "1 1 120px",
+    minWidth: "100px",
+  },
+  pickRow: {
+    display: "flex",
+    gap: "6px",
+    flexWrap: "wrap",
+    alignItems: "center",
+  },
 });
 
 export interface ColorPickerPanelHandle {
@@ -95,7 +129,11 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
     const [loading, setLoading] = React.useState(true);
     const [paletteTick, setPaletteTick] = React.useState(0);
     const [selectedColor, setSelectedColor] = React.useState<string | null>(null);
-    const [busy, setBusy] = React.useState<"fill" | "line" | "text" | null>(null);
+    const [hexInput, setHexInput] = React.useState("");
+    const [hexError, setHexError] = React.useState<string | null>(null);
+    const [busy, setBusy] = React.useState<
+      "fill" | "line" | "text" | "pick-fill" | "pick-line" | "pick-text" | "screen" | null
+    >(null);
 
     const reloadPalette = React.useCallback(async () => {
       setLoading(true);
@@ -137,6 +175,90 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
         setSelectedColor(themeColors[0]);
       }
     }, [selectedColor, themeColors]);
+
+    React.useEffect(() => {
+      if (selectedColor) {
+        setHexInput(normalizeHex(selectedColor));
+        setHexError(null);
+      }
+    }, [selectedColor]);
+
+    const applyHexInput = React.useCallback(() => {
+      const trimmed = hexInput.trim();
+      if (!trimmed) {
+        setHexError("Enter a HEX color (#RRGGBB or RRGGBB).");
+        return;
+      }
+      if (!isValidHex(trimmed)) {
+        setHexError("Invalid HEX. Use #RRGGBB or RRGGBB (6 hex digits).");
+        return;
+      }
+      setHexError(null);
+      setSelectedColor(normalizeHex(trimmed));
+    }, [hexInput]);
+
+    const onHexChange = React.useCallback((_e: unknown, data: { value: string }) => {
+      const value = data.value;
+      setHexInput(value);
+      const trimmed = value.trim();
+      if (!trimmed) {
+        setHexError(null);
+        return;
+      }
+      if (isValidHex(trimmed)) {
+        setHexError(null);
+        setSelectedColor(normalizeHex(trimmed));
+      } else {
+        setHexError("Invalid HEX. Use #RRGGBB or RRGGBB (6 hex digits).");
+      }
+    }, []);
+
+    const pickColorFromShape = async (source: ColorPickSource) => {
+      const busyKey = `pick-${source}` as const;
+      setBusy(busyKey);
+      try {
+        const color = await readColorFromSelection(source);
+        setSelectedColor(color);
+        recordRecentColor(color);
+        await reloadPalette();
+        onFeedback?.(outcomeSuccess(`Picked ${source} color ${color} from shape.`));
+      } catch (err) {
+        onFeedback?.(outcomeError(err instanceof Error ? err.message : String(err)));
+      } finally {
+        setBusy(null);
+      }
+    };
+
+    const pickColorFromScreen = async () => {
+      if (!isEyeDropperSupported()) {
+        return;
+      }
+
+      setBusy("screen");
+      try {
+        const EyeDropperCtor = (window as unknown as { EyeDropper: EyeDropperConstructor })
+          .EyeDropper;
+        const dropper = new EyeDropperCtor();
+        const result = await dropper.open();
+        const trimmed = result.sRGBHex.trim();
+        if (!isValidHex(trimmed)) {
+          onFeedback?.(outcomeError("Screen pick returned an invalid color."));
+          return;
+        }
+        const color = normalizeHex(trimmed);
+        setSelectedColor(color);
+        recordRecentColor(color);
+        await reloadPalette();
+        onFeedback?.(outcomeSuccess(`Picked screen color ${color}.`));
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+        onFeedback?.(outcomeError(err instanceof Error ? err.message : String(err)));
+      } finally {
+        setBusy(null);
+      }
+    };
 
     const applyColor = async (kind: "fill" | "line" | "text") => {
       if (!selectedColor) {
@@ -198,6 +320,9 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
       );
     };
 
+    const isBusy = busy !== null;
+    const eyeDropperSupported = isEyeDropperSupported();
+
     if (loading && paletteTick === 0) {
       return (
         <div className={styles.root} id="color-picker-panel" ref={rootRef}>
@@ -228,6 +353,87 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
           </div>
         )}
 
+        <div className={styles.section}>
+          <Caption1>Custom HEX</Caption1>
+          <div className={styles.hexRow}>
+            <Input
+              className={styles.hexInput}
+              size="small"
+              placeholder="#RRGGBB"
+              value={hexInput}
+              aria-label="HEX color"
+              disabled={isBusy}
+              onChange={onHexChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applyHexInput();
+                }
+              }}
+            />
+            <Button
+              size="small"
+              appearance="secondary"
+              disabled={isBusy}
+              onClick={applyHexInput}
+            >
+              Set
+            </Button>
+          </div>
+          {hexError && (
+            <MessageBar intent="error">
+              <MessageBarBody>{hexError}</MessageBarBody>
+            </MessageBar>
+          )}
+        </div>
+
+        <div className={styles.section}>
+          <Caption1>Pick from shape</Caption1>
+          <div className={styles.pickRow}>
+            <Button
+              size="small"
+              appearance="secondary"
+              disabled={isBusy}
+              onClick={() => void pickColorFromShape("fill")}
+            >
+              {busy === "pick-fill" ? "Picking…" : "Fill"}
+            </Button>
+            <Button
+              size="small"
+              appearance="secondary"
+              disabled={isBusy}
+              onClick={() => void pickColorFromShape("line")}
+            >
+              {busy === "pick-line" ? "Picking…" : "Line"}
+            </Button>
+            <Button
+              size="small"
+              appearance="secondary"
+              disabled={isBusy}
+              onClick={() => void pickColorFromShape("text")}
+            >
+              {busy === "pick-text" ? "Picking…" : "Text"}
+            </Button>
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <Caption1>Screen pick</Caption1>
+          <div className={styles.pickRow}>
+            <Button
+              size="small"
+              appearance="secondary"
+              disabled={isBusy || !eyeDropperSupported}
+              onClick={() => void pickColorFromScreen()}
+            >
+              {busy === "screen" ? "Picking…" : "Screen pick"}
+            </Button>
+          </div>
+          {!eyeDropperSupported && (
+            <Caption1>Screen color picker is not available in this browser.</Caption1>
+          )}
+        </div>
+
         {selectedColor && (
           <div className={styles.preview}>
             <span
@@ -242,7 +448,7 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
           <Button
             size="small"
             appearance="primary"
-            disabled={busy !== null || !selectedColor}
+            disabled={isBusy || !selectedColor}
             onClick={() => void applyColor("fill")}
           >
             {busy === "fill" ? "Applying…" : "Apply Fill"}
@@ -250,7 +456,7 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
           <Button
             size="small"
             appearance="secondary"
-            disabled={busy !== null || !selectedColor}
+            disabled={isBusy || !selectedColor}
             onClick={() => void applyColor("line")}
           >
             {busy === "line" ? "Applying…" : "Apply Line"}
@@ -258,7 +464,7 @@ export const ColorPickerPanel = React.forwardRef<ColorPickerPanelHandle, ColorPi
           <Button
             size="small"
             appearance="secondary"
-            disabled={busy !== null || !selectedColor}
+            disabled={isBusy || !selectedColor}
             onClick={() => void applyColor("text")}
           >
             {busy === "text" ? "Applying…" : "Apply Text"}

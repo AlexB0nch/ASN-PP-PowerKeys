@@ -94,6 +94,14 @@ let themeColorSource: ThemeColorSource = "fallback";
 let activePaletteCache: string[] | null = null;
 let paletteRefreshPromise: Promise<void> | null = null;
 
+/** Mirrors Core `ThemeColor.IsValidHex` — optional `#` plus six hex digits. */
+export function isValidHex(hex: string | null | undefined): boolean {
+  if (hex == null) {
+    return false;
+  }
+  return /^#?[0-9a-fA-F]{6}$/.test(hex.trim());
+}
+
 /** Normalizes a color string to uppercase `#RRGGBB`. */
 export function normalizeHex(color: string): string {
   const trimmed = color.trim();
