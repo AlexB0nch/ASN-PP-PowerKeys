@@ -39,7 +39,7 @@ PowerPoint (Desktop/Web/Mac/iPad)
 | `src/PptPowerKeys.VstoLegacy*` | **Заморожен** scaffold. **Не** развивать — новый Windows host: `PptPowerKeys.Windows` (S07+). |
 
 Корневой `PptPowerKeys.sln` = Core + Api + Tests (кроссплатформенно).
-`PptPowerKeys.Windows.sln` — planned S07 (Windows + VSTO). `VstoLegacy.sln` — исторический reference only.
+`PptPowerKeys.Windows.sln` — S07+ (Windows + VSTO). `VstoLegacy.sln` — исторический reference only.
 
 ## 3. Инварианты / правила (нарушать нельзя)
 - **Граница `ShapeBounds`** (`{id,left,top,width,height}` в points): host читает геометрию через Office.js →

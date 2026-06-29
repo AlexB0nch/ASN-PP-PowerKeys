@@ -1,6 +1,6 @@
 # Architect Kickoff — Sprint 07 LTSC Foundation
 
-> **Статус:** Ready to start. Первая задача: **S07-001**.
+> **Статус:** Done (2026-06-29). См. [`retrospective.md`](./retrospective.md). Следующий: **Sprint 08**.
 
 ## Контекст
 

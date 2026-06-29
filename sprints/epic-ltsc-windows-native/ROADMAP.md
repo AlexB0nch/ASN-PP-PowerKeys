@@ -16,8 +16,8 @@
 
 | Sprint | Папка | Статус | Цель | Задачи (ID range) |
 |--------|-------|--------|------|-------------------|
-| **S07** | [`sprint-07-ltsc-foundation/`](../sprint-07-ltsc-foundation/) | **Next** | Spikes + VSTO shell + ComHost POC | S07-001…004 |
-| **S08** | [`sprint-08-ltsc-layout-parity/`](../sprint-08-ltsc-layout-parity/) | Planned | 32 ServerLayout + alignment extras | S08-001…005 |
+| **S07** | [`sprint-07-ltsc-foundation/`](../sprint-07-ltsc-foundation/) | **Done** | Spikes + VSTO shell + ComHost POC | S07-001…004 |
+| **S08** | [`sprint-08-ltsc-layout-parity/`](../sprint-08-ltsc-layout-parity/) | **Next** | 32 ServerLayout + alignment extras | S08-001…005 |
 | **S09** | [`sprint-09-ltsc-objects-format-text/`](../sprint-09-ltsc-objects-format-text/) | Planned | Objects, Format, Text HostScript | S09-001…006 |
 | **S10** | [`sprint-10-ltsc-slides-settings/`](../sprint-10-ltsc-slides-settings/) | Planned | Slides + 9 None unlock + Settings UI | S10-001…005 |
 | **S11** | [`sprint-11-ltsc-ship/`](../sprint-11-ltsc-ship/) | Planned | Global hotkeys, MSI, QA, release | S11-001…005 |
@@ -83,5 +83,5 @@
 
 ## Следующий шаг
 
-**Sprint 07** — [`sprint-07-ltsc-foundation/ARCHITECT-KICKOFF.md`](../sprint-07-ltsc-foundation/ARCHITECT-KICKOFF.md)  
-Первая задача: **S07-001** Core multitarget netstandard2.0.
+**Sprint 08** — [`sprint-08-ltsc-layout-parity/ARCHITECT-KICKOFF.md`](../sprint-08-ltsc-layout-parity/ARCHITECT-KICKOFF.md)  
+Первая задача: **S08-001** CommandRouter all ServerLayout.

@@ -28,11 +28,11 @@
 
 ## Definition of Done спринта
 
-- [ ] S07-001…004 Done
-- [ ] `dotnet test PptPowerKeys.sln` зелёный (Linux CI)
-- [ ] Windows: `PptPowerKeys.Windows.sln` собирается; AlignLeft POC manual note
-- [ ] `docs/PRODUCT_CONTEXT.md` journal Sprint 07 kickoff
-- [ ] `retrospective.md` при закрытии спринта
+- [x] S07-001…004 Done
+- [x] `dotnet test PptPowerKeys.sln` зелёный (Linux CI)
+- [x] Windows: `PptPowerKeys.Windows.sln` собирается; AlignLeft POC manual note
+- [x] `docs/PRODUCT_CONTEXT.md` journal Sprint 07
+- [x] `retrospective.md` при закрытии спринта
 
 ## Зависимости
 
