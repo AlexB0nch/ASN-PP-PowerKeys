@@ -43,9 +43,10 @@ Office **Keyboard Shortcuts API** + **Shared Runtime**, синхронизиро
 - [x] **S06-001** — Shared Runtime + Tier 1 defaults (`shortcuts.json`, `associate` → `runCommand`) — PR #46
 - [x] **S06-002** — Save/load Shortcut Manager → `Office.actions.replaceShortcuts` (76 hotkey-eligible actions) — PR #49
 - [x] **S06-003** — Import/export settings JSON (`UserSettingsImporter`, validate-only API, Settings Export/Import UI) — PR #52
+- [ ] **S06-004** — Object Statistics MIN/MAX/AVG UI (`addupDisplayMode`, Settings dropdown, status formatter)
 - [ ] `dotnet test PptPowerKeys.sln` — зелёный
 - [ ] AddIn: `typecheck`, `validate:prod`, `build:prod` — зелёные
-- [ ] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` обновлены post-merge
-- [ ] Manual QA note: PP Desktop Win 2601+ (вне CI)
+- [ ] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` обновлены post-merge Sprint 06
+- [ ] Manual QA note: PP Desktop Win 2601+ hotkeys + Addup display (вне CI)
 
-**Stretch (P2/P3):** S06-003…005 — только если capacity после P1.
+**Stretch (P3):** S06-005 (Color Picker eyedropper) — после S06-004 или в retrospective.

@@ -1,9 +1,9 @@
 # ASN-PP-PowerKeys
 PowerPoint plugin. Shortcuts
 
-> ### Актуальный продукт: Office Web Add-in (Sprint 01–05 Done)
-> Рабочая надстройка — **Office Web Add-in** (Windows / Mac / Web / iPad): task pane + API.
-> **79 команд**, Sprint 05 завершён (2026-06-29).
+> ### Актуальный продукт: Office Web Add-in (Sprint 01–05 Done, Sprint 06 в работе)
+> Рабочая надстройка — **Office Web Add-in** (Windows / Mac / Web / iPad): task pane + API + глобальные hotkeys (Desktop Win 2601+).
+> **79 команд**, Sprint 05 завершён; Sprint 06 — P1 Done (S06-001…003).
 >
 > | Действие | Документ |
 > |----------|----------|
@@ -326,12 +326,12 @@ _(Не в ShortcutTools, но логично добавить)_
 - [x] Smart Duplicate gap memory
 - [x] Sideload: PowerPoint Online + **Desktop Windows/Mac** (`manifest.prod.xml`)
 
-### Backlog (Sprint 06+, не начато)
+### Sprint 06 — в работе (2026-06-29)
 
-- [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
-- [x] Import/export settings JSON
-- [ ] Color Picker: eyedropper / HEX input
-- [ ] Object Statistics MIN/MAX/AVG UI (Addup в status bar уже есть)
+- [x] **Глобальные шорткаты** — Shared Runtime + Tier 1 defaults + `replaceShortcuts` (76 actions, Desktop Win 2601+) — PR #46, #49
+- [x] Import/export settings JSON — PR #52
+- [ ] **Object Statistics MIN/MAX/AVG UI** — режим отображения Addup (Core math готов; next: S06-004)
+- [ ] Color Picker: eyedropper / HEX input (S06-005 stretch)
 - [ ] Snap-to-nearest-object при drag
 - [ ] Slide Backup: named section + hide/show (нет Office.js API)
 - [ ] Разрезание объектов (VSTO parity)

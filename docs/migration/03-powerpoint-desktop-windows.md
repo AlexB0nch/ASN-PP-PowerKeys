@@ -140,7 +140,7 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 1. Установите актуальный `manifest.prod.xml` (см. [Быстрая установка](#быстрая-установка-production)).
 2. **Desktop Windows 2601+:** выделите фигуры → нажмите Alt+1, Alt+D и т.д.
 3. **Web / иные платформы:** откройте task pane (**Home → PowerKeys**) → кликните команду в каталоге.
-4. Профили McKinsey/BCG и snap-to-grid — в **Settings** внутри панели.
+4. Профили McKinsey/BCG, snap-to-grid и **Export/Import settings JSON** — в **Settings** внутри панели.
 
 ### История / ограничения
 
@@ -157,10 +157,11 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 
 Глобальные клавиши не перехватывались — только клики в task pane на всех платформах.
 
-#### Дальнейшая работа (S06-003+)
+#### Дальнейшая работа (S06-004+)
 
-- Import/export shortcuts JSON.
-- Расширенная диагностика конфликтов hotkeys.
+- **S06-004:** Object Statistics — UI выбора режима отображения Addup (Sum / Min / Max / Avg).
+- **S06-005 (stretch):** Color Picker eyedropper / HEX input.
+- Расширенная диагностика конфликтов hotkeys (optional).
 
 #### Путь B — VSTO legacy (не рекомендуется)
 

@@ -79,7 +79,7 @@ Anti-scope: snap-to-nearest-object, slide sections hide/show.
 **Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
 (14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); S06-002 Done (PR #49) —
 `replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
-S06-003 Done — import/export settings JSON (PR #52).
+S06-003 Done — import/export settings JSON (PR #52). **Next:** S06-004 Object Statistics MIN/MAX/AVG UI.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S06-003:** Import/export settings JSON — `UserSettingsImporter` (Core) validates file against `CommandCatalog`;
