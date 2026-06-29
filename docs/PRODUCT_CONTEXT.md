@@ -19,6 +19,8 @@
 | **A — Web Add-in (primary)** | M365, Online, Desktop, Mac | `manifest.prod.xml` | AddIn + Api + Core |
 | **B — Windows Native (LTSC)** | Windows LTSC / perpetual | MSI / ClickOnce (S11) | `PptPowerKeys.Windows` + Core (S07+) |
 
+**Track 0 (Web на LTSC без Upload UI):** [`docs/migration/05-ltsc-web-addin-central-deploy.md`](migration/05-ltsc-web-addin-central-deploy.md).
+
 ### Архитектура Line A (`docs/migration/00-architecture.md`)
 ```
 PowerPoint (Desktop/Web/Mac/iPad)
