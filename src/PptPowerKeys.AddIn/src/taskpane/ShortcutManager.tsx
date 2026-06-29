@@ -16,7 +16,10 @@ import {
   findDuplicateKeyGroups,
   isDuplicateKey,
   normalizeShortcutKeys,
+  toOfficeShortcutKey,
 } from "./shortcutBindings";
+
+/* global Office */
 
 const useStyles = makeStyles({
   root: {
@@ -95,6 +98,38 @@ export const ShortcutManager: React.FC<ShortcutManagerProps> = ({
 
   const [newCommandId, setNewCommandId] = React.useState("");
   const [newKeys, setNewKeys] = React.useState("");
+  const [hostConflictWarning, setHostConflictWarning] = React.useState<string | null>(null);
+
+  const supportsKeyboardShortcuts = React.useMemo(
+    () => Office.context.requirements.isSetSupported("KeyboardShortcuts", "1.1"),
+    [],
+  );
+
+  const checkHostShortcutConflict = React.useCallback(
+    async (keys: string) => {
+      if (!supportsKeyboardShortcuts) {
+        setHostConflictWarning(null);
+        return;
+      }
+      const officeKey = toOfficeShortcutKey(keys);
+      if (!officeKey) {
+        setHostConflictWarning(null);
+        return;
+      }
+      try {
+        const results = await Office.actions.areShortcutsInUse([officeKey]);
+        const conflict = results.find((r) => r.shortcut === officeKey && r.inUse);
+        setHostConflictWarning(
+          conflict
+            ? `"${officeKey}" may conflict with PowerPoint or another add-in (save is still allowed).`
+            : null,
+        );
+      } catch {
+        setHostConflictWarning(null);
+      }
+    },
+    [supportsKeyboardShortcuts],
+  );
 
   const duplicateGroups = React.useMemo(
     () => findDuplicateKeyGroups(shortcuts),
@@ -155,6 +190,12 @@ export const ShortcutManager: React.FC<ShortcutManagerProps> = ({
         </MessageBar>
       )}
 
+      {hostConflictWarning && (
+        <MessageBar intent="warning">
+          <MessageBarBody>{hostConflictWarning}</MessageBarBody>
+        </MessageBar>
+      )}
+
       <div className={styles.list}>
         {shortcuts.length === 0 ? (
           <Caption1>No shortcut bindings configured.</Caption1>
@@ -183,6 +224,7 @@ export const ShortcutManager: React.FC<ShortcutManagerProps> = ({
                   value={binding.keys}
                   aria-label={`Keys for ${commandTitle(commands, binding.commandId)}`}
                   onChange={(_e, data) => updateKeys(binding.commandId, data.value)}
+                  onBlur={(e) => void checkHostShortcutConflict(e.target.value)}
                 />
                 <Button
                   size="small"
@@ -225,6 +267,7 @@ export const ShortcutManager: React.FC<ShortcutManagerProps> = ({
             placeholder="e.g. Alt+1"
             value={newKeys}
             onChange={(_e, data) => setNewKeys(data.value)}
+            onBlur={(e) => void checkHostShortcutConflict(e.target.value)}
           />
         </div>
         <Button

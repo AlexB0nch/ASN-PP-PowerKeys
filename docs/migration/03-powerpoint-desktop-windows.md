@@ -12,7 +12,7 @@ Production-манифест **тот же**, что и для PowerPoint Online 
 | Установка | Sideload `manifest.prod.xml` | `.msi` / COM (не поддерживается в CI) |
 | UI | Кнопка **PowerKeys** на вкладке **Home** + task pane | Отдельная вкладка Ribbon (замысел README) |
 | Команды | **79** — клик в task pane | Не развивается |
-| Глобальные шорткаты | **Tier 1** на PP Desktop Win 2601+ (S06-001); Web — task pane | Замысел COM-перехвата (не реализован в legacy) |
+| Глобальные шорткаты | **76** hotkey-eligible на PP Desktop Win 2601+ (S06-002); Web — task pane | Замысел COM-перехвата (не реализован в legacy) |
 | Интернет | Нужен (статика GitHub Pages + API на VDS) | Offline возможен |
 
 ---
@@ -113,9 +113,11 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 
 ## Глобальные шорткаты (Windows)
 
-### Как сейчас (после S06-001)
+### Как сейчас (после S06-002)
 
-**Tier 1 глобальные клавиши** (14 шорткатов) зарегистрированы через Office **Keyboard Shortcuts API** на **PowerPoint Desktop Windows 2601+** (build ≥ 19628.20150):
+**76 hotkey-eligible команд** зарегистрированы в `shortcuts.json` и связаны через `Office.actions.associate` на **PowerPoint Desktop Windows 2601+** (build ≥ 19628.20150).
+
+**Tier 1 default keys** (14 шорткатов) заданы в `shortcuts.json`; остальные 62 команды без default key в JSON — пользовательские привязки приходят через `Office.actions.replaceShortcuts()` после Save в Settings.
 
 | Клавиши | Команда |
 |---------|---------|
@@ -125,11 +127,13 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 | F1 | Toggle zoom fit (ограничение Office.js — см. «Not on Web») |
 | Alt+D, Alt+A | Duplicate right, Sum numeric fields (McKinsey preset) |
 
+Профили **McKinsey/BCG**: выберите профиль → **Save** → live hotkeys обновляются (например BCG `Ctrl+Alt+B` для Same width, `Alt+Shift+D` для Duplicate right).
+
 Требования в манифесте: `SharedRuntime 1.1` + `KeyboardShortcuts 1.1`, `shortcuts.json` через `ExtendedOverrides`, shared runtime на `taskpane.html`.
 
 **На PowerPoint Web / Mac / старом Desktop:** hotkeys **не активны** (graceful degradation) — используйте кнопки в task pane. Feature detection: `Office.context.requirements.isSetSupported('KeyboardShortcuts', '1.1')`.
 
-**Shortcut Manager** по-прежнему хранит привязки в `UserSettings`; синхронизация live hotkeys через `Office.actions.replaceShortcuts()` — **S06-002**.
+**Shortcut Manager** хранит привязки в `UserSettings`; синхронизация live hotkeys — `syncKeyboardShortcuts()` → `replaceShortcuts` на bootstrap, Save и Reset.
 
 ### Как работать
 
@@ -140,24 +144,23 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 
 ### История / ограничения
 
-До Sprint 06 глобальные клавиши не перехватывались — только клики в task pane. Сейчас Tier 1 покрывает defaults из `CommandCatalog` + McKinsey extras; остальные bindings и BCG-only keys — в S06-002.
+До Sprint 06 глобальные клавиши не перехватывались — только клики в task pane. Сейчас 76 команд зарегистрированы; Tier 1 defaults + пользовательские bindings через `replaceShortcuts`.
 
 **Ограничения API:**
 
 - Сочетания только с **Ctrl / Alt / Shift** (как в guidelines Microsoft); F1 — исключение для ToggleZoom.
 - Возможны конфликты с **встроенными** шорткатами PowerPoint (диалог Microsoft).
 - Каждое действие объявлено в `shortcuts.json` — не «любая клавиша на все 79 команд» без регистрации.
-- Settings-команды (`OpenShortcutManager`, `OpenColorScheme`, `ResetToDefaults`) **не** имеют глобальных hotkeys в S06-001.
+- Settings-команды (`OpenShortcutManager`, `OpenColorScheme`, `ResetToDefaults`) **не** имеют глобальных hotkeys.
 
 ### Как было (до S06-001)
 
 Глобальные клавиши не перехватывались — только клики в task pane на всех платформах.
 
-#### Дальнейшая работа (S06-002+)
+#### Дальнейшая работа (S06-003+)
 
-- `Office.actions.replaceShortcuts()` при Save в Shortcut Manager (все bindings из UserSettings).
-- `Office.actions.areShortcutsInUse()` для проверки конфликтов.
-- BCG-only keys и остальные команды вне Tier 1.
+- Import/export shortcuts JSON.
+- Расширенная диагностика конфликтов hotkeys.
 
 #### Путь B — VSTO legacy (не рекомендуется)
 
