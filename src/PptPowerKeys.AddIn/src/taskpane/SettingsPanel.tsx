@@ -20,6 +20,7 @@ import {
   UserSettings,
 } from "../services/types";
 import { CommandOutcome, outcomeError, outcomeSuccess } from "./runCommand";
+import { syncKeyboardShortcuts } from "../runtime/syncKeyboardShortcuts";
 import { ShortcutManager } from "./ShortcutManager";
 
 const CUSTOM_PROFILE = "Custom";
@@ -93,6 +94,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         setPresets(presetData);
         setPresetWarning(false);
         onSettingsUpdated?.(data);
+        await syncKeyboardShortcuts(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -153,6 +155,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         setSettings(saved);
         setPresetWarning(false);
         onSettingsUpdated?.(saved);
+        await syncKeyboardShortcuts(saved);
         onFeedback?.(outcomeSuccess("Settings saved."));
       } catch (err) {
         onFeedback?.(
@@ -170,6 +173,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         setSettings(reset);
         setPresetWarning(false);
         onSettingsUpdated?.(reset);
+        await syncKeyboardShortcuts(reset);
         onFeedback?.(outcomeSuccess("Settings reset to defaults."));
       } catch (err) {
         onFeedback?.(
@@ -213,8 +217,8 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
 
         <MessageBar intent="info">
           <MessageBarBody>
-            Hotkeys active on PowerPoint Desktop Windows (version 2601+). On Web, use task pane
-            buttons.
+            Edit shortcuts below and click Save to apply hotkeys on Desktop Windows (PowerPoint
+            2601+). On Web, use task pane buttons.
           </MessageBarBody>
         </MessageBar>
 

@@ -22,6 +22,7 @@ import {
   setSettingsActions,
   updateUserSettings,
 } from "../runtime/commandContext";
+import { syncKeyboardShortcuts } from "../runtime/syncKeyboardShortcuts";
 import { runCommand, CommandOutcome, outcomeSuccess } from "./runCommand";
 import { ColorPickerPanel, ColorPickerPanelHandle } from "./ColorPickerPanel";
 import { SettingsPanel, SettingsPanelHandle } from "./SettingsPanel";
@@ -123,6 +124,7 @@ export const App: React.FC = () => {
       const settings = getUserSettings();
       if (settings) {
         setUserSettings(settings);
+        void syncKeyboardShortcuts(settings);
       }
       setLoading(false);
       return;
@@ -133,6 +135,7 @@ export const App: React.FC = () => {
         setCommands(c);
         setUserSettings(settings);
         updateUserSettings(settings);
+        void syncKeyboardShortcuts(settings);
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)))
       .finally(() => setLoading(false));
@@ -151,6 +154,7 @@ export const App: React.FC = () => {
         const reset = await api.resetSettings();
         setUserSettings(reset);
         updateUserSettings(reset);
+        await syncKeyboardShortcuts(reset);
         await settingsPanelRef.current?.reload();
         return outcomeSuccess("Settings reset to defaults.");
       },
@@ -279,6 +283,7 @@ export const App: React.FC = () => {
                     onSettingsUpdated={(settings) => {
                       setUserSettings(settings);
                       updateUserSettings(settings);
+                      void syncKeyboardShortcuts(settings);
                     }}
                   />
                 </>

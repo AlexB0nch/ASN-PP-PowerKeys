@@ -41,6 +41,56 @@
       "name": "Distribute vertically"
     },
     {
+      "id": "CopyAndAlignLeft",
+      "type": "ExecuteFunction",
+      "name": "Duplicate + align left"
+    },
+    {
+      "id": "CopyAndAlignRight",
+      "type": "ExecuteFunction",
+      "name": "Duplicate + align right"
+    },
+    {
+      "id": "CopyAndAlignTop",
+      "type": "ExecuteFunction",
+      "name": "Duplicate + align top"
+    },
+    {
+      "id": "CopyAndAlignBottom",
+      "type": "ExecuteFunction",
+      "name": "Duplicate + align bottom"
+    },
+    {
+      "id": "AlignLeftToRight",
+      "type": "ExecuteFunction",
+      "name": "Place to right of anchor"
+    },
+    {
+      "id": "AlignRightToLeft",
+      "type": "ExecuteFunction",
+      "name": "Place to left of anchor"
+    },
+    {
+      "id": "AlignTopToBottom",
+      "type": "ExecuteFunction",
+      "name": "Place below anchor"
+    },
+    {
+      "id": "AlignBottomToTop",
+      "type": "ExecuteFunction",
+      "name": "Place above anchor"
+    },
+    {
+      "id": "CopyObjectPosition",
+      "type": "ExecuteFunction",
+      "name": "Copy object position"
+    },
+    {
+      "id": "PasteObjectPosition",
+      "type": "ExecuteFunction",
+      "name": "Paste object position"
+    },
+    {
       "id": "SameWidth",
       "type": "ExecuteFunction",
       "name": "Same width"
@@ -51,14 +101,124 @@
       "name": "Same height"
     },
     {
-      "id": "FillColor",
+      "id": "SameWidthKeepAspect",
       "type": "ExecuteFunction",
-      "name": "Fill color"
+      "name": "Same width (keep aspect)"
     },
     {
-      "id": "ToggleZoom",
+      "id": "SameHeightKeepAspect",
       "type": "ExecuteFunction",
-      "name": "Toggle zoom fit"
+      "name": "Same height (keep aspect)"
+    },
+    {
+      "id": "WidthEqualsAnchorHeight",
+      "type": "ExecuteFunction",
+      "name": "Width = anchor height"
+    },
+    {
+      "id": "HeightEqualsAnchorWidth",
+      "type": "ExecuteFunction",
+      "name": "Height = anchor width"
+    },
+    {
+      "id": "StretchWidthToLeft",
+      "type": "ExecuteFunction",
+      "name": "Stretch width to anchor left"
+    },
+    {
+      "id": "StretchWidthToRight",
+      "type": "ExecuteFunction",
+      "name": "Stretch width to anchor right"
+    },
+    {
+      "id": "StretchHeightToTop",
+      "type": "ExecuteFunction",
+      "name": "Stretch height to anchor top"
+    },
+    {
+      "id": "StretchHeightToBottom",
+      "type": "ExecuteFunction",
+      "name": "Stretch height to anchor bottom"
+    },
+    {
+      "id": "IncreaseWidthLarge",
+      "type": "ExecuteFunction",
+      "name": "Increase width (large)"
+    },
+    {
+      "id": "DecreaseWidthLarge",
+      "type": "ExecuteFunction",
+      "name": "Decrease width (large)"
+    },
+    {
+      "id": "IncreaseHeightLarge",
+      "type": "ExecuteFunction",
+      "name": "Increase height (large)"
+    },
+    {
+      "id": "DecreaseHeightLarge",
+      "type": "ExecuteFunction",
+      "name": "Decrease height (large)"
+    },
+    {
+      "id": "IncreaseWidthSmall",
+      "type": "ExecuteFunction",
+      "name": "Increase width (small)"
+    },
+    {
+      "id": "DecreaseWidthSmall",
+      "type": "ExecuteFunction",
+      "name": "Decrease width (small)"
+    },
+    {
+      "id": "IncreaseHeightSmall",
+      "type": "ExecuteFunction",
+      "name": "Increase height (small)"
+    },
+    {
+      "id": "DecreaseHeightSmall",
+      "type": "ExecuteFunction",
+      "name": "Decrease height (small)"
+    },
+    {
+      "id": "IncreaseSizeKeepAspect",
+      "type": "ExecuteFunction",
+      "name": "Increase size (keep aspect)"
+    },
+    {
+      "id": "DecreaseSizeKeepAspect",
+      "type": "ExecuteFunction",
+      "name": "Decrease size (keep aspect)"
+    },
+    {
+      "id": "InsertRectangle",
+      "type": "ExecuteFunction",
+      "name": "Insert rectangle"
+    },
+    {
+      "id": "InsertSquare",
+      "type": "ExecuteFunction",
+      "name": "Insert square"
+    },
+    {
+      "id": "InsertEllipse",
+      "type": "ExecuteFunction",
+      "name": "Insert circle/ellipse"
+    },
+    {
+      "id": "InsertLine",
+      "type": "ExecuteFunction",
+      "name": "Insert line"
+    },
+    {
+      "id": "InsertArrow",
+      "type": "ExecuteFunction",
+      "name": "Insert arrow"
+    },
+    {
+      "id": "InsertTextbox",
+      "type": "ExecuteFunction",
+      "name": "Insert text box"
     },
     {
       "id": "DuplicateRight",
@@ -66,9 +226,159 @@
       "name": "Duplicate right"
     },
     {
+      "id": "DuplicateLeft",
+      "type": "ExecuteFunction",
+      "name": "Duplicate left"
+    },
+    {
+      "id": "DuplicateDown",
+      "type": "ExecuteFunction",
+      "name": "Duplicate down"
+    },
+    {
+      "id": "DuplicateUp",
+      "type": "ExecuteFunction",
+      "name": "Duplicate up"
+    },
+    {
+      "id": "Group",
+      "type": "ExecuteFunction",
+      "name": "Group"
+    },
+    {
+      "id": "Ungroup",
+      "type": "ExecuteFunction",
+      "name": "Ungroup"
+    },
+    {
+      "id": "Regroup",
+      "type": "ExecuteFunction",
+      "name": "Regroup"
+    },
+    {
+      "id": "BringToFront",
+      "type": "ExecuteFunction",
+      "name": "Bring to front"
+    },
+    {
+      "id": "SendToBack",
+      "type": "ExecuteFunction",
+      "name": "Send to back"
+    },
+    {
+      "id": "BringForward",
+      "type": "ExecuteFunction",
+      "name": "Bring forward"
+    },
+    {
+      "id": "SendBackward",
+      "type": "ExecuteFunction",
+      "name": "Send backward"
+    },
+    {
+      "id": "PasteShapeToSelectedSlides",
+      "type": "ExecuteFunction",
+      "name": "Paste shape to selected slides"
+    },
+    {
+      "id": "RemoveShapeFromSelectedSlides",
+      "type": "ExecuteFunction",
+      "name": "Remove shape from selected slides (by name)"
+    },
+    {
+      "id": "FillColor",
+      "type": "ExecuteFunction",
+      "name": "Fill color"
+    },
+    {
+      "id": "LineColor",
+      "type": "ExecuteFunction",
+      "name": "Line color"
+    },
+    {
+      "id": "TextColor",
+      "type": "ExecuteFunction",
+      "name": "Text color"
+    },
+    {
+      "id": "ToggleFillBlackWhite",
+      "type": "ExecuteFunction",
+      "name": "Toggle fill black/white"
+    },
+    {
+      "id": "FormatPainter",
+      "type": "ExecuteFunction",
+      "name": "Format painter"
+    },
+    {
+      "id": "PasteUnformatted",
+      "type": "ExecuteFunction",
+      "name": "Paste unformatted"
+    },
+    {
+      "id": "PasteFormatted",
+      "type": "ExecuteFunction",
+      "name": "Paste formatted"
+    },
+    {
       "id": "AddupTextFields",
       "type": "ExecuteFunction",
       "name": "Sum numeric fields"
+    },
+    {
+      "id": "ReplaceWithEllipsis",
+      "type": "ExecuteFunction",
+      "name": "Replace with ellipsis"
+    },
+    {
+      "id": "ToggleSuperscript",
+      "type": "ExecuteFunction",
+      "name": "Toggle superscript"
+    },
+    {
+      "id": "ToggleSubscript",
+      "type": "ExecuteFunction",
+      "name": "Toggle subscript"
+    },
+    {
+      "id": "ToggleZoom",
+      "type": "ExecuteFunction",
+      "name": "Toggle zoom fit"
+    },
+    {
+      "id": "ToggleSlideSorter",
+      "type": "ExecuteFunction",
+      "name": "Toggle slide sorter"
+    },
+    {
+      "id": "StartSlideShow",
+      "type": "ExecuteFunction",
+      "name": "Start slide show"
+    },
+    {
+      "id": "ToggleGrid",
+      "type": "ExecuteFunction",
+      "name": "Toggle grid"
+    },
+    {
+      "id": "ToggleGuides",
+      "type": "ExecuteFunction",
+      "name": "Toggle guides"
+    },
+    {
+      "id": "CopySlide",
+      "type": "ExecuteFunction",
+      "name": "Copy/duplicate slide"
+    },
+    {
+      "id": "MoveSlidesToBackup",
+      "type": "ExecuteFunction",
+      "name": "Move slides to backup (end of deck)"
+    },
+    {
+      "id": "PrintSlide",
+      "type": "ExecuteFunction",
+      "name": "Print slide"
     }
   ],
   "shortcuts": [

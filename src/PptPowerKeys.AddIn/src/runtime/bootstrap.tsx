@@ -3,8 +3,9 @@ import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import { bootstrapThemeColors } from "../office/themeColors";
 import { registerRibbonActions } from "../commands/commands";
 import { App } from "../taskpane/App";
-import { bootstrapCommandContext } from "./commandContext";
+import { bootstrapCommandContext, getUserSettings } from "./commandContext";
 import { registerCommandActions } from "./registerCommandActions";
+import { syncKeyboardShortcuts } from "./syncKeyboardShortcuts";
 
 /* global Office, document */
 
@@ -39,6 +40,10 @@ export function startAddIn(): void {
       registerRibbonActions();
       if (supportsKeyboardShortcuts()) {
         registerCommandActions();
+        const settings = getUserSettings();
+        if (settings) {
+          await syncKeyboardShortcuts(settings);
+        }
       }
 
       mountReactApp();
