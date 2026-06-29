@@ -1,0 +1,160 @@
+{
+  "actions": [
+    {
+      "id": "AlignLeft",
+      "type": "ExecuteFunction",
+      "name": "Align left"
+    },
+    {
+      "id": "AlignCenterHorizontal",
+      "type": "ExecuteFunction",
+      "name": "Align center (H)"
+    },
+    {
+      "id": "AlignRight",
+      "type": "ExecuteFunction",
+      "name": "Align right"
+    },
+    {
+      "id": "AlignTop",
+      "type": "ExecuteFunction",
+      "name": "Align top"
+    },
+    {
+      "id": "AlignMiddleVertical",
+      "type": "ExecuteFunction",
+      "name": "Align middle (V)"
+    },
+    {
+      "id": "AlignBottom",
+      "type": "ExecuteFunction",
+      "name": "Align bottom"
+    },
+    {
+      "id": "DistributeHorizontal",
+      "type": "ExecuteFunction",
+      "name": "Distribute horizontally"
+    },
+    {
+      "id": "DistributeVertical",
+      "type": "ExecuteFunction",
+      "name": "Distribute vertically"
+    },
+    {
+      "id": "SameWidth",
+      "type": "ExecuteFunction",
+      "name": "Same width"
+    },
+    {
+      "id": "SameHeight",
+      "type": "ExecuteFunction",
+      "name": "Same height"
+    },
+    {
+      "id": "FillColor",
+      "type": "ExecuteFunction",
+      "name": "Fill color"
+    },
+    {
+      "id": "ToggleZoom",
+      "type": "ExecuteFunction",
+      "name": "Toggle zoom fit"
+    },
+    {
+      "id": "DuplicateRight",
+      "type": "ExecuteFunction",
+      "name": "Duplicate right"
+    },
+    {
+      "id": "AddupTextFields",
+      "type": "ExecuteFunction",
+      "name": "Sum numeric fields"
+    }
+  ],
+  "shortcuts": [
+    {
+      "action": "AlignLeft",
+      "key": {
+        "default": "Alt+1"
+      }
+    },
+    {
+      "action": "AlignCenterHorizontal",
+      "key": {
+        "default": "Alt+2"
+      }
+    },
+    {
+      "action": "AlignRight",
+      "key": {
+        "default": "Alt+3"
+      }
+    },
+    {
+      "action": "AlignTop",
+      "key": {
+        "default": "Alt+4"
+      }
+    },
+    {
+      "action": "AlignMiddleVertical",
+      "key": {
+        "default": "Alt+5"
+      }
+    },
+    {
+      "action": "AlignBottom",
+      "key": {
+        "default": "Alt+6"
+      }
+    },
+    {
+      "action": "DistributeHorizontal",
+      "key": {
+        "default": "Alt+7"
+      }
+    },
+    {
+      "action": "DistributeVertical",
+      "key": {
+        "default": "Alt+8"
+      }
+    },
+    {
+      "action": "SameWidth",
+      "key": {
+        "default": "Alt+B"
+      }
+    },
+    {
+      "action": "SameHeight",
+      "key": {
+        "default": "Alt+H"
+      }
+    },
+    {
+      "action": "FillColor",
+      "key": {
+        "default": "Alt+G"
+      }
+    },
+    {
+      "action": "ToggleZoom",
+      "key": {
+        "default": "F1"
+      }
+    },
+    {
+      "action": "DuplicateRight",
+      "key": {
+        "default": "Alt+D"
+      }
+    },
+    {
+      "action": "AddupTextFields",
+      "key": {
+        "default": "Alt+A"
+      }
+    }
+  ]
+}

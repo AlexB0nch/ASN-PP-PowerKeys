@@ -16,8 +16,8 @@ module.exports = (env, argv) => {
   return {
     devtool: dev ? "source-map" : false,
     entry: {
-      taskpane: "./src/taskpane/index.tsx",
-      commands: "./src/commands/commands.ts",
+      taskpane: ["./src/taskpane/index.tsx", "./src/commands/commands.ts"],
+      commands: "./src/commands/commandsEntry.ts",
     },
     output: {
       path: path.resolve(__dirname, "dist"),
@@ -52,7 +52,10 @@ module.exports = (env, argv) => {
         chunks: ["commands"],
       }),
       new CopyWebpackPlugin({
-        patterns: [{ from: "assets", to: "assets" }],
+        patterns: [
+          { from: "assets", to: "assets" },
+          { from: "shortcuts.json", to: "shortcuts.json", noErrorOnMissing: false },
+        ],
       }),
     ],
     devServer: {

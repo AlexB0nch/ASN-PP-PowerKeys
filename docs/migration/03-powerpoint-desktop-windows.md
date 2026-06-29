@@ -12,7 +12,7 @@ Production-манифест **тот же**, что и для PowerPoint Online 
 | Установка | Sideload `manifest.prod.xml` | `.msi` / COM (не поддерживается в CI) |
 | UI | Кнопка **PowerKeys** на вкладке **Home** + task pane | Отдельная вкладка Ribbon (замысел README) |
 | Команды | **79** — клик в task pane | Не развивается |
-| Глобальные шорткаты | **См. раздел ниже** — сейчас не работают как в VSTO | Замысел COM-перехвата (не реализован в legacy) |
+| Глобальные шорткаты | **Tier 1** на PP Desktop Win 2601+ (S06-001); Web — task pane | Замысел COM-перехвата (не реализован в legacy) |
 | Интернет | Нужен (статика GitHub Pages + API на VDS) | Offline возможен |
 
 ---
@@ -107,56 +107,57 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 | «Cannot reach backend» | API недоступен / firewall | Проверить `/health` на VDS; интернет |
 | Панель пустая / ошибка загрузки | GitHub Pages недоступен | Проверить URL статики в браузере |
 | Команда «Not available on PowerPoint Web» | `support=None` (9 команд) | Ожидаемая деградация — используйте host (Print, Slide Show и т.д.) |
-| Alt+1 / Alt+D не работают | Глобальные шорткаты **не зарегистрированы** | См. [Глобальные шорткаты](#глобальные-шорткаты-windows) |
+| Alt+1 / Alt+D не работают | Web / Mac / PP &lt; 2601, или конфликт с native PP | На Desktop Win 2601+ — Tier 1 hotkeys; иначе task pane. См. [Глобальные шорткаты](#глобальные-шорткаты-windows) |
 
 ---
 
 ## Глобальные шорткаты (Windows)
 
-### Как сейчас (без доработок кода)
+### Как сейчас (после S06-001)
 
-**Глобальные клавиши (Alt+1, Alt+D, …) не перехватываются.**  
-Shortcut Manager в Settings **хранит и редактирует** привязки, но Office Web Add-in в текущей архитектуре **не регистрирует** их в PowerPoint.
+**Tier 1 глобальные клавиши** (14 шорткатов) зарегистрированы через Office **Keyboard Shortcuts API** на **PowerPoint Desktop Windows 2601+** (build ≥ 19628.20150):
 
-**Как работать сегодня:**
+| Клавиши | Команда |
+|---------|---------|
+| Alt+1 … Alt+8 | Align left … Distribute vertically |
+| Alt+B, Alt+H | Same width, Same height |
+| Alt+G | Fill color |
+| F1 | Toggle zoom fit (ограничение Office.js — см. «Not on Web») |
+| Alt+D, Alt+A | Duplicate right, Sum numeric fields (McKinsey preset) |
 
-1. Откройте task pane (**Home → PowerKeys**).
-2. Выделите фигуры в слайде.
-3. **Кликните команду** в каталоге (поиск по названию вверху панели).
+Требования в манифесте: `SharedRuntime 1.1` + `KeyboardShortcuts 1.1`, `shortcuts.json` через `ExtendedOverrides`, shared runtime на `taskpane.html`.
+
+**На PowerPoint Web / Mac / старом Desktop:** hotkeys **не активны** (graceful degradation) — используйте кнопки в task pane. Feature detection: `Office.context.requirements.isSetSupported('KeyboardShortcuts', '1.1')`.
+
+**Shortcut Manager** по-прежнему хранит привязки в `UserSettings`; синхронизация live hotkeys через `Office.actions.replaceShortcuts()` — **S06-002**.
+
+### Как работать
+
+1. Установите актуальный `manifest.prod.xml` (см. [Быстрая установка](#быстрая-установка-production)).
+2. **Desktop Windows 2601+:** выделите фигуры → нажмите Alt+1, Alt+D и т.д.
+3. **Web / иные платформы:** откройте task pane (**Home → PowerKeys**) → кликните команду в каталоге.
 4. Профили McKinsey/BCG и snap-to-grid — в **Settings** внутри панели.
 
-Это ограничение **Office Web Add-in**, не баг установки. На PowerPoint **Desktop** поведение то же, что в браузере.
+### История / ограничения
 
-### Как сделать глобальные шорткаты (пути)
+До Sprint 06 глобальные клавиши не перехватывались — только клики в task pane. Сейчас Tier 1 покрывает defaults из `CommandCatalog` + McKinsey extras; остальные bindings и BCG-only keys — в S06-002.
 
-#### Путь A — официальный API Microsoft (рекомендуемый для продукта, **ещё не реализован**)
+**Ограничения API:**
 
-Microsoft поддерживает **custom keyboard shortcuts** для Office Add-ins в **PowerPoint Desktop on Windows**:
+- Сочетания только с **Ctrl / Alt / Shift** (как в guidelines Microsoft); F1 — исключение для ToggleZoom.
+- Возможны конфликты с **встроенными** шорткатами PowerPoint (диалог Microsoft).
+- Каждое действие объявлено в `shortcuts.json` — не «любая клавиша на все 79 команд» без регистрации.
+- Settings-команды (`OpenShortcutManager`, `OpenColorScheme`, `ResetToDefaults`) **не** имеют глобальных hotkeys в S06-001.
 
-| Требование | Значение |
-|------------|----------|
-| PowerPoint Windows | **Version 2601** (Build 19628.20150) или новее |
-| Requirement set | `KeyboardShortcuts 1.1` + **`SharedRuntime 1.1`** |
-| Конфигурация | Расширения в манифесте + `shortcuts.json` (или `ExtendedOverrides`) |
-| Код | `Office.actions.associate(actionId, handler)` + опционально `Office.actions.replaceShortcuts()` для синхронизации с UserSettings |
+### Как было (до S06-001)
 
-Документация: [Add custom keyboard shortcuts to your Office Add-ins](https://learn.microsoft.com/en-us/office/dev/add-ins/design/keyboard-shortcuts).
+Глобальные клавиши не перехватывались — только клики в task pane на всех платформах.
 
-**Что потребует доработки в репозитории (кандидат Sprint 06):**
+#### Дальнейшая работа (S06-002+)
 
-1. Миграция AddIn на **shared runtime** (сейчас task pane + отдельный `commands.html`).
-2. Объявление action id для команд в `shortcuts.json` / manifest extensions.
-3. Связка `Office.actions.associate` → вызов существующего `runCommand`.
-4. При Save в Shortcut Manager — `Office.actions.replaceShortcuts()` из сохранённых bindings (где API доступен).
-5. Проверка конфликтов: `Office.actions.areShortcutsInUse()`.
-
-**Ограничения API (даже после реализации):**
-
-- Сочетания только с **Ctrl / Alt / Shift** (как в guidelines Microsoft).
-- Нужно избегать конфликтов с **встроенными** шорткатами PowerPoint.
-- Каждое действие должно быть объявлено в манifest/JSON — не «любая клавиша на все 79 команд» без регистрации.
-- На **PowerPoint Web** и **Mac** поддержка keyboard shortcuts **ограничена или отсутствует** (см. таблицы в MS docs) — Desktop Windows будет основной платформой для hotkeys.
-- Фокус внутри task pane: часть комбинаций (Ctrl+Space и др.) зарезервирована для accessibility.
+- `Office.actions.replaceShortcuts()` при Save в Shortcut Manager (все bindings из UserSettings).
+- `Office.actions.areShortcutsInUse()` для проверки конфликтов.
+- BCG-only keys и остальные команды вне Tier 1.
 
 #### Путь B — VSTO legacy (не рекомендуется)
 

@@ -213,10 +213,8 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
 
         <MessageBar intent="info">
           <MessageBarBody>
-            Global keyboard shortcuts (Alt+1, Alt+D, …) are not active yet — use task pane
-            buttons. Bindings below are stored for reference; registration via Office
-            Keyboard Shortcuts API is planned (Windows Desktop PowerPoint 2601+). See repo
-            docs/migration/03-powerpoint-desktop-windows.md.
+            Hotkeys active on PowerPoint Desktop Windows (version 2601+). On Web, use task pane
+            buttons.
           </MessageBarBody>
         </MessageBar>
 

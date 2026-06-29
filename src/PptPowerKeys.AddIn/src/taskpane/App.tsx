@@ -16,6 +16,12 @@ import {
 } from "@fluentui/react-components";
 import { api } from "../services/api";
 import { CommandCategory, CommandDescriptor, OfficeJsSupport, UserSettings } from "../services/types";
+import {
+  getCatalog,
+  getUserSettings,
+  setSettingsActions,
+  updateUserSettings,
+} from "../runtime/commandContext";
 import { runCommand, CommandOutcome, outcomeSuccess } from "./runCommand";
 import { ColorPickerPanel, ColorPickerPanelHandle } from "./ColorPickerPanel";
 import { SettingsPanel, SettingsPanelHandle } from "./SettingsPanel";
@@ -111,10 +117,22 @@ export const App: React.FC = () => {
   ]);
 
   React.useEffect(() => {
+    const cached = getCatalog();
+    if (cached.length > 0) {
+      setCommands([...cached]);
+      const settings = getUserSettings();
+      if (settings) {
+        setUserSettings(settings);
+      }
+      setLoading(false);
+      return;
+    }
+
     Promise.all([api.getCommands(), api.getSettings()])
       .then(([c, settings]) => {
         setCommands(c);
         setUserSettings(settings);
+        updateUserSettings(settings);
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)))
       .finally(() => setLoading(false));
@@ -132,6 +150,7 @@ export const App: React.FC = () => {
       resetToDefaults: async () => {
         const reset = await api.resetSettings();
         setUserSettings(reset);
+        updateUserSettings(reset);
         await settingsPanelRef.current?.reload();
         return outcomeSuccess("Settings reset to defaults.");
       },
@@ -148,6 +167,10 @@ export const App: React.FC = () => {
     }),
     [],
   );
+
+  React.useEffect(() => {
+    setSettingsActions(settingsActions);
+  }, [settingsActions]);
 
   const layoutOptions = React.useMemo(
     () => ({ snapToGrid: userSettings?.snapToGrid ?? false }),
@@ -253,7 +276,10 @@ export const App: React.FC = () => {
                     ref={settingsPanelRef}
                     commands={commands}
                     onFeedback={setStatus}
-                    onSettingsUpdated={setUserSettings}
+                    onSettingsUpdated={(settings) => {
+                      setUserSettings(settings);
+                      updateUserSettings(settings);
+                    }}
                   />
                 </>
               )}
