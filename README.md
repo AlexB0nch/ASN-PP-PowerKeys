@@ -326,10 +326,10 @@ _(Не в ShortcutTools, но логично добавить)_
 - [x] Smart Duplicate gap memory
 - [x] Sideload: PowerPoint Online + **Desktop Windows/Mac** (`manifest.prod.xml`)
 
-### Backlog (Sprint 06+, не начато)
+### Sprint 06 (в работе) + backlog
 
-- [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
-- [ ] Import/export settings JSON
+- [x] **Глобальные шорткаты** — Shared Runtime + `replaceShortcuts` (S06-001/002, Windows Desktop PP 2601+)
+- [ ] Import/export settings JSON (S06-003)
 - [ ] Color Picker: eyedropper / HEX input
 - [ ] Object Statistics MIN/MAX/AVG UI (Addup в status bar уже есть)
 - [ ] Snap-to-nearest-object при drag

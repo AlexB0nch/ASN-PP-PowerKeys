@@ -1,6 +1,6 @@
 # Sprint 06 — Backlog
 
-> Architect декомпозировал Sprint 06 (2026-06-29). См. [`ARCHITECT-KICKOFF.md`](./ARCHITECT-KICKOFF.md).
+> Architect декомпозировал Sprint 06 (2026-06-29). **P1 Done** (S06-001/002). Следующая: **S06-003**.
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
@@ -17,10 +17,10 @@
 3. **S06-003 / S06-004** — P2 stretch после P1
 4. **S06-005** — P3 deferred из Sprint 04
 
-## Черновик S06-002 (постановка после merge S06-001)
+## Черновик S06-003 (import/export settings JSON)
 
-- Объявить runtime actions для **всех 79** CommandIds в manifest / shortcuts schema
-- On Settings Save + on task pane load: `Office.actions.replaceShortcuts(map from UserSettings.shortcuts)`
-- `Office.actions.areShortcutsInUse()` → warning в Shortcut Manager (non-blocking)
-- Consulting profile apply (McKinsey/BCG) → `replaceShortcuts` после Save
-- 9 `support=None` команд — handler вызывает existing unsupported path через `runCommand`
+- **Export:** скачать `.json` текущих `UserSettings` (profile, snapToGrid, shortcuts) из Settings panel
+- **Import:** выбрать файл → Core validate (CommandId in catalog, keys normalize) → editor → Save → `replaceShortcuts`
+- Формат: тот же JSON что `UserSettings.Serialize` (VSTO parity); optional `schemaVersion: 1`
+- Api: `POST /api/settings/import` validate-only или validate+merge; export может быть client-only blob
+- Anti-scope: encrypt, cross-device sync, import catalog/commands
