@@ -95,6 +95,7 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
         {
             profile = "Custom",
             snapToGrid = true,
+            addupDisplayMode = "all",
             shortcuts = new[] { new { commandId = "AlignLeft", keys = "Alt+1" } },
         });
         put.EnsureSuccessStatusCode();
@@ -104,6 +105,44 @@ public class ApiIntegrationTests : IClassFixture<TestWebApplicationFactory>
 
         var loaded = await client.GetFromJsonAsync<JsonElement>("/api/settings");
         Assert.True(loaded.GetProperty("snapToGrid").GetBoolean());
+    }
+
+    [Fact]
+    public async Task Settings_AddupDisplayMode_RoundTrips()
+    {
+        var client = _factory.CreateClient();
+
+        var put = await client.PutAsJsonAsync("/api/settings", new
+        {
+            profile = "Custom",
+            addupDisplayMode = "average",
+            shortcuts = new[] { new { commandId = "AlignLeft", keys = "Alt+1" } },
+        });
+        put.EnsureSuccessStatusCode();
+
+        var saved = await put.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("average", saved.GetProperty("addupDisplayMode").GetString());
+
+        var loaded = await client.GetFromJsonAsync<JsonElement>("/api/settings");
+        Assert.Equal("average", loaded.GetProperty("addupDisplayMode").GetString());
+    }
+
+    [Fact]
+    public async Task Settings_Reset_DefaultsAddupDisplayModeToAll()
+    {
+        var client = _factory.CreateClient();
+        await client.PutAsJsonAsync("/api/settings", new
+        {
+            profile = "Custom",
+            addupDisplayMode = "max",
+            shortcuts = new[] { new { commandId = "AlignLeft", keys = "Alt+1" } },
+        });
+
+        var reset = await client.PostAsync("/api/settings/reset", null);
+        reset.EnsureSuccessStatusCode();
+
+        var settings = await reset.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("all", settings.GetProperty("addupDisplayMode").GetString());
     }
 
     [Fact]

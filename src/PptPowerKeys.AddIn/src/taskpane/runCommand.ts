@@ -37,6 +37,7 @@ import {
 } from "../office/formatColorState";
 import { isUnsupportedWebCommand, runUnsupportedWebCommand } from "./unsupportedWebCommands";
 import { getDuplicateGap, setDuplicateGap } from "../office/duplicateGapMemory";
+import { formatAddupStatus } from "../text/addupStatus";
 
 export type CommandOutcomeKind = "success" | "unsupported" | "error";
 
@@ -259,9 +260,8 @@ async function runHostScript(
     case "AddupTextFields": {
       const texts = await getSelectedShapeTexts();
       const stats = await api.addup(texts);
-      return outcomeSuccess(
-        `Sum ${stats.sum} · avg ${stats.average} · min ${stats.min} · max ${stats.max} (${stats.count} numbers).`,
-      );
+      const mode = layoutOptions?.addupDisplayMode ?? "all";
+      return outcomeSuccess(formatAddupStatus(stats, mode));
     }
     case "ToggleFillBlackWhite": {
       const count = await toggleFillBlackWhite();

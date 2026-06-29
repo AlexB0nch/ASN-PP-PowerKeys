@@ -22,6 +22,11 @@ import {
 import { CommandOutcome, outcomeError, outcomeSuccess } from "./runCommand";
 import { syncKeyboardShortcuts } from "../runtime/syncKeyboardShortcuts";
 import { ShortcutManager } from "./ShortcutManager";
+import {
+  ADDUP_DISPLAY_MODE_DEFAULT,
+  ADDUP_DISPLAY_MODE_OPTIONS,
+  normalizeAddupDisplayMode,
+} from "../text/addupStatus";
 
 const CUSTOM_PROFILE = "Custom";
 const SETTINGS_SCHEMA_VERSION = 1;
@@ -47,6 +52,7 @@ function buildSettingsExportPayload(settings: UserSettings): string {
       schemaVersion: SETTINGS_SCHEMA_VERSION,
       profile: settings.profile,
       snapToGrid: settings.snapToGrid ?? false,
+      addupDisplayMode: settings.addupDisplayMode ?? ADDUP_DISPLAY_MODE_DEFAULT,
       shortcuts: settings.shortcuts,
     },
     null,
@@ -175,6 +181,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         profile,
         shortcuts: cloneShortcuts(preset.shortcuts),
         snapToGrid: settings.snapToGrid,
+        addupDisplayMode: settings.addupDisplayMode,
       });
       setPresetWarning(true);
       setImportWarning(false);
@@ -294,6 +301,10 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
 
     const profileOptions = presets.profiles;
     const selectedProfile = normalizeProfile(settings.profile, presets);
+    const selectedAddupMode = normalizeAddupDisplayMode(settings.addupDisplayMode);
+    const selectedAddupLabel =
+      ADDUP_DISPLAY_MODE_OPTIONS.find((option) => option.value === selectedAddupMode)?.label ??
+      "All metrics";
 
     return (
       <div className={styles.root} id="settings-panel">
@@ -356,6 +367,29 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
               )
             }
           />
+        </div>
+
+        <div className={styles.row}>
+          <Caption1>Object statistics display</Caption1>
+          <Dropdown
+            size="small"
+            selectedOptions={[selectedAddupMode]}
+            value={selectedAddupLabel}
+            onOptionSelect={(_e, data) => {
+              const mode = data.optionValue;
+              if (mode) {
+                setSettings((prev) =>
+                  prev ? { ...prev, addupDisplayMode: normalizeAddupDisplayMode(mode) } : prev,
+                );
+              }
+            }}
+          >
+            {ADDUP_DISPLAY_MODE_OPTIONS.map((option) => (
+              <Option key={option.value} value={option.value} text={option.label}>
+                {option.label}
+              </Option>
+            ))}
+          </Dropdown>
         </div>
 
         <div className={styles.row} ref={shortcutsRef} id="settings-shortcuts">

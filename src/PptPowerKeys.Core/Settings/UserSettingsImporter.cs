@@ -1,5 +1,6 @@
 using System.Text.Json;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Text;
 
 namespace PptPowerKeys.Core.Settings;
 
@@ -85,10 +86,25 @@ public static class UserSettingsImporter
             });
         }
 
+        var addupDisplayMode = AddupStatusFormatter.ModeAll;
+        if (!string.IsNullOrWhiteSpace(document.AddupDisplayMode))
+        {
+            var rawMode = document.AddupDisplayMode.Trim();
+            if (AddupStatusFormatter.IsValidMode(rawMode))
+            {
+                addupDisplayMode = AddupStatusFormatter.NormalizeMode(rawMode);
+            }
+            else
+            {
+                warnings.Add(AddupStatusFormatter.UnknownModeWarning);
+            }
+        }
+
         var settings = new UserSettings
         {
             Profile = string.IsNullOrWhiteSpace(document.Profile) ? "Custom" : document.Profile.Trim(),
             SnapToGrid = document.SnapToGrid,
+            AddupDisplayMode = addupDisplayMode,
             Shortcuts = shortcuts,
         };
 
@@ -102,6 +118,8 @@ public static class UserSettingsImporter
         public string? Profile { get; set; }
 
         public bool SnapToGrid { get; set; }
+
+        public string? AddupDisplayMode { get; set; }
 
         public List<SettingsImportShortcut>? Shortcuts { get; set; }
     }

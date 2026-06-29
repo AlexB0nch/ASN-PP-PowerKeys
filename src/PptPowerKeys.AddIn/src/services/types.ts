@@ -63,11 +63,13 @@ export interface UserSettings {
   profile: string;
   shortcuts: ShortcutBinding[];
   snapToGrid?: boolean;
+  addupDisplayMode?: string;
 }
 
 export interface LayoutOptions {
   snapToGrid?: boolean;
   gridStepCm?: number;
+  addupDisplayMode?: string;
 }
 
 export interface ProfilePresetEntry {
