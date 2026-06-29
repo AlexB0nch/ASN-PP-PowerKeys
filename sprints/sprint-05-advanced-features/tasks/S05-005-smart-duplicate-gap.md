@@ -8,8 +8,9 @@
 | **Task ID** | `S05-005` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + AddIn + Tests |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | #41 |
+| **PR** | #42 |
 
 ## Цель
 
@@ -109,15 +110,22 @@ setDuplicateGap(descriptor.id, gap);
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] `DuplicationEngine.InferGap` + unit-тесты (round-trip с `ComputeDuplicate`).
-2. [ ] `duplicateGapMemory.ts` — get/set per `commandId`, in-memory.
-3. [ ] `Duplicate*` в `runCommand.ts` передают remembered gap; после success обновляют память.
-4. [ ] Первый duplicate в направлении — gap `0` (поведение как до задачи).
-5. [ ] Второй duplicate того же направления — тот же gap (проверка через unit `InferGap` + manual).
-6. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-7. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-8. [ ] PR: `cursor/S05-005-smart-duplicate-gap-<suffix>`, `Closes #<issue>`.
-9. [ ] `.github/review/CHECKLIST.md` пройден; `CommandCatalog` **не** менялся (79 команд).
+1. [x] `DuplicationEngine.InferGap` + unit-тесты (round-trip с `ComputeDuplicate`).
+2. [x] `duplicateGapMemory.ts` — get/set per `commandId`, in-memory.
+3. [x] `Duplicate*` в `runCommand.ts` передают remembered gap; после success обновляют память.
+4. [x] Первый duplicate в направлении — gap `0` (поведение как до задачи).
+5. [x] Второй duplicate того же направления — тот же gap (проверка через unit `InferGap` + manual).
+6. [x] `dotnet test PptPowerKeys.sln` — зелёный (114 passed).
+7. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+8. [x] PR: `cursor/S05-005-smart-duplicate-gap-c495`, `Closes #41`.
+9. [x] `.github/review/CHECKLIST.md` пройден; `CommandCatalog` **не** менялся (79 команд).
+
+## Приёмка (architect, 2026-06-29)
+- PR #42 merged (`73742fa`). Scope соблюдён: Core `InferGap` + AddIn gap memory + runCommand wire; CommandCatalog/VstoLegacy/Api без изменений.
+- CI зелёный. Локально: 114 dotnet tests, typecheck, validate:prod — OK.
+- Gap memory per CommandId, in-memory task pane scope; negative gap clamped to 0.
+- CHECKLIST: scope OK; 79 команд без изменений.
+- Ручная проверка PowerPoint Online — post-merge (Pages + VDS).
 
 ## Зависимости
 

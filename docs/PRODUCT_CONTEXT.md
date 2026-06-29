@@ -71,12 +71,15 @@ VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
 **Sprint 04 завершён (2026-06-28):** S04-001…003 Done (PR #29–#31). Smart Color Picker.
-**Sprint 05 — P1+P2 Done (2026-06-29):** S05-001 Done (PR #32) Consulting profiles McKinsey/BCG;
+**Sprint 05 завершён (2026-06-29):** S05-001 Done (PR #32) Consulting profiles McKinsey/BCG;
 S05-002 Done — snap-to-grid 0.1 cm (PR #34); S05-003 Done — `MoveSlidesToBackup` (PR #36);
-S05-004 Done — multi-slide paste/remove (PR #39). Optional stretch: S05-005 Smart Duplicate gap.
+S05-004 Done — multi-slide paste/remove (PR #39); S05-005 Done — Smart Duplicate gap memory (PR #42).
 Anti-scope: snap-to-nearest-object, slide sections hide/show.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S05-005:** Smart Duplicate gap memory — per-`CommandId` in-memory state в task pane (`duplicateGapMemory.ts`);
+  первый duplicate в направлении gap=0, повторный — remembered gap; `DuplicationEngine.InferGap` в Core (inverse
+  of `ComputeDuplicate`); status bar «(gap X pt)» при gap>0. Без localStorage/UserSettings; каталог 79 команд без изменений.
 - **S05-004:** `PasteShapeToSelectedSlides` / `RemoveShapeFromSelectedSlides` (78–79-я команды) — HostScript:
   `pasteShapeToSelectedSlides()` — ≥2 slides, 1 source shape, skip source slide, same geometry;
   `cloneShapeOnSlide(..., crossSlide=true)` forces recreate path on target slide (no copyTo/duplicate cross-slide);
