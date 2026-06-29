@@ -71,6 +71,8 @@ public enum CommandIds
     BringToFront,
     BringForward,
     SendBackward,
+    PasteShapeToSelectedSlides,
+    RemoveShapeFromSelectedSlides,
 
     // Format
     FillColor,

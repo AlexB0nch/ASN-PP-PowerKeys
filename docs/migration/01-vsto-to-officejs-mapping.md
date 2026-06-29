@@ -67,6 +67,8 @@
 | Group / Ungroup | `ShapeRange.Group` | `shapes.addGroup` / `group.ungroup` | ✅/⚠️ | HostScript |
 | Regroup | `ShapeRange.Regroup` | — | ❌ None | HostScript |
 | BringToFront / SendToBack / Forward / Backward | `Shape.ZOrder` | `shape.setZOrder(...)` | ✅ Full | HostScript |
+| PasteShapeToSelectedSlides | — (README parity) | `getSelectedSlides` + `cloneShapeOnSlide` per target | ⚠️ Partial | HostScript |
+| RemoveShapeFromSelectedSlides | — (README parity) | iterate slides + `shape.name` match + `delete` | ⚠️ Partial | HostScript |
 
 ### Format
 

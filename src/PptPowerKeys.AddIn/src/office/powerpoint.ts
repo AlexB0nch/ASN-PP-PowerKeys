@@ -8,22 +8,23 @@ type CloneCapableShape = PowerPoint.Shape & {
   duplicate?: () => PowerPoint.Shape;
 };
 
-/** Clones a shape on the same slide using native APIs when available, otherwise recreates basic types. */
+/** Clones a shape using native APIs when available, otherwise recreates basic types on {@link targetSlide}. */
 async function cloneShapeOnSlide(
   context: PowerPoint.RequestContext,
   source: PowerPoint.Shape,
-  slide: PowerPoint.Slide,
+  targetSlide: PowerPoint.Slide,
+  crossSlide = false,
 ): Promise<PowerPoint.Shape> {
   const cloneApi = source as CloneCapableShape;
 
-  if (typeof cloneApi.copyTo === "function") {
+  if (!crossSlide && typeof cloneApi.copyTo === "function") {
     const copy = cloneApi.copyTo();
     copy.load("id");
     await context.sync();
     return copy;
   }
 
-  if (typeof cloneApi.duplicate === "function") {
+  if (!crossSlide && typeof cloneApi.duplicate === "function") {
     const copy = cloneApi.duplicate();
     copy.load("id");
     await context.sync();
@@ -39,7 +40,7 @@ async function cloneShapeOnSlide(
     source.textFrame.textRange.load("text");
     await context.sync();
     const text = source.textFrame.textRange.text ?? "";
-    const copy = slide.shapes.addTextBox(text);
+    const copy = targetSlide.shapes.addTextBox(text);
     copy.width = source.width;
     copy.height = source.height;
     copy.left = source.left;
@@ -50,7 +51,7 @@ async function cloneShapeOnSlide(
   }
 
   if (shapeType === PowerPoint.ShapeType.line) {
-    const copy = slide.shapes.addLine();
+    const copy = targetSlide.shapes.addLine();
     copy.left = source.left;
     copy.top = source.top;
     copy.width = source.width;
@@ -61,7 +62,7 @@ async function cloneShapeOnSlide(
   }
 
   if (shapeType === PowerPoint.ShapeType.geometricShape) {
-    const copy = slide.shapes.addGeometricShape(PowerPoint.GeometricShapeType.rectangle);
+    const copy = targetSlide.shapes.addGeometricShape(PowerPoint.GeometricShapeType.rectangle);
     copy.left = source.left;
     copy.top = source.top;
     copy.width = source.width;
@@ -820,5 +821,131 @@ export async function moveSelectedSlidesToBackup(): Promise<number> {
     }
 
     return moveCount;
+  });
+}
+
+const UNSUPPORTED_PASTE_SHAPE_TYPE =
+  "Shape paste is not supported for this shape type on PowerPoint Web.";
+
+function rethrowPasteShapeError(err: unknown): never {
+  if (
+    err instanceof Error &&
+    err.message.includes("not supported for this shape type")
+  ) {
+    throw new Error(UNSUPPORTED_PASTE_SHAPE_TYPE);
+  }
+  throw err;
+}
+
+/**
+ * Clones the single selected shape on the active slide onto every other selected slide,
+ * preserving left/top/width/height. Skips the source slide when it is part of the selection.
+ */
+export async function pasteShapeToSelectedSlides(): Promise<number> {
+  return PowerPoint.run(async (context) => {
+    const selectedSlides = context.presentation.getSelectedSlides();
+    selectedSlides.load("items");
+    await context.sync();
+
+    if (selectedSlides.items.length < 2) {
+      throw new Error("Select two or more slides first.");
+    }
+
+    const selectedShapes = context.presentation.getSelectedShapes();
+    selectedShapes.load("items/id,items/left,items/top,items/width,items/height");
+    await context.sync();
+
+    if (selectedShapes.items.length !== 1) {
+      throw new Error("Select exactly one shape on the active slide first.");
+    }
+
+    const sourceShape = selectedShapes.items[0];
+    const activeSlide = selectedSlides.getItemAt(0);
+    activeSlide.load("id");
+    await context.sync();
+    const sourceSlideId = activeSlide.id;
+
+    for (const slide of selectedSlides.items) {
+      slide.load("id");
+    }
+    await context.sync();
+
+    const sourceLeft = sourceShape.left;
+    const sourceTop = sourceShape.top;
+    const sourceWidth = sourceShape.width;
+    const sourceHeight = sourceShape.height;
+
+    let pasted = 0;
+
+    for (const targetSlide of selectedSlides.items) {
+      if (targetSlide.id === sourceSlideId) {
+        continue;
+      }
+
+      try {
+        const copy = await cloneShapeOnSlide(context, sourceShape, targetSlide, true);
+        copy.left = sourceLeft;
+        copy.top = sourceTop;
+        copy.width = sourceWidth;
+        copy.height = sourceHeight;
+        pasted++;
+      } catch (err) {
+        rethrowPasteShapeError(err);
+      }
+    }
+
+    await context.sync();
+    return pasted;
+  });
+}
+
+/**
+ * Deletes every shape on each selected slide whose name matches the single selected shape
+ * on the active slide (case-sensitive). Returns aggregate counts for the status bar.
+ */
+export async function removeShapeFromSelectedSlides(): Promise<{
+  slidesProcessed: number;
+  shapesRemoved: number;
+}> {
+  return PowerPoint.run(async (context) => {
+    const selectedSlides = context.presentation.getSelectedSlides();
+    selectedSlides.load("items");
+    await context.sync();
+
+    if (selectedSlides.items.length === 0) {
+      throw new Error("Select one or more slides first.");
+    }
+
+    const selectedShapes = context.presentation.getSelectedShapes();
+    selectedShapes.load("items/name");
+    await context.sync();
+
+    if (selectedShapes.items.length !== 1) {
+      throw new Error("Select exactly one shape on the active slide first.");
+    }
+
+    const targetName = selectedShapes.items[0].name ?? "";
+    if (!targetName) {
+      throw new Error("Selected shape has no name. Name the shape first.");
+    }
+
+    let shapesRemoved = 0;
+    const slidesProcessed = selectedSlides.items.length;
+
+    for (const slide of selectedSlides.items) {
+      const shapes = slide.shapes;
+      shapes.load("items/name");
+      await context.sync();
+
+      for (const shape of shapes.items) {
+        if (shape.name === targetName) {
+          shape.delete();
+          shapesRemoved++;
+        }
+      }
+    }
+
+    await context.sync();
+    return { slidesProcessed, shapesRemoved };
   });
 }
