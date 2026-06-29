@@ -9,9 +9,17 @@
 с объектами, форматирование, текст, слайды). Продуктовая спецификация функционала — в `README.md`.
 
 Проект **мигрирует с Windows-only VSTO на кроссплатформенный Office Web Add-in**
-(Windows / Mac / Web / iPad). Детали миграции — в `docs/migration/`.
+(Windows / Mac / Web / iPad). Для **LTSC / perpetual Office** без sideload Web Add-in — **вторая официальная line**
+`PptPowerKeys.Windows` (VSTO + Core in-process). См. [`docs/migration/04-powerpoint-ltsc-windows-native.md`](migration/04-powerpoint-ltsc-windows-native.md).
 
-## 2. Архитектура (`docs/migration/00-architecture.md`)
+## 2. Product lines
+
+| Line | Платформа | Доставка | Проекты |
+|------|-----------|----------|---------|
+| **A — Web Add-in (primary)** | M365, Online, Desktop, Mac | `manifest.prod.xml` | AddIn + Api + Core |
+| **B — Windows Native (LTSC)** | Windows LTSC / perpetual | MSI / ClickOnce (S11) | `PptPowerKeys.Windows` + Core (S07+) |
+
+### Архитектура Line A (`docs/migration/00-architecture.md`)
 ```
 PowerPoint (Desktop/Web/Mac/iPad)
   Task Pane (React + Fluent UI + Office.js)   → src/PptPowerKeys.AddIn
@@ -26,10 +34,10 @@ PowerPoint (Desktop/Web/Mac/iPad)
 | `src/PptPowerKeys.Api` | ASP.NET Core Minimal API + Swagger. Тонкий слой поверх Core. |
 | `src/PptPowerKeys.Tests` | xUnit: тесты Core + интеграционные тесты API. Не требуют PowerPoint. |
 | `src/PptPowerKeys.AddIn` | Office Web Add-in: TypeScript + React + Fluent UI + Office.js. |
-| `src/PptPowerKeys.VstoLegacy*` | **Заморожен** (Windows-only VSTO). Новые фичи не добавляются (`FROZEN.md`). |
+| `src/PptPowerKeys.VstoLegacy*` | **Заморожен** scaffold. **Не** развивать — новый Windows host: `PptPowerKeys.Windows` (S07+). |
 
 Корневой `PptPowerKeys.sln` = Core + Api + Tests (кроссплатформенно).
-`src/PptPowerKeys.VstoLegacy.sln` — отдельный legacy-solution (только Windows + VS + VSTO).
+`PptPowerKeys.Windows.sln` — planned S07 (Windows + VSTO). `VstoLegacy.sln` — исторический reference only.
 
 ## 3. Инварианты / правила (нарушать нельзя)
 - **Граница `ShapeBounds`** (`{id,left,top,width,height}` в points): host читает геометрию через Office.js →
@@ -81,7 +89,14 @@ S06-002 Done (PR #49) — `replaceShortcuts` sync с UserSettings (76 hotkey-eli
 S06-003 Done — import/export settings JSON (PR #52). S06-004 Done — Object Statistics MIN/MAX/AVG UI (PR #55).
 S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
+**Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
+Core in-process) для LTSC/perpetual Office. Sprint 07 next — foundation. См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **ADR-001 / LTSC line:** Вторая официальная product line для PowerPoint LTSC/perpetual Windows — **Variant D**
+  (VSTO host + in-process Core); не PPAM/VBA; не размораживать `VstoLegacy*`; новый проект `PptPowerKeys.Windows`;
+  полный паритет 79 cmd + unlock 9 `OfficeJsSupport.None`; hotkeys via native hook (S11); Track 0 doc (S07-004).
+  Docs: `docs/migration/04`, `docs/adr/ADR-001`.
 - **S06-005:** Color Picker HEX + eyedropper — `isValidHex()` в AddIn (mirror `ThemeColor.IsValidHex`);
   `ColorPickerPanel` Custom HEX input (live preview, Enter/Set, inline error); **pick from shape** (path A) —
   `readColorFromSelection(fill|line|text)` читает цвет первой выделенной фигуры; **screen pick** (path B, bonus) —

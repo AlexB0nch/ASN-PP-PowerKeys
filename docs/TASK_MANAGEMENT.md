@@ -38,7 +38,17 @@
 
 ## Спринты (`sprints/`)
 - `sprint-XX-*/goals.md` — цели; `backlog.md` — задачи со статусами и ссылками на Issue/PR; `retrospective.md` — итоги.
+- **Epic multi-sprint:** `epic-ltsc-windows-native/ROADMAP.md` (S07–S11, Product Line B).
 - Шаблон задачи — `sprints/TASK_TEMPLATE.md`.
+
+## Product Line B (LTSC Windows)
+
+| Компонент | Путь | CI |
+|-----------|------|-----|
+| `PptPowerKeys.Windows` | `src/PptPowerKeys.Windows/` (S07-002+) | Windows + VS + VSTO (отдельный workflow позже) |
+| Shared Core | `src/PptPowerKeys.Core` (netstandard2.0 + net8.0) | `dotnet test PptPowerKeys.sln` (Linux) |
+
+Builder для Windows-задач: сборка/ручной QA на Windows; Core-only задачи (S07-001) — стандартный Linux CI.
 
 ## GitHub как место описания задач
 - Задачи — **Issues** по `.github/ISSUE_TEMPLATE/task.yml` (Sprint, Task ID, проект/компонент, scope, критерии приёмки, зависимости).

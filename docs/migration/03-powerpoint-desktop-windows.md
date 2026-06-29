@@ -39,6 +39,9 @@ Production-манифест **тот же**, что и для PowerPoint Online 
    ```
    Не используйте `manifest.xml` / `manifest.dev.xml` — там `localhost`.
 
+> **LTSC / perpetual Office без «Upload My Add-in»:** см. Track 0 в
+> [`04-powerpoint-ltsc-windows-native.md`](./04-powerpoint-ltsc-windows-native.md) или product line B (S07+).
+
 3. **Удалите старую версию** (если ставили раньше):
    - PowerPoint → **Insert** → **My Add-ins**
    - Найдите **PptPowerKeys** / **PptPowerKeys (Web)** → **Remove**  

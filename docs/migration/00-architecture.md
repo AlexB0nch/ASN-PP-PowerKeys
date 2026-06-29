@@ -28,10 +28,11 @@ PowerPoint (Desktop / Web / Mac / iPad)
 | `src/PptPowerKeys.Api` | ASP.NET Core Minimal API + Swagger. Тонкий слой поверх Core. |
 | `src/PptPowerKeys.Tests` | xUnit. Тесты Core + интеграционные тесты API. **Не требуют PowerPoint.** |
 | `src/PptPowerKeys.AddIn` | Office Web Add-in: TypeScript + React + Fluent UI + Office.js. |
-| `src/PptPowerKeys.VstoLegacy*` | Замороженный старый VSTO-проект (Windows-only). Не развивается. |
+| `src/PptPowerKeys.VstoLegacy*` | Замороженный старый VSTO-проект (Windows-only). **Не развивается.** |
+| `src/PptPowerKeys.Windows` | **Planned S07+** — LTSC/perpetual line (VSTO + Core). См. [`04-powerpoint-ltsc-windows-native.md`](./04-powerpoint-ltsc-windows-native.md). |
 
 Корневой `PptPowerKeys.sln` объединяет .NET 8 проекты (Core + Api + Tests).
-`src/PptPowerKeys.VstoLegacy.sln` — отдельный solution для legacy (открывается только на Windows с VS + VSTO).
+`PptPowerKeys.Windows.sln` — planned (Windows + VSTO). `VstoLegacy.sln` — historical reference only.
 
 ## Ключевой архитектурный приём: граница `ShapeBounds`
 

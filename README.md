@@ -8,6 +8,7 @@ PowerPoint plugin. Shortcuts
 > | Действие | Документ |
 > |----------|----------|
 > | **Установить на PowerPoint Desktop (Windows)** | [`docs/migration/03-powerpoint-desktop-windows.md`](docs/migration/03-powerpoint-desktop-windows.md) |
+| **LTSC / perpetual Office (Windows native line)** | [`docs/migration/04-powerpoint-ltsc-windows-native.md`](docs/migration/04-powerpoint-ltsc-windows-native.md) |
 > | Установить в PowerPoint Online | [`docs/migration/02-powerpoint-web-deploy.md`](docs/migration/02-powerpoint-web-deploy.md) |
 > | Архитектура и карта VSTO → Office.js | [`docs/migration/00-architecture.md`](docs/migration/00-architecture.md) |
 >
@@ -330,7 +331,14 @@ _(Не в ShortcutTools, но логично добавить)_
 - [x] Color Picker: eyedropper / HEX input
 - [x] Sideload: PowerPoint Online + **Desktop Windows/Mac** (`manifest.prod.xml`)
 
-### Backlog (Sprint 07+, не начато)
+### Backlog
+
+**Product Line B — LTSC Windows (Sprint 07–11, planned):**
+
+- [ ] **PptPowerKeys.Windows** — VSTO/COM + Core in-process для LTSC/perpetual Office ([`docs/migration/04-powerpoint-ltsc-windows-native.md`](docs/migration/04-powerpoint-ltsc-windows-native.md))
+- [ ] Sprint 07: Core multitarget, VSTO bootstrap, AlignLeft POC
+
+**Web Add-in (Line A) — stretch:**
 
 - [ ] Snap-to-nearest-object при drag
 - [ ] Slide Backup: named section + hide/show (нет Office.js API)

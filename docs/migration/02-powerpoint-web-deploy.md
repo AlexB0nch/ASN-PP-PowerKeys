@@ -26,7 +26,8 @@
 | **Prod** (Web + Desktop) | `manifest.prod.xml` (генерируется) | GitHub Pages / CDN | Azure App Service (или другой HTTPS хост) |
 
 > **PowerPoint Desktop (Windows/Mac):** тот же `manifest.prod.xml` — см. runbook
-> [`03-powerpoint-desktop-windows.md`](./03-powerpoint-desktop-windows.md).
+> [`03-powerpoint-desktop-windows.md`](./03-powerpoint-desktop-windows.md).  
+> **LTSC / perpetual без sideload:** product line B — [`04-powerpoint-ltsc-windows-native.md`](./04-powerpoint-ltsc-windows-native.md).
 
 ## Production URL по умолчанию
 

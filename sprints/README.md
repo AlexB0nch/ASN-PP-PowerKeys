@@ -29,6 +29,12 @@ sprints/
 | Sprint 04 | Smart Color Picker / Slide Master palette | **Done** — `sprint-04-smart-color-picker/retrospective.md` |
 | Sprint 05 | Consulting Mode, Backup, Multi-slide | **Done** — `sprint-05-advanced-features/retrospective.md` |
 | Sprint 06 | Global keyboard shortcuts (Windows Desktop) | **Done** — `sprint-06-keyboard-shortcuts/retrospective.md` |
+| **Epic** | **LTSC Windows Native (Product Line B)** | **Planned** — `epic-ltsc-windows-native/ROADMAP.md` |
+| Sprint 07 | LTSC foundation (Core multitarget, VSTO shell) | **Next** — `sprint-07-ltsc-foundation/` |
+| Sprint 08 | LTSC layout parity (38 cmd) | Planned |
+| Sprint 09 | LTSC objects · format · text | Planned |
+| Sprint 10 | LTSC slides · settings · None unlock | Planned |
+| Sprint 11 | LTSC ship (hotkeys, MSI, QA) | Planned |
 
 > Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до
 > рабочего состояния в PowerPoint Online (исходные VSTO-цели переосмыслены). Детали — в его `retrospective.md`.
