@@ -159,7 +159,7 @@ Sideload **`manifest.dev.xml`** (или `manifest.xml`) через **Upload My A
 
 #### Дальнейшая работа (S06-003+)
 
-- Import/export shortcuts JSON.
+- **Import/export settings JSON** — backup и перенос профиля/шорткатов между машинами (Settings panel).
 - Расширенная диагностика конфликтов hotkeys.
 
 #### Путь B — VSTO legacy (не рекомендуется)

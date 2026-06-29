@@ -42,10 +42,11 @@ Office **Keyboard Shortcuts API** + **Shared Runtime**, синхронизиро
 
 - [x] **S06-001** — Shared Runtime + Tier 1 defaults (`shortcuts.json`, `associate` → `runCommand`) — PR #46
 - [x] **S06-002** — Save/load Shortcut Manager → `Office.actions.replaceShortcuts` (76 hotkey-eligible actions) — PR #49
-- [ ] Трассировка `S06-0YY` → Issue → PR → merge
+- [ ] **S06-003** — Import/export settings JSON (P2)
+- [ ] Трассировка `S06-0YY` → Issue → PR → merge (для оставшихся задач)
 - [ ] `dotnet test PptPowerKeys.sln` — зелёный
 - [ ] AddIn: `typecheck`, `validate:prod`, `build:prod` — зелёные
-- [ ] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` обновлены post-merge
-- [ ] Manual QA note: PP Desktop Win 2601+ (вне CI)
+- [x] `docs/PRODUCT_CONTEXT.md` + `03-powerpoint-desktop-windows.md` — hotkeys (S06-001/002)
+- [ ] Manual QA note: PP Desktop Win 2601+ hotkeys (вне CI)
 
-**Stretch (P2/P3):** S06-003…005 — только если capacity после P1.
+**P1 (hotkeys) — выполнен.** Следующая рекомендуемая задача: **S06-003** import/export JSON.
