@@ -46,5 +46,6 @@ Consulting Mode (профили + snap-to-grid), Slide Backup Manager, Multi-sli
 
 - [x] **S05-001** — Consulting profiles (PR #32)
 - [x] **S05-002** — Snap-to-grid 0.1 cm (P1) — PR #34
-- [ ] **Одна из P2:** S05-003 (Backup) или S05-004 (Multi-slide)
+- [x] **S05-003** — Slide Backup Manager (P2 Backup) — PR #36
+- [ ] **S05-004** — Multi-slide paste/remove (P2)
 - [ ] (Optional) S05-005 — Smart Duplicate gap

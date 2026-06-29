@@ -61,21 +61,25 @@ PowerPoint (Desktop/Web/Mac/iPad)
 ## 6. Дорожная карта / статус
 Статусы — в `sprints/` и в `docs/migration/00-architecture.md` (Definition of Done эпика миграции).
 
-**Текущее состояние (2026-06-28):** сквозной путь **подтверждён в живом PowerPoint Online** — надстройка
+**Текущее состояние (2026-06-29):** сквозной путь **подтверждён в живом PowerPoint Online** — надстройка
 загружается (manifest на GitHub Pages, task pane «PptPowerKeys (Web)»), тянет каталог из **API на собственном
 VDS** (`https://95.140.152.103.sslip.io`, HTTPS через Caddy + Let's Encrypt, деплой по SSH через GitHub Actions),
-рендерит 76 команд по категориям. **ServerLayout**, **HostScript** (Objects, Format, Text, Alignment, Slides)
+рендерит **77 команд** по категориям. **ServerLayout**, **HostScript** (Objects, Format, Text, Alignment, Slides)
 и **Settings** исполняются; 9 команд `support=None` — через единый реестр `unsupportedWebCommands.ts` с warning-UX
 (не красный Error). Default «not wired up yet» — safety-net для неизвестных id.
 
 **Sprint 02 завершён (2026-06-28):** S02-001…006 Done (Objects, Format, Text, Alignment, Slides, unsupported UX).
 **Sprint 03 завершён (2026-06-28):** S03-001…003 Done. Settings UI, persistent store, Shortcut Manager.
 **Sprint 04 завершён (2026-06-28):** S04-001…003 Done (PR #29–#31). Smart Color Picker.
-**Sprint 05 — In Progress (2026-06-28):** S05-001 Done (PR #32) Consulting profiles McKinsey/BCG;
-S05-002 Done — snap-to-grid 0.1 cm. Следующая: S05-003. Anti-scope: snap-to-nearest-object, slide sections hide/show.
-Новые CommandIds: S05-003 `MoveSlidesToBackup`, S05-004 multi-slide paste/remove.
+**Sprint 05 — In Progress (2026-06-29):** S05-001 Done (PR #32) Consulting profiles McKinsey/BCG;
+S05-002 Done — snap-to-grid 0.1 cm (PR #34); S05-003 Done — `MoveSlidesToBackup` (PR #36). Следующая: S05-004.
+Anti-scope: snap-to-nearest-object, slide sections hide/show.
+Новые CommandIds: S05-004 multi-slide paste/remove (`PasteShapeToSelectedSlides`, `RemoveShapeFromSelectedSlides`).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S05-003:** `MoveSlidesToBackup` (77-я команда) — HostScript `moveSelectedSlidesToBackup()`:
+  `slide.moveTo` (Api 1.8+) preferred; fallback export → insert at end → delete; multi-select descending
+  by index; no slide sections on Web. Catalog: Partial, HostScript, Slides, defaultShortcut null.
 - **S05-002:** `GridSnap` (Core) — 0.1 cm grid in points; post-process in `LayoutEngine.Apply` when
   `LayoutOptions.SnapToGrid`; `UserSettings.snapToGrid` persist; AddIn checkbox + pass `options.snapToGrid`
   per layout request (stateless API). Без snap на клиенте; без новых CommandIds.

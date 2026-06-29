@@ -8,7 +8,7 @@
 | **Task ID** | `S05-003` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + AddIn + Tests |
-| **Статус** | In Review |
+| **Статус** | Done |
 | **Issue** | #35 |
 | **PR** | #36 |
 
@@ -109,15 +109,23 @@
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] `MoveSlidesToBackup` в `CommandIds` + `CommandCatalog` (Partial, HostScript, Slides).
-2. [ ] HostScript перемещает **все выделенные** слайды в **конец** deck (или graceful error).
-3. [ ] `runCommand.ts` wired; нет fallback на generic «not wired up yet».
-4. [ ] Unit-тесты каталога зелёные; при добавлении Core-логики — тесты без PowerPoint.
-5. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-6. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-7. [ ] PR: ветка `cursor/S05-003-slide-backup-manager-<suffix>`, Task ID в title/body, `Closes #<issue>`.
-8. [ ] `.github/review/CHECKLIST.md` — scope, explicit degradation где Partial недоступен.
-9. [ ] После merge: backlog S05-003 → **Done**; goals.md DoD P2 (Backup) отмечен; PRODUCT_CONTEXT обновлён.
+1. [x] `MoveSlidesToBackup` в `CommandIds` + `CommandCatalog` (Partial, HostScript, Slides).
+2. [x] HostScript перемещает **все выделенные** слайды в **конец** deck (или graceful error).
+3. [x] `runCommand.ts` wired; нет fallback на generic «not wired up yet».
+4. [x] Unit-тесты каталога зелёные; при добавлении Core-логики — тесты без PowerPoint.
+5. [x] `dotnet test PptPowerKeys.sln` — зелёный.
+6. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+7. [x] PR: ветка `cursor/S05-003-slide-backup-manager-8a0f`, Task ID в title/body, `Closes #35`.
+8. [x] `.github/review/CHECKLIST.md` — scope, explicit degradation где Partial недоступен.
+9. [x] После merge: backlog S05-003 → **Done**; goals.md DoD P2 (Backup) отмечен; PRODUCT_CONTEXT обновлён.
+
+## Приёмка (architect, 2026-06-29)
+- PR #36 merged (`53c6495`). Scope соблюдён: Core catalog + HostScript + runCommand; VstoLegacy/Api не тронуты.
+- CI зелёный (Core + Add-in). Локально: 108 dotnet tests, typecheck, validate:prod — OK.
+- `moveSelectedSlidesToBackup()`: `moveTo` preferred; export/insert/delete fallback; descending index для multi-select.
+- Ошибки: «Select one or more slides first.» / «Slide move is not supported on this PowerPoint version.»
+- CHECKLIST: scope OK; Partial degradation explicit; unsupportedWebCommands не изменён.
+- Ручная проверка PowerPoint Online — post-merge (Pages + VDS).
 
 ## Зависимости
 

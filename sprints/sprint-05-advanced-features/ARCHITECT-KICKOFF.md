@@ -9,7 +9,7 @@
 | 01–04 | #7–#31 | Infra → 76 commands → Settings → Color Picker |
 | **05** | **#32** | **S05-001 Done** — Consulting profiles McKinsey/BCG |
 
-**108 tests** passed. **S05-002 Done** (snap-to-grid 0.1 cm, PR #34). **Следующая: S05-003** (Slide Backup). См. `backlog.md`.
+**108 tests** passed. **S05-003 Done** (`MoveSlidesToBackup`, PR #36). **Следующая: S05-004** (Multi-slide). См. `backlog.md`.
 
 ## 2. Продуктовый backlog (README)
 | Фича | Описание | Office Web (ожидание) |
