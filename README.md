@@ -331,7 +331,7 @@ _(Не в ShortcutTools, но логично добавить)_
 - [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
 - [x] Import/export settings JSON
 - [ ] Color Picker: eyedropper / HEX input
-- [ ] Object Statistics MIN/MAX/AVG UI (Addup в status bar уже есть)
+- [x] Object Statistics MIN/MAX/AVG UI (`addupDisplayMode` in Settings; Addup status by mode)
 - [ ] Snap-to-nearest-object при drag
 - [ ] Slide Backup: named section + hide/show (нет Office.js API)
 - [ ] Разрезание объектов (VSTO parity)

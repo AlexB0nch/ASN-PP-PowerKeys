@@ -79,9 +79,13 @@ Anti-scope: snap-to-nearest-object, slide sections hide/show.
 **Sprint 06 в работе (2026-06-29):** S06-001 Done (PR #46) — Shared Runtime + Tier 1 keyboard shortcuts
 (14 defaults via `shortcuts.json`, `Office.actions.associate` → `runCommand`); S06-002 Done (PR #49) —
 `replaceShortcuts` sync с UserSettings (76 hotkey-eligible actions); Desktop Windows 2601+ target.
-S06-003 Done — import/export settings JSON (PR #52).
+S06-003 Done — import/export settings JSON (PR #52). S06-004 Done — Object Statistics MIN/MAX/AVG UI (PR #55).
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S06-004:** Object Statistics display mode — `UserSettings.addupDisplayMode` (`all`|`sum`|`min`|`max`|`average`,
+  default `all`); Core `AddupStatusFormatter` + TS mirror `addupStatus.ts`; Settings dropdown «Object statistics display»;
+  `AddupTextFields` + hotkey Alt+A format status by mode; `all` preserves legacy string; export/import JSON v1;
+  invalid mode → `all` + warning; optional «Last addup result» in Text section (session, not persist). 143 dotnet tests.
 - **S06-003:** Import/export settings JSON — `UserSettingsImporter` (Core) validates file against `CommandCatalog`;
   unknown `commandId` → skip + warning; duplicate keys last wins; `POST /api/settings/import` validate-only (no persist);
   Settings Export (editor state + `schemaVersion: 1`) / Import → editor; MessageBar «Imported — click Save to persist»;

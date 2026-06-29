@@ -9,9 +9,9 @@
 | **Task ID** | `S06-004` |
 | **Спринт** | `sprint-06-keyboard-shortcuts` |
 | **Компонент** | Core + Api + AddIn |
-| **Статус** | In Progress |
-| **Issue** | #54 |
-| **PR** | — |
+| **Статус** | Done |
+| **Issue** | #54 (closed) |
+| **PR** | #55 |
 
 ## Цель
 
@@ -92,27 +92,33 @@ default `all` = текущее поведение без регрессии.
 | Tests | `AddupStatusFormatterTests.cs`, `UserSettingsImporterTests.cs`, `ApiIntegrationTests.cs` |
 | AddIn | `SettingsPanel.tsx`, `runCommand.ts`, `App.tsx`, `runtime/commandContext.ts`, `services/types.ts` |
 
+## Приёмка (architect, 2026-06-29)
+
+- PR #55 merged. Scope соблюдён: `AddupStatusFormatter`, `addupDisplayMode` persist, Settings dropdown, export/import, hotkey path.
+- Режим `all` без регрессии status строки; invalid import → `all` + warning.
+- `dotnet test` 143 passed; AddIn typecheck/validate:prod/build:prod green.
+
 ## Критерии приёмки (Definition of Done)
 
 ### Core
-- [ ] `AddupStatusFormatter.Format` + unit tests (all modes, count=0, `all` regression string).
-- [ ] `UserSettings.AddupDisplayMode` default `"all"`; round-trip JSON.
-- [ ] `UserSettingsImporter` — valid modes, invalid → `all` + warning.
+- [x] `AddupStatusFormatter.Format` + unit tests (all modes, count=0, `all` regression string).
+- [x] `UserSettings.AddupDisplayMode` default `"all"`; round-trip JSON.
+- [x] `UserSettingsImporter` — valid modes, invalid → `all` + warning.
 
 ### AddIn
-- [ ] Settings dropdown «Object statistics display»; Save → reload сохраняет режим.
-- [ ] `AddupTextFields` status соответствует режиму; `all` = текущая строка.
-- [ ] Export/import включает `addupDisplayMode`.
-- [ ] Hotkey path (`executeCommandById`) использует тот же режим.
-- [ ] (Optional) «Last addup result» в Text section — session only.
+- [x] Settings dropdown «Object statistics display»; Save → reload сохраняет режим.
+- [x] `AddupTextFields` status соответствует режиму; `all` = текущая строка.
+- [x] Export/import включает `addupDisplayMode`.
+- [x] Hotkey path (`executeCommandById`) использует тот же режим.
+- [x] (Optional) «Last addup result» в Text section — session only.
 
 ### CI
-- [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-- [ ] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
+- [x] `dotnet test PptPowerKeys.sln` — зелёный (143).
+- [x] `npm run typecheck`, `validate:prod`, `build:prod` — зелёные.
 
 ### PR
-- [ ] Ветка: `cursor/S06-004-object-statistics-min-max-avg-ui-28cd`.
-- [ ] `Closes #<issue>`; CHECKLIST.
+- [x] Ветка: `cursor/S06-004-object-statistics-min-max-avg-ui-28cd`.
+- [x] `Closes #54`; CHECKLIST; docs post-merge.
 
 ## Красные флаги (reject)
 
