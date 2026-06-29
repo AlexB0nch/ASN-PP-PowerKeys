@@ -51,7 +51,7 @@ public static class UserSettingsImporter
         var warnings = new List<string>();
         var shortcuts = new List<ShortcutBinding>();
 
-        foreach (var entry in document.Shortcuts ?? [])
+        foreach (var entry in document.Shortcuts ?? new List<SettingsImportShortcut>())
         {
             var commandId = entry.CommandId?.Trim() ?? string.Empty;
             if (string.IsNullOrEmpty(commandId))

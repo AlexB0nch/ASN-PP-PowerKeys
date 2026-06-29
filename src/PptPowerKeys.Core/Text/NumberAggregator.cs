@@ -8,12 +8,13 @@ namespace PptPowerKeys.Core.Text;
 /// the selected shapes and compute aggregates. Kept host-independent so it can be
 /// unit tested and reused from the backend.
 /// </summary>
-public static partial class NumberAggregator
+public static class NumberAggregator
 {
     public sealed record Stats(int Count, double Sum, double Min, double Max, double Average);
 
-    [GeneratedRegex(@"-?\d{1,3}(?:[ \u00A0.,]\d{3})*(?:[.,]\d+)?|-?\d+(?:[.,]\d+)?", RegexOptions.CultureInvariant)]
-    private static partial Regex NumberPattern();
+    private static readonly Regex NumberPattern = new(
+        @"-?\d{1,3}(?:[ \u00A0.,]\d{3})*(?:[.,]\d+)?|-?\d+(?:[.,]\d+)?",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     /// <summary>
     /// Parses every number found across the given text fragments and returns the
@@ -22,7 +23,10 @@ public static partial class NumberAggregator
     /// </summary>
     public static Stats Compute(IEnumerable<string?> texts)
     {
-        ArgumentNullException.ThrowIfNull(texts);
+        if (texts is null)
+        {
+            throw new ArgumentNullException(nameof(texts));
+        }
 
         var values = new List<double>();
         foreach (var text in texts)
@@ -32,7 +36,7 @@ public static partial class NumberAggregator
                 continue;
             }
 
-            foreach (Match match in NumberPattern().Matches(text))
+            foreach (Match match in NumberPattern.Matches(text))
             {
                 if (TryParse(match.Value, out double value))
                 {

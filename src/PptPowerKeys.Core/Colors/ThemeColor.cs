@@ -9,23 +9,26 @@ namespace PptPowerKeys.Core.Colors;
 /// so this avoids any dependency on <c>System.Drawing.Color</c> (which the legacy
 /// <c>IColorSchemeReader</c> used).
 /// </summary>
-public sealed partial record ThemeColor(string Name, string Hex)
+public sealed record ThemeColor(string Name, string Hex)
 {
-    [GeneratedRegex("^#?[0-9a-fA-F]{6}$")]
-    private static partial Regex HexPattern();
+    private static readonly Regex HexPattern = new("^#?[0-9a-fA-F]{6}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-    public static bool IsValidHex(string? hex) => hex is not null && HexPattern().IsMatch(hex);
+    public static bool IsValidHex(string? hex) => hex is not null && HexPattern.IsMatch(hex);
 
     /// <summary>Normalises any accepted hex form to uppercase <c>#RRGGBB</c>.</summary>
     public static string NormalizeHex(string hex)
     {
-        ArgumentNullException.ThrowIfNull(hex);
+        if (hex is null)
+        {
+            throw new ArgumentNullException(nameof(hex));
+        }
+
         if (!IsValidHex(hex))
         {
             throw new FormatException($"'{hex}' is not a valid #RRGGBB color.");
         }
 
-        string digits = hex.StartsWith('#') ? hex[1..] : hex;
+        string digits = hex.StartsWith("#", StringComparison.Ordinal) ? hex.Substring(1) : hex;
         return "#" + digits.ToUpperInvariant();
     }
 
@@ -35,9 +38,9 @@ public sealed partial record ThemeColor(string Name, string Hex)
     public double Luminance()
     {
         string digits = Hex.TrimStart('#');
-        double r = int.Parse(digits[..2], NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
-        double g = int.Parse(digits[2..4], NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
-        double b = int.Parse(digits[4..6], NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
+        double r = int.Parse(digits.Substring(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
+        double g = int.Parse(digits.Substring(2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
+        double b = int.Parse(digits.Substring(4, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255.0;
         return (0.2126 * Linearize(r)) + (0.7152 * Linearize(g)) + (0.0722 * Linearize(b));
     }
 

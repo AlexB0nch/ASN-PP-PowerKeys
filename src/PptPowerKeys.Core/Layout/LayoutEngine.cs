@@ -27,8 +27,15 @@ public static class LayoutEngine
 {
     public static LayoutResult Apply(LayoutRequest request)
     {
-        ArgumentNullException.ThrowIfNull(request);
-        ArgumentNullException.ThrowIfNull(request.Shapes);
+        if (request is null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        if (request.Shapes is null)
+        {
+            throw new ArgumentNullException(nameof(request), "Shapes must not be null.");
+        }
 
         var shapes = request.Shapes;
         var options = request.Options ?? LayoutOptions.Default;
@@ -231,7 +238,7 @@ public static class LayoutEngine
             .ToList();
 
         var first = shapes[order[0]];
-        var last = shapes[order[^1]];
+        var last = shapes[order[order.Count - 1]];
 
         double span = horizontal
             ? last.Right - first.Left

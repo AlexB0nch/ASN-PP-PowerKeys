@@ -52,7 +52,10 @@ public static class GridSnap
         double gridStepPoints = default,
         double minSize = 1.0)
     {
-        ArgumentNullException.ThrowIfNull(shapes);
+        if (shapes is null)
+        {
+            throw new ArgumentNullException(nameof(shapes));
+        }
         return shapes.Select(s => Snap(s, gridStepPoints, minSize)).ToList();
     }
 }

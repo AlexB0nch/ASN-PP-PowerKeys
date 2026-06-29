@@ -10,7 +10,7 @@
 | **Спринт** | `sprint-07-ltsc-foundation` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | Core + Tests |
-| **Статус** | Todo |
+| **Статус** | Done |
 
 ## Цель
 
@@ -41,11 +41,11 @@
 
 ## Критерии приёмки
 
-- [ ] `dotnet test PptPowerKeys.sln` зелёный
-- [ ] `dotnet build src/PptPowerKeys.Core/PptPowerKeys.Core.csproj -f netstandard2.0` успешен
-- [ ] `dotnet build src/PptPowerKeys.Core/PptPowerKeys.Core.csproj -f net8.0` успешен
-- [ ] Api project still references net8.0 Core build
-- [ ] No breaking changes to Web Add-in
+- [x] `dotnet test PptPowerKeys.sln` зелёный
+- [x] `dotnet build src/PptPowerKeys.Core/PptPowerKeys.Core.csproj -f netstandard2.0` успешен
+- [x] `dotnet build src/PptPowerKeys.Core/PptPowerKeys.Core.csproj -f net8.0` успешен
+- [x] Api project still references net8.0 Core build
+- [x] No breaking changes to Web Add-in
 
 ## Зависимости
 

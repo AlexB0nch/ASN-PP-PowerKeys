@@ -13,7 +13,10 @@ public static class ShortcutBindingValidator
     /// </summary>
     public static IReadOnlyList<DuplicateKeyGroup> FindDuplicateKeys(IEnumerable<ShortcutBinding> bindings)
     {
-        ArgumentNullException.ThrowIfNull(bindings);
+        if (bindings is null)
+        {
+            throw new ArgumentNullException(nameof(bindings));
+        }
 
         return bindings
             .Where(b => !string.IsNullOrWhiteSpace(b.Keys))
