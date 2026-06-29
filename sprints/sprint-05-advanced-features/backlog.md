@@ -1,12 +1,12 @@
 # Sprint 05 — Backlog
 
-> Architect декомпозировал Sprint 05 (2026-06-28). **S05-002 Done** — следующая S05-003.
+> Architect декомпозировал Sprint 05 (2026-06-28). **S05-003 In Progress** — Slide Backup Manager.
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
 | S05-001 | Consulting profiles (McKinsey/BCG presets → UserSettings) | Core + Api + AddIn + Tests | **Done** | PR #32 |
 | S05-002 | Snap-to-grid 0.1 cm (Core + layout apply) | Core + Api + AddIn + Tests | **Done** | #33 / PR #34 |
-| S05-003 | Slide Backup Manager (`MoveSlidesToBackup`) | Core + AddIn + Tests | Todo | — |
+| S05-003 | Slide Backup Manager (`MoveSlidesToBackup`) | Core + AddIn + Tests | **In Progress** | #35 |
 | S05-004 | Multi-slide shape paste/remove | Core + AddIn + Tests | Todo | — |
 | S05-005 | Smart Duplicate gap memory (optional stretch) | AddIn + Tests | Todo | — |
 
