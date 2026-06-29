@@ -8,7 +8,7 @@
 | **Task ID** | `S05-004` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + AddIn + Tests |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | #37 |
 
 ## Цель
@@ -152,17 +152,25 @@ case "RemoveShapeFromSelectedSlides": {
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] `PasteShapeToSelectedSlides` и `RemoveShapeFromSelectedSlides` в `CommandIds` + `CommandCatalog` (Partial, HostScript, **Objects**, defaultShortcut null).
-2. [ ] `pasteShapeToSelectedSlides()` — ≥2 slides, 1 source shape, skip source slide, same geometry; корректные ошибки UX.
-3. [ ] `removeShapeFromSelectedSlides()` — ≥1 slide, remove by name, aggregates в status bar; пустое имя — ошибка; 0 matches на слайде — OK.
-4. [ ] `cloneShapeOnSlide` (или wrapper) поддерживает **cross-slide** clone без дублирования логики.
-5. [ ] `runCommand.ts` wired для обеих команд; нет fallback «not wired up yet».
-6. [ ] `Catalog_NoneSupportCommands_AreExactlyNineKnownIds` — без изменений (9 None).
-7. [ ] `dotnet test PptPowerKeys.sln` — зелёный.
-8. [ ] `npm run typecheck`, `npm run validate:prod` — зелёные.
-9. [ ] PR: ветка `cursor/S05-004-multi-slide-paste-remove-<suffix>`, Task ID в title/body, `Closes #<issue>`.
-10. [ ] `.github/review/CHECKLIST.md` — scope, explicit degradation где Partial недоступен.
-11. [ ] После merge: backlog S05-004 → **Done**; goals.md DoD P2 multi-slide отмечен; PRODUCT_CONTEXT → 79 команд.
+1. [x] `PasteShapeToSelectedSlides` и `RemoveShapeFromSelectedSlides` в `CommandIds` + `CommandCatalog` (Partial, HostScript, **Objects**, defaultShortcut null).
+2. [x] `pasteShapeToSelectedSlides()` — ≥2 slides, 1 source shape, skip source slide, same geometry; корректные ошибки UX.
+3. [x] `removeShapeFromSelectedSlides()` — ≥1 slide, remove by name, aggregates в status bar; пустое имя — ошибка; 0 matches на слайде — OK.
+4. [x] `cloneShapeOnSlide` (или wrapper) поддерживает **cross-slide** clone без дублирования логики.
+5. [x] `runCommand.ts` wired для обеих команд; нет fallback «not wired up yet».
+6. [x] `Catalog_NoneSupportCommands_AreExactlyNineKnownIds` — без изменений (9 None).
+7. [x] `dotnet test PptPowerKeys.sln` — зелёный.
+8. [x] `npm run typecheck`, `npm run validate:prod` — зелёные.
+9. [x] PR: ветка `cursor/S05-004-multi-slide-paste-remove-10ec`, Task ID в title/body, `Closes #37`.
+10. [x] `.github/review/CHECKLIST.md` — scope, explicit degradation где Partial недоступен.
+11. [x] После merge: backlog S05-004 → **Done**; goals.md DoD P2 multi-slide отмечен; PRODUCT_CONTEXT → 79 команд.
+
+## Приёмка (architect, 2026-06-29)
+- PR #39 merged (`1660e34`). Scope соблюдён: Core catalog + HostScript helpers + runCommand; VstoLegacy/Api/unsupportedWebCommands не тронуты.
+- CI зелёный (Core + Add-in). Локально: 108 dotnet tests, typecheck, validate:prod — OK.
+- `pasteShapeToSelectedSlides()`: ≥2 slides, 1 source shape, skip source slide, `cloneShapeOnSlide(..., crossSlide=true)`; unsupported type → явное сообщение без «Try desktop…».
+- `removeShapeFromSelectedSlides()`: remove by exact `shape.name`, aggregates `{ slidesProcessed, shapesRemoved }`; пустое имя — ошибка; 0 matches на слайде — OK.
+- CHECKLIST: scope OK; Partial degradation explicit; 9 None-команд без изменений.
+- Ручная проверка PowerPoint Online — post-merge (Pages + VDS).
 
 ## Зависимости
 
