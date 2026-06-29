@@ -1,6 +1,6 @@
 # Sprint 05 — Backlog
 
-> Architect декомпозировал Sprint 05 (2026-06-28). **S05-004 Done** (PR #39). Следующая: S05-005 (optional).
+> Architect декомпозировал Sprint 05 (2026-06-28). **S05-004 Done** (PR #39). **S05-005 In Progress** (optional stretch).
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
@@ -8,7 +8,7 @@
 | S05-002 | Snap-to-grid 0.1 cm (Core + layout apply) | Core + Api + AddIn + Tests | **Done** | #33 / PR #34 |
 | S05-003 | Slide Backup Manager (`MoveSlidesToBackup`) | Core + AddIn + Tests | **Done** | #35 / PR #36 |
 | S05-004 | Multi-slide shape paste/remove | Core + AddIn + Tests | **Done** | #37 / PR #39 |
-| S05-005 | Smart Duplicate gap memory (optional stretch) | AddIn + Tests | Todo | — |
+| S05-005 | Smart Duplicate gap memory (optional stretch) | Core + AddIn + Tests | **In Progress** | #41 |
 
 ## Порядок исполнения (рекомендация architect)
 
