@@ -6,7 +6,7 @@
 |----|--------|-----------|--------|------------|
 | S06-001 | Shared Runtime + Keyboard Shortcuts (Tier 1) | AddIn + manifest + scripts + Tests | **Done** | #44 / PR #46 |
 | S06-002 | `replaceShortcuts` ↔ UserSettings (все bindings) | AddIn | **Done** | #48 / PR #49 |
-| S06-003 | Import/export settings JSON | Core + Api + AddIn | **Todo** | — |
+| S06-003 | Import/export settings JSON | Core + Api + AddIn | **In Progress** | #51 |
 | S06-004 | Object Statistics MIN/MAX/AVG UI | AddIn | **Todo** | — |
 | S06-005 | Color Picker eyedropper / HEX (stretch) | AddIn | **Todo** | — |
 
