@@ -25,6 +25,9 @@
 | **Dev** (Desktop) | `manifest.dev.xml` / `manifest.xml` | `npm start` → `https://localhost:3000` | `dotnet run` → `https://localhost:7168` |
 | **Prod** (Web + Desktop) | `manifest.prod.xml` (генерируется) | GitHub Pages / CDN | Azure App Service (или другой HTTPS хост) |
 
+> **PowerPoint Desktop (Windows/Mac):** тот же `manifest.prod.xml` — см. runbook
+> [`03-powerpoint-desktop-windows.md`](./03-powerpoint-desktop-windows.md).
+
 ## Production URL по умолчанию
 
 | Переменная | Значение по умолчанию |

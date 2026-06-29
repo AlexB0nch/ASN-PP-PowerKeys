@@ -1,17 +1,26 @@
 # ASN-PP-PowerKeys
 PowerPoint plugin. Shortcuts
 
-> ### Migration: VSTO → Office Web Add-in
-> Проект мигрирует с Windows-only **VSTO** на кроссплатформенный **Office Web Add-in**.
-> Целевая архитектура, инструкция по запуску и карта VSTO → Office.js — в
-> [`docs/migration/`](docs/migration/).
+> ### Актуальный продукт: Office Web Add-in (Sprint 01–05 Done)
+> Рабочая надстройка — **Office Web Add-in** (Windows / Mac / Web / iPad): task pane + API.
+> **79 команд**, Sprint 05 завершён (2026-06-29).
 >
-> - `src/PptPowerKeys.Core` — бизнес-логика (.NET 8, чистый C#, юнит-тесты без PowerPoint)
+> | Действие | Документ |
+> |----------|----------|
+> | **Установить на PowerPoint Desktop (Windows)** | [`docs/migration/03-powerpoint-desktop-windows.md`](docs/migration/03-powerpoint-desktop-windows.md) |
+> | Установить в PowerPoint Online | [`docs/migration/02-powerpoint-web-deploy.md`](docs/migration/02-powerpoint-web-deploy.md) |
+> | Архитектура и карта VSTO → Office.js | [`docs/migration/00-architecture.md`](docs/migration/00-architecture.md) |
+>
+> **Быстрый старт (Windows Desktop):** `git pull` → **Insert → Get Add-ins → Upload My Add-in** →
+> файл `src/PptPowerKeys.AddIn/manifest.prod.xml` → **Home → PowerKeys**.
+>
+> Проекты:
+> - `src/PptPowerKeys.Core` — бизнес-логика (.NET 8, юнит-тесты без PowerPoint)
 > - `src/PptPowerKeys.Api` — ASP.NET Core backend (Swagger)
 > - `src/PptPowerKeys.AddIn` — task pane (TypeScript + React + Fluent UI + Office.js)
-> - `src/PptPowerKeys.VstoLegacy*` — старый VSTO-проект (заморожен)
+> - `src/PptPowerKeys.VstoLegacy*` — старый VSTO (заморожен, не устанавливать)
 >
-> Сборка/тесты: `dotnet test PptPowerKeys.sln`. Раздел ниже описывает **исходный VSTO**-замысел и сохранён как продуктовая спецификация.
+> Сборка/тесты: `dotnet test PptPowerKeys.sln`. Разделы ниже — **продуктовая спецификация** (VSTO-замысел + parity); фактическое поведение Web Add-in см. migration docs.
 
 ---
 
@@ -23,13 +32,19 @@ PowerPoint plugin. Shortcuts
 
 ## Общая концепция
 
-**PPT PowerKeys** — это COM-надстройка (`.dll`) для Microsoft PowerPoint (Windows, версии 2013–2021, Microsoft 365), которая добавляет в ленту отдельную вкладку **PowerKeys** и регистрирует глобальные клавиатурные сочетания для >100 команд. Все шорткаты настраиваемы через встроенный менеджер горячих клавиш.
+**PPT PowerKeys** — инструмент для быстрой работы с фигурами в PowerPoint (>100 команд в спецификации, **79** в текущем Web Add-in). Опорная фигура = **последняя выделенная**; consulting-профили McKinsey/BCG; snap-to-grid 0.1 cm; backup slides; multi-slide paste.
 
-**Технический стек:**
-- Visual Studio / VSTO (Visual Studio Tools for Office) на C# или VB.NET
-- Интеграция через `Microsoft.Office.Interop.PowerPoint`
-- Регистрация COM Add-in через реестр Windows
-- Установка через `.msi` / `.exe` инсталлятор
+**Как установить сегодня (Web Add-in, не VSTO):**
+
+| Платформа | Инструкция |
+|-----------|------------|
+| **Windows Desktop** | [`docs/migration/03-powerpoint-desktop-windows.md`](docs/migration/03-powerpoint-desktop-windows.md) |
+| PowerPoint Online | [`docs/migration/02-powerpoint-web-deploy.md`](docs/migration/02-powerpoint-web-deploy.md) |
+| Локальная разработка | `AGENTS.md` |
+
+UI: кнопка **PowerKeys** на вкладке **Home** (не отдельная вкладка Ribbon как в VSTO-замысле). Команды — **клик в task pane**; Shortcut Manager хранит привязки. **Глобальные Alt+… шорткаты** — см. runbook § «Глобальные шорткаты» (официальный API Microsoft, Sprint 06).
+
+**Исходный VSTO-стек (legacy, frozen):** COM `.dll`, VSTO, `.msi` — см. `src/PptPowerKeys.VstoLegacy*`.
 
 ---
 
@@ -226,11 +241,11 @@ PPT PowerKeys/
 
 ## Менеджер горячих клавиш
 
-- Все шорткаты полностью переопределяемы
-- Поддержка профилей: **McKinsey style**, **BCG style**, **Custom**
-- Импорт/экспорт настроек в `.json`
-- Проверка конфликтов с системными и PowerPoint-нативными шорткатами
-- Быстрый поиск команды по названию
+- Редактирование привязок в **Settings → Shortcut Manager** (Web Add-in)
+- Профили: **McKinsey**, **BCG**, **Custom** (presets из Core)
+- Предупреждение о duplicate keys при сохранении
+- **Глобальный перехват Alt+… в PowerPoint** — **не работает** в текущей версии; команды через task pane. План: Office `KeyboardShortcuts` API + Shared Runtime ([runbook](docs/migration/03-powerpoint-desktop-windows.md#глобальные-шорткаты-windows))
+- Импорт/экспорт `.json` — в backlog (не реализовано)
 
 ---
 
@@ -298,27 +313,32 @@ _(Не в ShortcutTools, но логично добавить)_
 
 ## Этапы разработки (Roadmap)
 
-### MVP (v1.0)
-- [x] Регистрация плагина (COM Add-in, VSTO)
-- [x] Все команды выравнивания (18 команд)
-- [x] Все команды изменения размера (20 команд)
-- [x] Базовые объектные команды: Insert, Duplicate, Group, Order
-- [x] Цвет заливки и обводки из Slide Master (`Alt+G`, `Alt+L`)
-- [x] Вкладка PowerKeys в Ribbon
-- [x] Менеджер шорткатов (базовый)
+> Статус **Office Web Add-in** (Sprint 01–05, 2026-06-29). VSTO-колонка — legacy frozen.
 
-### v1.5
-- [ ] Smart Color Picker с пипеткой
-- [ ] Профили шорткатов (McKinsey, BCG, Custom)
-- [ ] Smart Duplicate с памятью шага
-- [ ] Суммирование текстовых полей (`Alt+A`)
+### Web Add-in — сделано (Sprint 01–05)
 
-### v2.0
-- [ ] Slide Backup Manager
-- [ ] Multi-slide paste/remove
-- [ ] Разрезание объектов
-- [ ] Статистика объектов (MIN/MAX/AVG)
-- [ ] Экспорт настроек в JSON
+- [x] Core + Api + AddIn + CI + деплой (Pages + VDS)
+- [x] **79 команд** каталога (Alignment, Resize, Objects, Format, Text, Slides, Settings)
+- [x] Settings UI, persistent store, Shortcut Manager
+- [x] Smart Color Picker (theme + recent colors)
+- [x] Consulting profiles McKinsey/BCG + snap-to-grid 0.1 cm
+- [x] Slide Backup (`MoveSlidesToBackup`), multi-slide paste/remove
+- [x] Smart Duplicate gap memory
+- [x] Sideload: PowerPoint Online + **Desktop Windows/Mac** (`manifest.prod.xml`)
+
+### Backlog (Sprint 06+, не начато)
+
+- [ ] **Глобальные шорткаты** — Shared Runtime + `Office.actions` Keyboard Shortcuts API (Windows Desktop PP 2601+)
+- [ ] Import/export settings JSON
+- [ ] Color Picker: eyedropper / HEX input
+- [ ] Object Statistics MIN/MAX/AVG UI (Addup в status bar уже есть)
+- [ ] Snap-to-nearest-object при drag
+- [ ] Slide Backup: named section + hide/show (нет Office.js API)
+- [ ] Разрезание объектов (VSTO parity)
+
+### VSTO legacy (frozen, не roadmap)
+
+- [x] COM/VSTO scaffold в `VstoLegacy*` — новые фичи **не добавляются**
 
 ---
 
