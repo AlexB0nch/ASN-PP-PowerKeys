@@ -63,7 +63,7 @@
 | InsertLine | `Shapes.AddLine` | `shapes.addLine()` | ✅ Full | HostScript |
 | InsertArrow | `AddLine` + arrowhead | `addLine` + `lineFormat` | ⚠️ Partial | HostScript |
 | InsertTextbox | `Shapes.AddTextbox` | `shapes.addTextBox()` | ✅ Full | HostScript |
-| Duplicate {Right,Left,Down,Up} | `Shape.Duplicate` + сдвиг | `copyTo`/`duplicate` + `DuplicationEngine` | ⚠️ Partial | HostScript |
+| Duplicate {Right,Left,Down,Up} | `Shape.Duplicate` + сдвиг | `copyTo`/`duplicate` + `DuplicationEngine`; **gap memory** per direction in task pane (in-memory, Figma-like) | ⚠️ Partial | HostScript |
 | Group / Ungroup | `ShapeRange.Group` | `shapes.addGroup` / `group.ungroup` | ✅/⚠️ | HostScript |
 | Regroup | `ShapeRange.Regroup` | — | ❌ None | HostScript |
 | BringToFront / SendToBack / Forward / Backward | `Shape.ZOrder` | `shape.setZOrder(...)` | ✅ Full | HostScript |
