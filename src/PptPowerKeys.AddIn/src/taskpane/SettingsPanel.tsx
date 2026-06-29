@@ -213,9 +213,10 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
 
         <MessageBar intent="info">
           <MessageBarBody>
-            Office Web Add-ins cannot capture global keyboard shortcuts like the desktop
-            VSTO add-in. Shortcuts listed below are for reference — use the task pane
-            buttons while editing in the browser.
+            Global keyboard shortcuts (Alt+1, Alt+D, …) are not active yet — use task pane
+            buttons. Bindings below are stored for reference; registration via Office
+            Keyboard Shortcuts API is planned (Windows Desktop PowerPoint 2601+). See repo
+            docs/migration/03-powerpoint-desktop-windows.md.
           </MessageBarBody>
         </MessageBar>
 

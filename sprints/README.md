@@ -27,7 +27,7 @@ sprints/
 | Sprint 02 | Функциональный паритет команд (Objects, Format, Text, Alignment, Slides, UX) | **Done** — `sprint-02-functionality/retrospective.md` |
 | Sprint 03 | Settings UI, persistent SettingsStore, Shortcut Manager | **Done** — `sprint-03-settings/retrospective.md` |
 | Sprint 04 | Smart Color Picker / Slide Master palette | **Done** — `sprint-04-smart-color-picker/retrospective.md` |
-| Sprint 05 | Consulting Mode, Backup, Multi-slide | **Planning** — `sprint-05-advanced-features/ARCHITECT-KICKOFF.md` |
+| Sprint 05 | Consulting Mode, Backup, Multi-slide | **Done** — `sprint-05-advanced-features/retrospective.md` |
 
 > Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до
 > рабочего состояния в PowerPoint Online (исходные VSTO-цели переосмыслены). Детали — в его `retrospective.md`.
