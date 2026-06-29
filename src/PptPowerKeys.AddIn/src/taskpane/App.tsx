@@ -15,7 +15,7 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { api } from "../services/api";
-import { CommandCategory, CommandDescriptor, OfficeJsSupport } from "../services/types";
+import { CommandCategory, CommandDescriptor, OfficeJsSupport, UserSettings } from "../services/types";
 import { runCommand, CommandOutcome, outcomeSuccess } from "./runCommand";
 import { ColorPickerPanel, ColorPickerPanelHandle } from "./ColorPickerPanel";
 import { SettingsPanel, SettingsPanelHandle } from "./SettingsPanel";
@@ -100,6 +100,7 @@ export const App: React.FC = () => {
   const settingsPanelRef = React.useRef<SettingsPanelHandle>(null);
   const colorPickerPanelRef = React.useRef<ColorPickerPanelHandle>(null);
   const [commands, setCommands] = React.useState<CommandDescriptor[]>([]);
+  const [userSettings, setUserSettings] = React.useState<UserSettings | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<CommandOutcome | null>(null);
@@ -110,9 +111,11 @@ export const App: React.FC = () => {
   ]);
 
   React.useEffect(() => {
-    api
-      .getCommands()
-      .then((c) => setCommands(c))
+    Promise.all([api.getCommands(), api.getSettings()])
+      .then(([c, settings]) => {
+        setCommands(c);
+        setUserSettings(settings);
+      })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)))
       .finally(() => setLoading(false));
   }, []);
@@ -127,7 +130,8 @@ export const App: React.FC = () => {
         return outcomeSuccess("Shortcut manager opened.");
       },
       resetToDefaults: async () => {
-        await api.resetSettings();
+        const reset = await api.resetSettings();
+        setUserSettings(reset);
         await settingsPanelRef.current?.reload();
         return outcomeSuccess("Settings reset to defaults.");
       },
@@ -145,14 +149,19 @@ export const App: React.FC = () => {
     [],
   );
 
+  const layoutOptions = React.useMemo(
+    () => ({ snapToGrid: userSettings?.snapToGrid ?? false }),
+    [userSettings?.snapToGrid],
+  );
+
   const onRun = React.useCallback(
     async (descriptor: CommandDescriptor) => {
       setBusy(descriptor.id);
-      const outcome = await runCommand(descriptor, settingsActions);
+      const outcome = await runCommand(descriptor, settingsActions, layoutOptions);
       setStatus(outcome);
       setBusy(null);
     },
-    [settingsActions],
+    [settingsActions, layoutOptions],
   );
 
   const byCategory = React.useMemo(() => {
@@ -244,6 +253,7 @@ export const App: React.FC = () => {
                     ref={settingsPanelRef}
                     commands={commands}
                     onFeedback={setStatus}
+                    onSettingsUpdated={setUserSettings}
                   />
                 </>
               )}

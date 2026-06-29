@@ -30,6 +30,49 @@ public class SettingsAndCatalogTests
     }
 
     [Fact]
+    public void UserSettings_SnapToGrid_RoundTripsThroughJson()
+    {
+        var original = new UserSettings
+        {
+            Profile = "Custom",
+            SnapToGrid = true,
+            Shortcuts =
+            {
+                new ShortcutBinding { CommandId = "AlignLeft", Keys = "Alt+1" },
+            },
+        };
+
+        string json = UserSettings.Serialize(original);
+        var restored = UserSettings.Deserialize(json);
+
+        Assert.NotNull(restored);
+        Assert.True(restored!.SnapToGrid);
+    }
+
+    [Fact]
+    public void UserSettings_MissingSnapToGrid_DefaultsFalse()
+    {
+        const string json = """
+            {
+              "Profile": "Custom",
+              "Shortcuts": []
+            }
+            """;
+
+        var restored = UserSettings.Deserialize(json);
+
+        Assert.NotNull(restored);
+        Assert.False(restored!.SnapToGrid);
+    }
+
+    [Fact]
+    public void CreateDefaults_SnapToGridIsFalse()
+    {
+        var defaults = UserSettings.CreateDefaults();
+        Assert.False(defaults.SnapToGrid);
+    }
+
+    [Fact]
     public void UserSettings_DeserializeInvalid_ReturnsNull()
     {
         Assert.Null(UserSettings.Deserialize(null));

@@ -5,6 +5,7 @@ import {
   BuildPaletteResponse,
   CommandDescriptor,
   LayoutResult,
+  LayoutOptions,
   ProfilePresetsResponse,
   ShapeBounds,
   UserSettings,
@@ -43,13 +44,19 @@ function settingsRequest<T>(path: string, init?: RequestInit): Promise<T> {
 export const api = {
   getCommands: () => request<CommandDescriptor[]>("/api/commands"),
 
-  applyLayout: (command: string, shapes: ShapeBounds[], anchorIndex?: number) =>
+  applyLayout: (
+    command: string,
+    shapes: ShapeBounds[],
+    anchorIndex?: number,
+    options?: LayoutOptions,
+  ) =>
     request<LayoutResult>("/api/layout/apply", {
       method: "POST",
       body: JSON.stringify({
         command,
         shapes,
         ...(anchorIndex !== undefined ? { anchorIndex } : {}),
+        ...(options !== undefined ? { options } : {}),
       }),
     }),
 

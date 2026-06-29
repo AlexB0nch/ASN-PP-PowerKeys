@@ -262,4 +262,58 @@ public class LayoutEngineTests
     {
         Assert.Equal(expected, LayoutEngine.IsLayoutCommand(command));
     }
+
+    [Fact]
+    public void AlignLeft_WithSnapToGrid_SnapsResultGeometry()
+    {
+        var a = new ShapeBounds("a", Left: 101.2, Top: 10.3, Width: 50.4, Height: 20.6);
+        var b = new ShapeBounds("b", Left: 30.7, Top: 200.1, Width: 80.2, Height: 40.3);
+        var options = new LayoutOptions { SnapToGrid = true };
+
+        var result = LayoutEngine.Apply(new LayoutRequest
+        {
+            Command = CommandIds.AlignLeft,
+            Shapes = new[] { a, b },
+            Options = options,
+        });
+
+        Assert.True(result.Changed);
+        var moved = result.Shapes[0];
+        Assert.Equal(GridSnap.SnapValue(30.7), moved.Left, 6);
+        Assert.Equal(GridSnap.SnapValue(10.3), moved.Top, 6);
+        Assert.Equal(GridSnap.SnapValue(50.4), moved.Width, 6);
+        Assert.Equal(GridSnap.SnapValue(20.6), moved.Height, 6);
+    }
+
+    [Fact]
+    public void AlignLeft_WithSnapToGridDisabled_DoesNotSnap()
+    {
+        var a = new ShapeBounds("a", Left: 101.2, Top: 10, Width: 50, Height: 20);
+        var b = new ShapeBounds("b", Left: 30.7, Top: 200, Width: 80, Height: 40);
+
+        var result = LayoutEngine.Apply(new LayoutRequest
+        {
+            Command = CommandIds.AlignLeft,
+            Shapes = new[] { a, b },
+            Options = new LayoutOptions { SnapToGrid = false },
+        });
+
+        Assert.Equal(30.7, result.Shapes[0].Left, 6);
+    }
+
+    [Fact]
+    public void AlignLeft_NoChange_DoesNotSnapEvenWhenEnabled()
+    {
+        var a = new ShapeBounds("a", Left: 0, Top: 0, Width: 10, Height: 10);
+
+        var result = LayoutEngine.Apply(new LayoutRequest
+        {
+            Command = CommandIds.AlignLeft,
+            Shapes = new[] { a },
+            Options = new LayoutOptions { SnapToGrid = true },
+        });
+
+        Assert.False(result.Changed);
+        Assert.Equal(0, result.Shapes[0].Left, 6);
+    }
 }

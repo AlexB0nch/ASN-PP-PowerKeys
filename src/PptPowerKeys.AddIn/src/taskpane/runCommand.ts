@@ -1,5 +1,5 @@
 import { api } from "../services/api";
-import { CommandDescriptor } from "../services/types";
+import { CommandDescriptor, LayoutOptions } from "../services/types";
 import {
   applyFillColor,
   applyLineColor,
@@ -62,13 +62,14 @@ export interface SettingsCommandActions {
 export async function runCommand(
   descriptor: CommandDescriptor,
   settingsActions?: SettingsCommandActions,
+  layoutOptions?: LayoutOptions,
 ): Promise<CommandOutcome> {
   try {
     switch (descriptor.execution) {
       case "ServerLayout":
-        return await runServerLayout(descriptor);
+        return await runServerLayout(descriptor, layoutOptions);
       case "HostScript":
-        return await runHostScript(descriptor);
+        return await runHostScript(descriptor, layoutOptions);
       case "Settings":
         return await runSettingsCommand(descriptor, settingsActions);
       default:
@@ -99,13 +100,16 @@ async function runSettingsCommand(
   }
 }
 
-async function runServerLayout(descriptor: CommandDescriptor): Promise<CommandOutcome> {
+async function runServerLayout(
+  descriptor: CommandDescriptor,
+  layoutOptions?: LayoutOptions,
+): Promise<CommandOutcome> {
   const shapes = await getSelectedShapeBounds();
   if (shapes.length === 0) {
     return outcomeError("Select one or more shapes first.");
   }
 
-  const result = await api.applyLayout(descriptor.id, shapes);
+  const result = await api.applyLayout(descriptor.id, shapes, undefined, layoutOptions);
   if (!result.changed) {
     return outcomeSuccess(result.message ?? "Nothing to change.");
   }
@@ -154,6 +158,7 @@ const COPY_AND_ALIGN_LAYOUT: Record<
 
 async function runCopyAndAlign(
   commandId: keyof typeof COPY_AND_ALIGN_LAYOUT,
+  layoutOptions?: LayoutOptions,
 ): Promise<CommandOutcome> {
   const originals = await getSelectedShapeBounds();
   if (originals.length === 0) {
@@ -165,7 +170,7 @@ async function runCopyAndAlign(
   const anchorIndex = originals.length - 1;
   const layoutCommand = COPY_AND_ALIGN_LAYOUT[commandId];
 
-  const result = await api.applyLayout(layoutCommand, combined, anchorIndex);
+  const result = await api.applyLayout(layoutCommand, combined, anchorIndex, layoutOptions);
   if (!result.changed) {
     return outcomeSuccess(result.message ?? "Nothing to change.");
   }
@@ -174,7 +179,10 @@ async function runCopyAndAlign(
   return outcomeSuccess(`Duplicated and aligned ${clones.length} shape(s).`);
 }
 
-async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutcome> {
+async function runHostScript(
+  descriptor: CommandDescriptor,
+  layoutOptions?: LayoutOptions,
+): Promise<CommandOutcome> {
   if (isUnsupportedWebCommand(descriptor.id)) {
     return runUnsupportedWebCommand(descriptor.id);
   }
@@ -277,7 +285,7 @@ async function runHostScript(descriptor: CommandDescriptor): Promise<CommandOutc
     case "CopyAndAlignRight":
     case "CopyAndAlignTop":
     case "CopyAndAlignBottom":
-      return await runCopyAndAlign(descriptor.id as keyof typeof COPY_AND_ALIGN_LAYOUT);
+      return await runCopyAndAlign(descriptor.id as keyof typeof COPY_AND_ALIGN_LAYOUT, layoutOptions);
     case "CopySlide":
       await duplicateSelectedSlide();
       return outcomeSuccess("Slide duplicated.");

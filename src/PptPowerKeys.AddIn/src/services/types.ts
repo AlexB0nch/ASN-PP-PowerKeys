@@ -62,6 +62,12 @@ export interface ShortcutBinding {
 export interface UserSettings {
   profile: string;
   shortcuts: ShortcutBinding[];
+  snapToGrid?: boolean;
+}
+
+export interface LayoutOptions {
+  snapToGrid?: boolean;
+  gridStepCm?: number;
 }
 
 export interface ProfilePresetEntry {

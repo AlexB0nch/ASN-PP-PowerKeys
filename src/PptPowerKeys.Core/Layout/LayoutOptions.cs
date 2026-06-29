@@ -16,5 +16,11 @@ public sealed record LayoutOptions
     /// <summary>Minimum width/height a shape is allowed to shrink to.</summary>
     public double MinSize { get; init; } = 1.0;
 
+    /// <summary>When true, layout results are snapped to <see cref="GridStepCm"/>.</summary>
+    public bool SnapToGrid { get; init; } = false;
+
+    /// <summary>Grid step in centimetres (default 0.1 cm Consulting Mode).</summary>
+    public double GridStepCm { get; init; } = GridSnap.GridStepCm;
+
     public static LayoutOptions Default { get; } = new();
 }

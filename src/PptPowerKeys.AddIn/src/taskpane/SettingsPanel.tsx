@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   Button,
   Caption1,
+  Checkbox,
   Dropdown,
   MessageBar,
   MessageBarBody,
@@ -52,6 +53,7 @@ export interface SettingsPanelHandle {
 interface SettingsPanelProps {
   commands: CommandDescriptor[];
   onFeedback?: (outcome: CommandOutcome) => void;
+  onSettingsUpdated?: (settings: UserSettings) => void;
 }
 
 function isPresetProfile(profile: string, presets: ProfilePresetsResponse | null): boolean {
@@ -70,7 +72,7 @@ function cloneShortcuts(shortcuts: ShortcutBinding[]): ShortcutBinding[] {
 }
 
 export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanelProps>(
-  function SettingsPanel({ commands, onFeedback }, ref) {
+  function SettingsPanel({ commands, onFeedback, onSettingsUpdated }, ref) {
     const styles = useStyles();
     const shortcutsRef = React.useRef<HTMLDivElement>(null);
     const [settings, setSettings] = React.useState<UserSettings | null>(null);
@@ -90,12 +92,13 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         setSettings(data);
         setPresets(presetData);
         setPresetWarning(false);
+        onSettingsUpdated?.(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
       }
-    }, []);
+    }, [onSettingsUpdated]);
 
     React.useEffect(() => {
       void loadSettings();
@@ -135,6 +138,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
       setSettings({
         profile,
         shortcuts: cloneShortcuts(preset.shortcuts),
+        snapToGrid: settings.snapToGrid,
       });
       setPresetWarning(true);
     };
@@ -148,6 +152,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         const saved = await api.saveSettings(settings);
         setSettings(saved);
         setPresetWarning(false);
+        onSettingsUpdated?.(saved);
         onFeedback?.(outcomeSuccess("Settings saved."));
       } catch (err) {
         onFeedback?.(
@@ -164,6 +169,7 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
         const reset = await api.resetSettings();
         setSettings(reset);
         setPresetWarning(false);
+        onSettingsUpdated?.(reset);
         onFeedback?.(outcomeSuccess("Settings reset to defaults."));
       } catch (err) {
         onFeedback?.(
@@ -240,6 +246,18 @@ export const SettingsPanel = React.forwardRef<SettingsPanelHandle, SettingsPanel
               </Option>
             ))}
           </Dropdown>
+        </div>
+
+        <div className={styles.row}>
+          <Checkbox
+            label="Snap to grid (0.1 cm)"
+            checked={settings.snapToGrid ?? false}
+            onChange={(_e, data) =>
+              setSettings((prev) =>
+                prev ? { ...prev, snapToGrid: Boolean(data.checked) } : prev,
+              )
+            }
+          />
         </div>
 
         <div className={styles.row} ref={shortcutsRef} id="settings-shortcuts">

@@ -38,7 +38,7 @@ public static class LayoutEngine
             return LayoutResult.NoChange(shapes, "No shapes selected.");
         }
 
-        return request.Command switch
+        var result = request.Command switch
         {
             // Alignment relative to the anchor.
             CommandIds.AlignLeft => AlignEach(request, s => s with { Left = Anchor(request).Left }),
@@ -83,6 +83,20 @@ public static class LayoutEngine
 
             _ => LayoutResult.NoChange(shapes, $"Command '{request.Command}' is not a geometry layout command."),
         };
+
+        return MaybeSnapToGrid(result, options);
+    }
+
+    private static LayoutResult MaybeSnapToGrid(LayoutResult result, LayoutOptions options)
+    {
+        if (!options.SnapToGrid || !result.Changed)
+        {
+            return result;
+        }
+
+        double gridStepPoints = options.GridStepCm * GridSnap.PointsPerCm;
+        var snapped = GridSnap.SnapAll(result.Shapes, gridStepPoints, options.MinSize);
+        return LayoutResult.Updated(snapped);
     }
 
     /// <summary>True if the command is a pure geometry transform handled by <see cref="Apply"/>.</summary>
