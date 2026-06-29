@@ -8,8 +8,8 @@
 | **Task ID** | `S05-002` |
 | **Спринт** | `sprint-05-advanced-features` |
 | **Компонент** | Core + Api + AddIn + Tests |
-| **Статус** | In Progress |
-| **Issue** | #33 |
+| **Статус** | Done |
+| **PR** | #34 |
 
 ## Цель
 
@@ -124,14 +124,19 @@ public double GridStepCm { get; init; } = GridSnap.GridStepCm;
 
 ## Критерии приёмки (Definition of Done)
 
-1. [ ] `GridSnap` unit-тесты: шаг 0.1 cm, rounding, ShapeBounds snap.
-2. [ ] `LayoutEngine` с `SnapToGrid=true` post-process после align/resize/distribute.
-3. [ ] `UserSettings.snapToGrid` persist round-trip (GET/PUT/reset).
-4. [ ] Settings UI: checkbox Snap to grid 0.1 cm; Save/Reset работают.
-5. [ ] AddIn передаёт `snapToGrid` в `applyLayout`; ServerLayout команды дают snapped geometry.
-6. [ ] `dotnet test PptPowerKeys.sln` — все зелёные (≥93 + новые).
-7. [ ] `npm run typecheck` и `npm run validate:prod` — зелёные.
-8. [ ] PR с `Sprint`/`Task ID` S05-002, `Closes #<issue>`.
+1. [x] `GridSnap` unit-тесты: шаг 0.1 cm, rounding, ShapeBounds snap.
+2. [x] `LayoutEngine` с `SnapToGrid=true` post-process после align/resize/distribute.
+3. [x] `UserSettings.snapToGrid` persist round-trip (GET/PUT/reset).
+4. [x] Settings UI: checkbox Snap to grid 0.1 cm; Save/Reset работают.
+5. [x] AddIn передаёт `snapToGrid` в `applyLayout`; ServerLayout команды дают snapped geometry.
+6. [x] `dotnet test PptPowerKeys.sln` — 108 passed.
+7. [x] `npm run typecheck` и `npm run validate:prod` — зелёные.
+8. [x] PR #34 merged в `main`, Closes #33.
+
+## Приёмка (architect, 2026-06-29)
+- PR #34 merged. Scope соблюдён: Core `GridSnap` + layout post-process + `UserSettings.snapToGrid` + Settings checkbox.
+- Anti-scope: snap-to-nearest-object не реализован; CommandCatalog не тронут; snap-математика только в Core.
+- CHECKLIST: stateless layout API (флаг с клиента); VstoLegacy не тронут.
 
 ## Зависимости
 
