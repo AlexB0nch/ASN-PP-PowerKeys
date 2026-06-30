@@ -44,39 +44,49 @@ namespace PptPowerKeys.Windows.UI
             Debug.WriteLine($"SnapToGrid set to {pressed} (persisted to UserSettings.json).");
         }
 
-        public void OnAlignLeft(IRibbonControl control)
+        public void OnLayoutCommand(IRibbonControl control)
+        {
+            if (!RibbonCommandMap.TryParse(control.Id, out var command))
+            {
+                MessageBox.Show(
+                    $"Unknown layout command for ribbon control '{control.Id}'.",
+                    "PPT PowerKeys",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            ExecuteLayout(command);
+        }
+
+        private static void ExecuteLayout(CommandIds command)
         {
             var router = Globals.ThisAddIn?.CommandRouter;
             if (router == null)
             {
-                MessageBox.Show("Command router is not initialized.", "PPT PowerKeys", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Command router is not initialized.",
+                    "PPT PowerKeys",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
+            var title = CommandCatalog.Find(command)?.Title ?? command.ToString();
+
             try
             {
-                var result = router.Execute(CommandIds.AlignLeft);
+                var result = router.Execute(command);
                 Debug.WriteLine(
                     result.Changed
-                        ? "AlignLeft applied via Core.LayoutEngine (in-process)."
-                        : $"AlignLeft no-op: {result.Message}");
+                        ? $"{command} applied via Core.LayoutEngine (in-process)."
+                        : $"{command} no-op: {result.Message}");
             }
             catch (System.Exception ex)
             {
-                Debug.WriteLine($"AlignLeft failed: {ex}");
-                MessageBox.Show(ex.Message, "PPT PowerKeys — Align Left", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"{command} failed: {ex}");
+                MessageBox.Show(ex.Message, $"PPT PowerKeys — {title}", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public void OnBootstrapAction(IRibbonControl control)
-        {
-            var commandCount = Core.Commands.CommandCatalog.All.Count;
-            Debug.WriteLine($"PowerKeys.Windows bootstrap: {commandCount} commands in shared Core catalog.");
-            MessageBox.Show(
-                $"PptPowerKeys.Windows loaded.\nShared Core catalog: {commandCount} commands.",
-                "PPT PowerKeys",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
         }
 
         private static string GetResourceText(string resourceName)

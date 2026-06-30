@@ -94,6 +94,7 @@
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\PowerKeysRibbon.cs" />
+    <Compile Include="UI\RibbonCommandMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\RibbonTab.xml" />
