@@ -30,8 +30,8 @@ in-process pipeline (no HTTP):
 COM selection → ShapeBounds[] → LayoutEngine.Apply → ComHostAdapter.ApplyShapeBounds
 ```
 
-Anchor = **last** selected shape (unchanged from S07-003). `LayoutOptions` is `null` (snap-to-grid: S08-002).
-Non-layout commands throw `NotSupportedException`.
+Anchor = **last** selected shape (unchanged from S07-003). `LayoutOptions.SnapToGrid` comes from
+local `UserSettings.json` (S08-002). Non-layout commands throw `NotSupportedException`.
 
 ### Routable commands (32)
 
@@ -54,7 +54,41 @@ var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.SameWidth);
 
 Ribbon exposes **Align Left** only until S08-003; other commands are testable via `CommandRouter` API.
 
-### Manual QA (Windows)
+## Snap-to-grid (S08-002)
+
+`UserSettings.SnapToGrid` is persisted to **`%AppData%\PptPowerKeys\UserSettings.json`**
+(Roaming profile — may sync on domain-joined machines). JSON uses camelCase (`snapToGrid`)
+compatible with Web Add-in export/import v1.
+
+Ribbon **PowerKeys** → **Layout** → checkbox **Snap to grid (0.1 cm)** toggles the flag;
+changes save immediately. All 32 ServerLayout commands receive
+`LayoutOptions { SnapToGrid = settings.SnapToGrid }` via `CommandRouter` (grid step = default 0.1 cm).
+
+### Manual QA — snap toggle
+
+1. Open PowerPoint with the add-in loaded → **PowerKeys** tab.
+2. Confirm checkbox **Snap to grid (0.1 cm)** is unchecked on first run (or matches prior session).
+3. Check the box → run **Align Left** on 2+ shapes → left edges should land on 0.1 cm grid
+   (use Format Shape position/size in cm to verify).
+4. Uncheck → **Align Left** again → positions follow raw layout math (S08-001 behavior, no snap).
+5. Check box, close PowerPoint, reopen → checkbox remains checked; `%AppData%\PptPowerKeys\UserSettings.json`
+   contains `"snapToGrid": true`.
+
+### Manual QA — snap geometry (snap ON)
+
+| Command | Setup | Expected |
+|---------|-------|----------|
+| **AlignLeft** | 3 rectangles at different X; anchor = last selected | All left edges match anchor left **and** are multiples of 0.1 cm |
+| **SameWidth** | 2+ shapes with different widths; anchor = widest | Non-anchor widths match anchor width; width/position values snap to 0.1 cm grid |
+
+Steps:
+
+1. Enable **Snap to grid (0.1 cm)** on the ribbon.
+2. Draw shapes; multi-select with **last** click = anchor.
+3. Run command (ribbon **Align Left**, or `CommandRouter.Execute(CommandIds.SameWidth)` for SameWidth).
+4. Inspect shape position/size in cm — values should be multiples of 0.1.
+
+### Manual QA (Windows) — layout regression (snap OFF)
 
 Regression minimum — three commands covering align, resize, and distribute:
 

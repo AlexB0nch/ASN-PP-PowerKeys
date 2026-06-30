@@ -24,4 +24,8 @@
     <ProjectReference Include="..\PptPowerKeys.Api\PptPowerKeys.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\PptPowerKeys.Windows\Settings\WindowsUserSettingsStore.cs" Link="Windows\WindowsUserSettingsStore.cs" />
+  </ItemGroup>
+
 </Project>

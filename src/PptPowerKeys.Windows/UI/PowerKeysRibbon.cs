@@ -21,6 +21,29 @@ namespace PptPowerKeys.Windows.UI
             _ribbon = ribbonUI;
         }
 
+        public bool GetSnapToGridPressed(IRibbonControl control)
+        {
+            return Globals.ThisAddIn?.SettingsStore?.Current.SnapToGrid ?? false;
+        }
+
+        public void OnSnapToGridToggle(IRibbonControl control, bool pressed)
+        {
+            var store = Globals.ThisAddIn?.SettingsStore;
+            if (store == null)
+            {
+                MessageBox.Show(
+                    "Settings store is not initialized.",
+                    "PPT PowerKeys",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            store.SetSnapToGrid(pressed);
+            _ribbon?.InvalidateControl(control.Id);
+            Debug.WriteLine($"SnapToGrid set to {pressed} (persisted to UserSettings.json).");
+        }
+
         public void OnAlignLeft(IRibbonControl control)
         {
             var router = Globals.ThisAddIn?.CommandRouter;
