@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PptPowerKeys.Core.Commands;
 using PptPowerKeys.Core.Geometry;
 
 namespace PptPowerKeys.Windows.Host
@@ -29,5 +30,11 @@ namespace PptPowerKeys.Windows.Host
         /// Returns the number of shapes updated (0 if nothing selected).
         /// </summary>
         int ApplyPositionToSelection(double left, double top);
+
+        /// <summary>
+        /// Inserts a shape on the active slide per <paramref name="command"/>.
+        /// Throws <see cref="System.InvalidOperationException"/> when no active slide is available.
+        /// </summary>
+        void InsertShape(CommandIds command);
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
+using PptPowerKeys.Core.Commands;
 using PptPowerKeys.Core.Geometry;
 
 namespace PptPowerKeys.Windows.Host
@@ -160,6 +162,46 @@ namespace PptPowerKeys.Windows.Host
             }
 
             return range.Count;
+        }
+
+        public void InsertShape(CommandIds command)
+        {
+            Slide slide = GetActiveSlide();
+            if (slide == null)
+            {
+                throw new InvalidOperationException("No active slide. Open a slide in Normal view and try again.");
+            }
+
+            Shapes shapes = slide.Shapes;
+            switch (command)
+            {
+                case CommandIds.InsertRectangle:
+                    shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, 100f, 100f, 150f, 100f);
+                    break;
+                case CommandIds.InsertSquare:
+                    shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, 100f, 100f, 100f, 100f);
+                    break;
+                case CommandIds.InsertEllipse:
+                    shapes.AddShape(MsoAutoShapeType.msoShapeOval, 100f, 100f, 150f, 100f);
+                    break;
+                case CommandIds.InsertLine:
+                    shapes.AddLine(100f, 150f, 250f, 150f);
+                    break;
+                case CommandIds.InsertTextbox:
+                    shapes.AddTextbox(
+                        MsoTextOrientation.msoTextOrientationHorizontal,
+                        100f,
+                        100f,
+                        200f,
+                        80f);
+                    break;
+                case CommandIds.InsertArrow:
+                    Shape arrow = shapes.AddLine(100f, 150f, 250f, 150f);
+                    arrow.Line.EndArrowheadStyle = MsoArrowheadStyle.msoArrowheadTriangle;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(command), command, "Not an insert-shape command.");
+            }
         }
 
         private Slide GetActiveSlide() => _application.ActiveWindow?.View?.Slide;

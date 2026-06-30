@@ -10,6 +10,12 @@ public class HostScriptCommandMapTests
     [InlineData("btnCopyAndAlignLeft", CommandIds.CopyAndAlignLeft)]
     [InlineData("btnCopyObjectPosition", CommandIds.CopyObjectPosition)]
     [InlineData("btnPasteObjectPosition", CommandIds.PasteObjectPosition)]
+    [InlineData("btnInsertRectangle", CommandIds.InsertRectangle)]
+    [InlineData("btnInsertSquare", CommandIds.InsertSquare)]
+    [InlineData("btnInsertEllipse", CommandIds.InsertEllipse)]
+    [InlineData("btnInsertLine", CommandIds.InsertLine)]
+    [InlineData("btnInsertTextbox", CommandIds.InsertTextbox)]
+    [InlineData("btnInsertArrow", CommandIds.InsertArrow)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

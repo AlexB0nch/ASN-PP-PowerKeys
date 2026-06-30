@@ -18,8 +18,8 @@ Steps:
 1. Open `src/PptPowerKeys.Windows.sln` in Visual Studio.
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
-4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Position** (2 commands),
-   **Copy & Align** (4 commands), plus **Options** → snap checkbox.
+4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Objects** (6 commands),
+   **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## Manual QA
@@ -117,6 +117,43 @@ router.Execute(PptPowerKeys.Core.Commands.CommandIds.PasteObjectPosition);
 
 Copy → paste manual steps: see [06-windows-layout-qa.md](../../docs/migration/06-windows-layout-qa.md#copy--paste-flow-required-pr-manual-check).
 
+## Insert shapes (S09-001)
+
+`CommandRouter.Execute(CommandIds)` routes **6** insert-shape HostScript commands through COM on the active slide
+(no selection required). Parity with Web Add-in `insertShape` / `insertTextBox` in `powerpoint.ts` and success
+messages in `runCommand.ts`.
+
+| CommandId | COM behavior | Success message |
+|-----------|--------------|-----------------|
+| InsertRectangle | `AddShape(msoShapeRectangle)` 100,100 150×100 pt | *Rectangle inserted.* |
+| InsertSquare | `AddShape(msoShapeRectangle)` 100,100 100×100 pt | *Rectangle inserted.* |
+| InsertEllipse | `AddShape(msoShapeOval)` 100,100 150×100 pt | *Ellipse inserted.* |
+| InsertLine | `AddLine(100,150,250,150)` horizontal ~150 pt | *Line inserted.* |
+| InsertTextbox | `AddTextbox` 100,100 200×80 pt | *Text box inserted.* |
+| InsertArrow | line + `EndArrowheadStyle = msoArrowheadTriangle` | *Line inserted.* |
+
+Ribbon **PowerKeys** → **Objects** (6 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute` → `ComHostAdapter.InsertShape`.
+
+### Manual QA (Insert shapes)
+
+1. Open a presentation in Normal view with at least one slide active.
+2. For each **Objects** button (Rectangle, Square, Ellipse, Line, Textbox, Arrow):
+   - Click the button with **no shapes selected**.
+   - Confirm a new shape appears near the top-left at the documented size/position.
+   - Confirm status message matches the table above (if your build surfaces `CommandExecutionResult.Message`).
+3. **InsertArrow:** select the new line → confirm a **triangle end arrowhead** is visible (COM advantage over Web partial).
+4. Switch to Slide Sorter (no active slide in Normal view) → click any Insert button → expect a clear error
+   (*No active slide…*).
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.InsertRectangle);
+// result.Changed == true, result.Message == "Rectangle inserted."
+```
+
 ## Ribbon layout groups (S08-003)
 
 All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
@@ -126,6 +163,7 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 |-------|----------|
 | **Alignment** | AlignLeft, AlignCenterHorizontal, AlignRight, AlignTop, AlignMiddleVertical, AlignBottom, DistributeHorizontal, DistributeVertical |
 | **Stack** | AlignLeftToRight, AlignRightToLeft, AlignTopToBottom, AlignBottomToTop |
+| **Objects** | InsertRectangle, InsertSquare, InsertEllipse, InsertLine, InsertTextbox, InsertArrow |
 | **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |
