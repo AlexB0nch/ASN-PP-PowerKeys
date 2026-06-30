@@ -10,8 +10,9 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#73](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/73) |
+| **PR** | [#74](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/74) |
 
 ## Цель
 
