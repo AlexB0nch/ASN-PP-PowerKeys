@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Compile Include="..\PptPowerKeys.Windows\Settings\WindowsUserSettingsStore.cs" Link="Windows\WindowsUserSettingsStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\CopyAndAlignCommands.cs" Link="Windows\CopyAndAlignCommands.cs" />
   </ItemGroup>
 
 </Project>

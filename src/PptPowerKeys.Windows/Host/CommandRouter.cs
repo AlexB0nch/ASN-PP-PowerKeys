@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Geometry;
 using PptPowerKeys.Core.Layout;
 using PptPowerKeys.Windows.Settings;
 
 namespace PptPowerKeys.Windows.Host
 {
     /// <summary>
-    /// Routes <see cref="CommandIds"/> to in-process Core (ServerLayout) or future host scripts.
+    /// Routes <see cref="CommandIds"/> to in-process Core (ServerLayout) or host scripts.
     /// S08-001: all 32 <see cref="LayoutEngine.IsLayoutCommand"/> ids via <see cref="ExecuteServerLayout"/>.
     /// S08-002: passes <see cref="LayoutOptions.SnapToGrid"/> from <see cref="WindowsUserSettingsStore"/>.
+    /// S08-004: Copy-and-align HostScript commands (duplicate + layout).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -21,15 +24,20 @@ namespace PptPowerKeys.Windows.Host
             _settingsStore = settingsStore ?? throw new ArgumentNullException(nameof(settingsStore));
         }
 
-        public LayoutResult Execute(CommandIds command)
+        public CommandExecutionResult Execute(CommandIds command)
         {
-            if (!LayoutEngine.IsLayoutCommand(command))
+            if (LayoutEngine.IsLayoutCommand(command))
             {
-                throw new NotSupportedException(
-                    $"Command '{command}' is not implemented in PptPowerKeys.Windows yet.");
+                return CommandExecutionResult.FromLayoutResult(ExecuteServerLayout(command));
             }
 
-            return ExecuteServerLayout(command);
+            if (CopyAndAlignCommands.IsCopyAndAlign(command))
+            {
+                return ExecuteCopyAndAlign(command);
+            }
+
+            throw new NotSupportedException(
+                $"Command '{command}' is not implemented in PptPowerKeys.Windows yet.");
         }
 
         private LayoutOptions GetLayoutOptions() =>
@@ -52,6 +60,55 @@ namespace PptPowerKeys.Windows.Host
             }
 
             return result;
+        }
+
+        private CommandExecutionResult ExecuteCopyAndAlign(CommandIds command)
+        {
+            if (!CopyAndAlignCommands.TryMapToLayoutCommand(command, out var layoutCommand))
+            {
+                throw new InvalidOperationException($"Unknown copy-and-align command: {command}.");
+            }
+
+            var originals = _host.ReadSelectedShapeBounds();
+            if (originals.Count == 0)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            var clones = _host.CloneSelectedAtSourcePositions();
+            if (clones.Count == 0)
+            {
+                throw new InvalidOperationException("Could not duplicate the selected shapes.");
+            }
+
+            var combined = new List<ShapeBounds>(originals.Count + clones.Count);
+            combined.AddRange(originals);
+            combined.AddRange(clones);
+
+            var request = new LayoutRequest
+            {
+                Command = layoutCommand,
+                Shapes = combined,
+                AnchorIndex = originals.Count - 1,
+                Options = GetLayoutOptions(),
+            };
+
+            var result = LayoutEngine.Apply(request);
+            if (!result.Changed)
+            {
+                return new CommandExecutionResult
+                {
+                    Changed = false,
+                    Message = result.Message ?? "Nothing to change.",
+                };
+            }
+
+            _host.ApplyShapeBoundsOnSlide(result.Shapes);
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = $"Duplicated and aligned {clones.Count} shape(s).",
+            };
         }
     }
 }

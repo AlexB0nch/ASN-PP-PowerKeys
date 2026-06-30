@@ -56,10 +56,25 @@ namespace PptPowerKeys.Windows.UI
                 return;
             }
 
-            ExecuteLayout(command);
+            ExecuteCommand(command);
         }
 
-        private static void ExecuteLayout(CommandIds command)
+        public void OnHostScriptCommand(IRibbonControl control)
+        {
+            if (!HostScriptCommandMap.TryParse(control.Id, out var command))
+            {
+                MessageBox.Show(
+                    $"Unknown host script command for ribbon control '{control.Id}'.",
+                    "PPT PowerKeys",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            ExecuteCommand(command);
+        }
+
+        private static void ExecuteCommand(CommandIds command)
         {
             var router = Globals.ThisAddIn?.CommandRouter;
             if (router == null)
@@ -79,7 +94,7 @@ namespace PptPowerKeys.Windows.UI
                 var result = router.Execute(command);
                 Debug.WriteLine(
                     result.Changed
-                        ? $"{command} applied via Core.LayoutEngine (in-process)."
+                        ? $"{command}: {result.Message}"
                         : $"{command} no-op: {result.Message}");
             }
             catch (System.Exception ex)
