@@ -117,6 +117,28 @@ S09-001…002 Done. Issue S09-003 → backlog In Progress → /builder выпо�
 Regroup — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-003).
 ```
 
+## Copy-paste промпт (S09-004 — Multi-slide paste/remove)
+
+```
+/architect
+
+Sprint 09 — S09-004 Multi-slide paste/remove shapes (2 HostScript commands).
+Прочитай:
+- sprints/sprint-09-ltsc-objects-format-text/tasks/S09-004-multislide-shapes.md
+- sprints/sprint-05-advanced-features/tasks/S05-004-multi-slide-paste-remove.md (Web UX spec)
+- sprints/sprint-09-ltsc-objects-format-text/goals.md
+- sprints/sprint-09-ltsc-objects-format-text/backlog.md
+- src/PptPowerKeys.Windows/Host/CommandRouter.cs
+- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
+- src/PptPowerKeys.Windows/UI/HostScriptCommandMap.cs
+- src/PptPowerKeys.Windows/Host/GroupAndZOrderCommands.cs (pattern)
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (pasteShapeToSelectedSlides, removeShapeFromSelectedSlides)
+- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (PasteShapeToSelectedSlides, RemoveShapeFromSelectedSlides)
+
+S09-001…003 Done. Issue S09-004 → backlog In Progress → /builder выполни S09-004 → приёмка → merge.
+CopySlide/MoveSlidesToBackup — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-004).
+```
+
 ## Copy-paste промпт (S09-006 — закрытие спринта)
 
 ```
