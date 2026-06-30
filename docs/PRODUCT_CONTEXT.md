@@ -96,6 +96,12 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S08-002:** Windows snap-to-grid parity с Web S05-002 — `WindowsUserSettingsStore` persist
+  `%AppData%/PptPowerKeys/UserSettings.json` (camelCase `snapToGrid`, Web export/import v1 compatible);
+  `CommandRouter` передаёт `LayoutOptions { SnapToGrid }` во все 32 ServerLayout; ribbon checkbox
+  «Snap to grid (0.1 cm)» toggle + immediate save; `GridStepCm` = default 0.1 (Core `GridSnap` unchanged);
+  unit tests `WindowsUserSettingsStoreTests` (linked in `PptPowerKeys.Tests` for Linux CI); manual QA AlignLeft +
+  SameWidth в `PptPowerKeys.Windows/README.md`. PR #65; 146 dotnet tests green.
 - **S08-001:** `CommandRouter` — generic dispatch через `LayoutEngine.IsLayoutCommand()` для всех **32 ServerLayout**
   команд (Alignment 12 + Resize 20); один `ExecuteServerLayout` (COM → `ShapeBounds[]` → `LayoutEngine.Apply` → write back);
   `LayoutOptions` = null (snap-to-grid — S08-002); non-layout → `NotSupportedException`; ribbon по-прежнему только AlignLeft
