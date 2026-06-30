@@ -6,7 +6,7 @@ namespace PptPowerKeys.Windows.Host
 {
     /// <summary>
     /// Routes <see cref="CommandIds"/> to in-process Core (ServerLayout) or future host scripts.
-    /// S07-003: AlignLeft only. S08 expands ServerLayout commands.
+    /// S08-001: all 32 <see cref="LayoutEngine.IsLayoutCommand"/> ids via <see cref="ExecuteServerLayout"/>.
     /// </summary>
     public sealed class CommandRouter
     {
@@ -19,15 +19,13 @@ namespace PptPowerKeys.Windows.Host
 
         public LayoutResult Execute(CommandIds command)
         {
-            switch (command)
+            if (!LayoutEngine.IsLayoutCommand(command))
             {
-                case CommandIds.AlignLeft:
-                    return ExecuteServerLayout(command);
-
-                default:
-                    throw new NotSupportedException(
-                        $"Command '{command}' is not implemented in PptPowerKeys.Windows yet.");
+                throw new NotSupportedException(
+                    $"Command '{command}' is not implemented in PptPowerKeys.Windows yet.");
             }
+
+            return ExecuteServerLayout(command);
         }
 
         private LayoutResult ExecuteServerLayout(CommandIds command)
