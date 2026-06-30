@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#82](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/82) |
-| **PR** | TBD |
+| **PR** | [#83](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/83) |
 
 ## Цель
 
@@ -141,16 +141,25 @@ if (MultiSlideShapeCommands.IsMultiSlideShapeCommand(command)) → ExecuteMultiS
 
 ## Критерии приёмки
 
-- [ ] Both commands routed via `CommandRouter.Execute`
-- [ ] Paste: ≥2 slides, 1 source shape, skip source slide, same Left/Top/Width/Height
-- [ ] Remove: ≥1 slide, exact name match, aggregates in status message; empty name → error
-- [ ] Validation error strings match Web `powerpoint.ts`
-- [ ] Ribbon grpMultiSlide (2 buttons) wired via `OnHostScriptCommand`
-- [ ] `HostScriptCommandMap` + `MultiSlideShapeCommands` unit tests
-- [ ] `dotnet test PptPowerKeys.sln` green
-- [ ] PR: ветка `cursor/S09-004-multislide-shapes-<suffix>`, Task ID, `Closes #<issue>`
-- [ ] `.github/review/CHECKLIST.md` — scope OK
-- [ ] После merge: backlog S09-004 → **Done**; `PRODUCT_CONTEXT` journal (S09-004 Windows parity)
+- [x] Both commands routed via `CommandRouter.Execute`
+- [x] Paste: ≥2 slides, 1 source shape, skip source slide, same Left/Top/Width/Height
+- [x] Remove: ≥1 slide, exact name match, aggregates in status message; empty name → error
+- [x] Validation error strings match Web `powerpoint.ts`
+- [x] Ribbon grpMultiSlide (2 buttons) wired via `OnHostScriptCommand`
+- [x] `HostScriptCommandMap` + `MultiSlideShapeCommands` unit tests
+- [x] `dotnet test PptPowerKeys.sln` green (230 passed)
+- [x] PR: `cursor/S09-004-multislide-shapes-22e1`, Task ID, `Closes #82`
+- [x] `.github/review/CHECKLIST.md` — scope OK
+- [x] После merge: backlog S09-004 → **Done**; `PRODUCT_CONTEXT` journal (S09-004 Windows parity)
+
+## Приёмка (architect, 2026-06-30)
+
+- PR #83 merged. Scope соблюдён: Windows multi-slide paste/remove; Core/Api/AddIn/VstoLegacy не тронуты.
+- CI/local: 230 dotnet tests green.
+- `PasteShapeToSelectedSlides`: COM `Shape.Copy()` + `Slide.Shapes.Paste()` per target; skip source slide; geometry preserved; validation messages match Web.
+- `RemoveShapeFromSelectedSlides`: delete by exact `Name` (backwards iteration); aggregates `{ slidesProcessed, shapesRemoved }`; empty name — error.
+- Ribbon **Multi-slide** group (`grpMultiSlide`, 2 buttons); CopySlide/MoveSlidesToBackup — anti-scope (S10).
+- Ручная проверка PowerPoint Windows — post-merge.
 
 ## Зависимости
 

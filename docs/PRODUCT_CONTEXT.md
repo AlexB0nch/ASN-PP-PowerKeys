@@ -96,11 +96,17 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S09-004:** Multi-slide paste/remove HostScript на Windows line — 2 команды (`PasteShapeToSelectedSlides`,
+  `RemoveShapeFromSelectedSlides`); COM `Shape.Copy()` + `Slide.Shapes.Paste()` per target slide (skip source,
+  preserve Left/Top/Width/Height); remove by exact `Name` (backwards delete); validation + success messages parity
+  с Web `powerpoint.ts` / `runCommand.ts`; ribbon **Multi-slide** group (`grpMultiSlide`, 2 buttons);
+  `MultiSlideShapeCommandsTests` + map tests; CopySlide/MoveSlidesToBackup — anti-scope (S10); PR #83; 230 dotnet
+  tests green. Next: S09-005 format colors + palette.
 - **S09-003:** Group / Ungroup / Z-order HostScript на Windows line — 6 команд (Group, Ungroup,
   BringToFront, SendToBack, BringForward, SendBackward); COM `ShapeRange.Group()`, `Shape.Ungroup()`,
   `Shape.ZOrder(MsoZOrderCmd)`; validation + messages parity с Web `powerpoint.ts` / `runCommand.ts`;
   ribbon **Order** group (`grpOrder`, 6 buttons); `GroupZOrderCommandsTests` + map tests; Regroup — anti-scope (S10);
-  PR #79; 220 dotnet tests green. Next: S09-004 multi-slide paste/remove.
+  PR #79; 220 dotnet tests green.
 - **S09-002:** Smart Duplicate HostScript на Windows line — `DuplicateRight/Left/Up/Down`; pipeline:
   `ReadSelectedShapeBounds` → `DuplicateGapStore.GetGap` → `DuplicationEngine.ComputeDuplicate` →
   `DuplicateSelectedAtPositions` (COM clone + Left/Top) → `DuplicateGapStore.SetGap`; in-memory per-`CommandId`
