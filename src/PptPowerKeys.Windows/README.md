@@ -18,8 +18,8 @@ Steps:
 1. Open `src/PptPowerKeys.Windows.sln` in Visual Studio.
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
-4. Ribbon tab **PowerKeys** → **Test** shows bootstrap message with Core catalog count.
-5. Select 2+ shapes (anchor = last selected) → **Align Left** aligns to anchor left edge (in-process Core, no HTTP).
+4. Ribbon tab **PowerKeys** shows six layout groups (32 commands) plus **Options** → snap checkbox.
+5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## ServerLayout commands (S08-001)
 
@@ -52,7 +52,37 @@ var router = Globals.ThisAddIn.CommandRouter;
 var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.SameWidth);
 ```
 
-Ribbon exposes **Align Left** only until S08-003; other commands are testable via `CommandRouter` API.
+## Ribbon layout groups (S08-003)
+
+All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
+`CommandRouter.Execute(CommandIds)`. Control ids follow `btn{CommandIds}` (parsed by `RibbonCommandMap`).
+
+| Group | Commands |
+|-------|----------|
+| **Alignment** | AlignLeft, AlignCenterHorizontal, AlignRight, AlignTop, AlignMiddleVertical, AlignBottom, DistributeHorizontal, DistributeVertical |
+| **Stack** | AlignLeftToRight, AlignRightToLeft, AlignTopToBottom, AlignBottomToTop |
+| **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
+| **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |
+| **Nudge Large** | IncreaseWidthLarge, DecreaseWidthLarge, IncreaseHeightLarge, DecreaseHeightLarge, IncreaseSizeKeepAspect, DecreaseSizeKeepAspect |
+| **Nudge Small** | IncreaseWidthSmall, DecreaseWidthSmall, IncreaseHeightSmall, DecreaseHeightSmall |
+| **Options** | Snap to grid checkbox only (S08-002) |
+
+### Manual QA — ribbon groups (≥1 command per group)
+
+1. Open PowerPoint with the add-in loaded → **PowerKeys** tab; confirm **Bootstrap / Test** button is gone.
+2. Draw 3 rectangles at different positions; multi-select with **last** click = anchor.
+3. Run one command from each group (examples below); geometry updates in-process, no network.
+4. Single-shape selection → no crash; command is a no-op with message in debug output.
+
+| Group | Sample command | Expected |
+|-------|----------------|----------|
+| **Alignment** | **Left** | All left edges match anchor left |
+| **Stack** | **To Right** | Each shape's left edge meets anchor's right edge |
+| **Size** | **Same Width** | Non-anchor widths match anchor width |
+| **Stretch** | **To Left** (Stretch width) | Width stretches toward anchor left |
+| **Nudge Large** | **+ Width** | Width increases by large step |
+| **Nudge Small** | **+ W** | Width increases by small step |
+| **Options** | Toggle **Snap to grid** | Persists to `%AppData%\PptPowerKeys\UserSettings.json` |
 
 ## Snap-to-grid (S08-002)
 
@@ -60,7 +90,7 @@ Ribbon exposes **Align Left** only until S08-003; other commands are testable vi
 (Roaming profile — may sync on domain-joined machines). JSON uses camelCase (`snapToGrid`)
 compatible with Web Add-in export/import v1.
 
-Ribbon **PowerKeys** → **Layout** → checkbox **Snap to grid (0.1 cm)** toggles the flag;
+Ribbon **PowerKeys** → **Options** → checkbox **Snap to grid (0.1 cm)** toggles the flag;
 changes save immediately. All 32 ServerLayout commands receive
 `LayoutOptions { SnapToGrid = settings.SnapToGrid }` via `CommandRouter` (grid step = default 0.1 cm).
 
@@ -85,7 +115,7 @@ Steps:
 
 1. Enable **Snap to grid (0.1 cm)** on the ribbon.
 2. Draw shapes; multi-select with **last** click = anchor.
-3. Run command (ribbon **Align Left**, or `CommandRouter.Execute(CommandIds.SameWidth)` for SameWidth).
+3. Run command (ribbon **Alignment** → **Left**, or **Size** → **Same Width**, or programmatic).
 4. Inspect shape position/size in cm — values should be multiples of 0.1.
 
 ### Manual QA (Windows) — layout regression (snap OFF)
@@ -101,15 +131,15 @@ Regression minimum — three commands covering align, resize, and distribute:
 Steps (each command):
 
 1. Draw shapes on a slide; multi-select with **last** click = anchor.
-2. Call `CommandRouter.Execute(CommandIds.<name>)` (ribbon Align Left for AlignLeft, or programmatic for others).
+2. Call `CommandRouter.Execute(CommandIds.<name>)` or use the matching ribbon button.
 3. Confirm geometry updates in-process; no network activity.
 4. Single-shape or empty selection → `LayoutResult.NoChange` with message (no crash).
 
-### AlignLeft ribbon check (S07-003)
+### AlignLeft ribbon check (S07-003 / S08-003)
 
 1. Draw three rectangles at different horizontal positions.
 2. Multi-select: click first shapes, **last** click = anchor (rightmost or any anchor shape).
-3. **PowerKeys** → **Align Left** — all shapes' left edges match anchor's left edge.
+3. **PowerKeys** → **Alignment** → **Left** — all shapes' left edges match anchor's left edge.
 4. Confirm no network calls (offline / air-gap safe for layout path).
 
 ## Solution layout

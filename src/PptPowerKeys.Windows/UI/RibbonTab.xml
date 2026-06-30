@@ -3,29 +3,188 @@
   <ribbon>
     <tabs>
       <tab id="tabPowerKeys" label="PowerKeys" insertAfterMso="TabHome">
-        <group id="grpLayout" label="Layout">
+        <group id="grpAlignment" label="Alignment">
           <button id="btnAlignLeft"
-                  label="Align Left"
-                  onAction="OnAlignLeft"
+                  label="Left"
+                  onAction="OnLayoutCommand"
                   size="large"
                   imageMso="ObjectsAlignLeft"
                   screentip="Align Left"
-                  supertip="Align selected shapes to the left edge of the anchor (last selected shape). Core in-process, no HTTP." />
+                  supertip="Align selected shapes to the left edge of the anchor (last selected shape)." />
+          <button id="btnAlignCenterHorizontal"
+                  label="Center"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignCenterHorizontal"
+                  screentip="Align Center Horizontal" />
+          <button id="btnAlignRight"
+                  label="Right"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignRight"
+                  screentip="Align Right" />
+          <button id="btnAlignTop"
+                  label="Top"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignTop"
+                  screentip="Align Top" />
+          <button id="btnAlignMiddleVertical"
+                  label="Middle"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignMiddleVertical"
+                  screentip="Align Middle Vertical" />
+          <button id="btnAlignBottom"
+                  label="Bottom"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignBottom"
+                  screentip="Align Bottom" />
+          <button id="btnDistributeHorizontal"
+                  label="Dist H"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsDistributeHorizontally"
+                  screentip="Distribute Horizontal" />
+          <button id="btnDistributeVertical"
+                  label="Dist V"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsDistributeVertically"
+                  screentip="Distribute Vertical" />
+        </group>
+        <group id="grpStack" label="Stack">
+          <button id="btnAlignLeftToRight"
+                  label="To Right"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectBringForward"
+                  screentip="Place to Right of Anchor"
+                  supertip="Position each shape so its left edge meets the anchor's right edge." />
+          <button id="btnAlignRightToLeft"
+                  label="To Left"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectSendBackward"
+                  screentip="Place to Left of Anchor" />
+          <button id="btnAlignTopToBottom"
+                  label="Below"
+                  onAction="OnLayoutCommand"
+                  imageMso="AlignBottom"
+                  screentip="Place Below Anchor" />
+          <button id="btnAlignBottomToTop"
+                  label="Above"
+                  onAction="OnLayoutCommand"
+                  imageMso="AlignTop"
+                  screentip="Place Above Anchor" />
+        </group>
+        <group id="grpSize" label="Size">
+          <button id="btnSameWidth"
+                  label="Same Width"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsSameWidth"
+                  screentip="Same Width" />
+          <button id="btnSameHeight"
+                  label="Same Height"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsSameHeight"
+                  screentip="Same Height" />
+          <button id="btnSameWidthKeepAspect"
+                  label="W + Aspect"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsSameWidth"
+                  screentip="Same Width (Keep Aspect)" />
+          <button id="btnSameHeightKeepAspect"
+                  label="H + Aspect"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsSameHeight"
+                  screentip="Same Height (Keep Aspect)" />
+          <button id="btnWidthEqualsAnchorHeight"
+                  label="W = Anchor H"
+                  onAction="OnLayoutCommand"
+                  imageMso="ShapeRectangle"
+                  screentip="Width = Anchor Height" />
+          <button id="btnHeightEqualsAnchorWidth"
+                  label="H = Anchor W"
+                  onAction="OnLayoutCommand"
+                  imageMso="ShapeRectangle"
+                  screentip="Height = Anchor Width" />
+        </group>
+        <group id="grpStretch" label="Stretch">
+          <button id="btnStretchWidthToLeft"
+                  label="To Left"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignLeft"
+                  screentip="Stretch Width to Anchor Left" />
+          <button id="btnStretchWidthToRight"
+                  label="To Right"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignRight"
+                  screentip="Stretch Width to Anchor Right" />
+          <button id="btnStretchHeightToTop"
+                  label="To Top"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignTop"
+                  screentip="Stretch Height to Anchor Top" />
+          <button id="btnStretchHeightToBottom"
+                  label="To Bottom"
+                  onAction="OnLayoutCommand"
+                  imageMso="ObjectsAlignBottom"
+                  screentip="Stretch Height to Anchor Bottom" />
+        </group>
+        <group id="grpNudgeLarge" label="Nudge Large">
+          <button id="btnIncreaseWidthLarge"
+                  label="+ Width"
+                  onAction="OnLayoutCommand"
+                  imageMso="IncreaseIndent"
+                  screentip="Increase Width (Large)" />
+          <button id="btnDecreaseWidthLarge"
+                  label="- Width"
+                  onAction="OnLayoutCommand"
+                  imageMso="DecreaseIndent"
+                  screentip="Decrease Width (Large)" />
+          <button id="btnIncreaseHeightLarge"
+                  label="+ Height"
+                  onAction="OnLayoutCommand"
+                  imageMso="IncreaseIndent"
+                  screentip="Increase Height (Large)" />
+          <button id="btnDecreaseHeightLarge"
+                  label="- Height"
+                  onAction="OnLayoutCommand"
+                  imageMso="DecreaseIndent"
+                  screentip="Decrease Height (Large)" />
+          <button id="btnIncreaseSizeKeepAspect"
+                  label="+ Size"
+                  onAction="OnLayoutCommand"
+                  imageMso="ZoomIn"
+                  screentip="Increase Size (Keep Aspect)" />
+          <button id="btnDecreaseSizeKeepAspect"
+                  label="- Size"
+                  onAction="OnLayoutCommand"
+                  imageMso="ZoomOut"
+                  screentip="Decrease Size (Keep Aspect)" />
+        </group>
+        <group id="grpNudgeSmall" label="Nudge Small">
+          <button id="btnIncreaseWidthSmall"
+                  label="+ W"
+                  onAction="OnLayoutCommand"
+                  imageMso="HappyFace"
+                  screentip="Increase Width (Small)" />
+          <button id="btnDecreaseWidthSmall"
+                  label="- W"
+                  onAction="OnLayoutCommand"
+                  imageMso="HappyFace"
+                  screentip="Decrease Width (Small)" />
+          <button id="btnIncreaseHeightSmall"
+                  label="+ H"
+                  onAction="OnLayoutCommand"
+                  imageMso="HappyFace"
+                  screentip="Increase Height (Small)" />
+          <button id="btnDecreaseHeightSmall"
+                  label="- H"
+                  onAction="OnLayoutCommand"
+                  imageMso="HappyFace"
+                  screentip="Decrease Height (Small)" />
+        </group>
+        <group id="grpOptions" label="Options">
           <checkBox id="chkSnapToGrid"
                     label="Snap to grid (0.1 cm)"
                     getPressed="GetSnapToGridPressed"
                     onAction="OnSnapToGridToggle"
                     screentip="Snap to grid"
                     supertip="When enabled, layout commands snap geometry to a 0.1 cm grid (Consulting Mode)." />
-        </group>
-        <group id="grpBootstrap" label="Bootstrap">
-          <button id="btnBootstrap"
-                  label="Test"
-                  onAction="OnBootstrapAction"
-                  size="normal"
-                  imageMso="HappyFace"
-                  screentip="PptPowerKeys.Windows bootstrap"
-                  supertip="Confirms the VSTO add-in and shared Core catalog are loaded." />
         </group>
       </tab>
     </tabs>
