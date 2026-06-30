@@ -16,6 +16,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-001: Insert-shape HostScript commands (rectangle, square, ellipse, line, textbox, arrow).
     /// S09-002: Smart-duplicate HostScript commands (DuplicateRight/Left/Up/Down + gap memory).
     /// S09-003: Group / Ungroup / Z-order HostScript commands (6 COM parity commands).
+    /// S09-004: Multi-slide paste / remove shape HostScript commands (2 COM parity commands).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -63,6 +64,11 @@ namespace PptPowerKeys.Windows.Host
             if (GroupZOrderCommands.IsGroupZOrderCommand(command))
             {
                 return ExecuteGroupZOrder(command);
+            }
+
+            if (MultiSlideShapeCommands.IsMultiSlideShapeCommand(command))
+            {
+                return ExecuteMultiSlideShape(command);
             }
 
             throw new NotSupportedException(
@@ -281,5 +287,34 @@ namespace PptPowerKeys.Windows.Host
                 CommandIds.SendBackward => "Sent backward.",
                 _ => throw new InvalidOperationException($"Unknown z-order command: {command}."),
             };
+
+        private CommandExecutionResult ExecuteMultiSlideShape(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.PasteShapeToSelectedSlides:
+                {
+                    int count = _host.PasteShapeToSelectedSlides();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Pasted shape to {count} slide(s).",
+                    };
+                }
+
+                case CommandIds.RemoveShapeFromSelectedSlides:
+                {
+                    var (slidesProcessed, shapesRemoved) = _host.RemoveShapeFromSelectedSlides();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Removed {shapesRemoved} shape(s) from {slidesProcessed} slide(s).",
+                    };
+                }
+
+                default:
+                    throw new InvalidOperationException($"Unknown multi-slide shape command: {command}.");
+            }
+        }
     }
 }

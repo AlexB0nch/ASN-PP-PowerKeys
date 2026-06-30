@@ -26,6 +26,8 @@ public class HostScriptCommandMapTests
     [InlineData("btnSendBackward", CommandIds.SendBackward)]
     [InlineData("btnGroup", CommandIds.Group)]
     [InlineData("btnUngroup", CommandIds.Ungroup)]
+    [InlineData("btnPasteShapeToSelectedSlides", CommandIds.PasteShapeToSelectedSlides)]
+    [InlineData("btnRemoveShapeFromSelectedSlides", CommandIds.RemoveShapeFromSelectedSlides)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

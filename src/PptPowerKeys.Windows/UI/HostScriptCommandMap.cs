@@ -11,6 +11,7 @@ namespace PptPowerKeys.Windows.UI
     /// S09-001: Insert-shape commands (rectangle, square, ellipse, line, textbox, arrow).
     /// S09-002: Smart-duplicate commands (DuplicateRight/Left/Up/Down).
     /// S09-003: Group / Ungroup / Z-order commands (6 COM parity commands).
+    /// S09-004: Multi-slide paste / remove shape commands (2 COM parity commands).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -36,7 +37,8 @@ namespace PptPowerKeys.Windows.UI
                 || PositionCommands.IsPositionCommand(command)
                 || InsertShapeCommands.IsInsertShape(command)
                 || DuplicateCommands.IsDuplicateCommand(command)
-                || GroupZOrderCommands.IsGroupZOrderCommand(command);
+                || GroupZOrderCommands.IsGroupZOrderCommand(command)
+                || MultiSlideShapeCommands.IsMultiSlideShapeCommand(command);
         }
     }
 }

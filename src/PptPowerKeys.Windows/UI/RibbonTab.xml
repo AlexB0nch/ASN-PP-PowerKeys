@@ -298,6 +298,21 @@
                   screentip="Ungroup"
                   supertip="Ungroup the selected group (requires exactly one group shape)." />
         </group>
+        <group id="grpMultiSlide" label="Multi-slide">
+          <button id="btnPasteShapeToSelectedSlides"
+                  label="Paste Shape"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="Paste"
+                  screentip="Paste shape to selected slides"
+                  supertip="Clone the single selected shape on the active slide onto every other selected slide (same position and size)." />
+          <button id="btnRemoveShapeFromSelectedSlides"
+                  label="Remove Shape"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectDelete"
+                  screentip="Remove shape from selected slides (by name)"
+                  supertip="Delete every shape with the same name as the selected shape on each selected slide." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"

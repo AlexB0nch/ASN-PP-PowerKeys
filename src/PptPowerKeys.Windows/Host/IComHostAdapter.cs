@@ -63,5 +63,17 @@ namespace PptPowerKeys.Windows.Host
         /// Throws when nothing is selected. Returns the number of shapes updated.
         /// </summary>
         int ApplyZOrderToSelection(CommandIds command);
+
+        /// <summary>
+        /// Copies the single selected shape on the active slide onto every other slide in the
+        /// multi-slide selection (skips the source slide). Returns the number of pastes.
+        /// </summary>
+        int PasteShapeToSelectedSlides();
+
+        /// <summary>
+        /// Deletes all shapes matching the selected shape's name on each slide in the selection.
+        /// Returns aggregate counts for the status bar.
+        /// </summary>
+        (int SlidesProcessed, int ShapesRemoved) RemoveShapeFromSelectedSlides();
     }
 }
