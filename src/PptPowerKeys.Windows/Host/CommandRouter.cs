@@ -14,6 +14,7 @@ namespace PptPowerKeys.Windows.Host
     /// S08-004: Copy-and-align HostScript commands (duplicate + layout).
     /// S08-005: Position clipboard HostScript commands (Copy/Paste object position).
     /// S09-001: Insert-shape HostScript commands (rectangle, square, ellipse, line, textbox, arrow).
+    /// S09-002: Smart-duplicate HostScript commands (DuplicateRight/Left/Up/Down + gap memory).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -51,6 +52,11 @@ namespace PptPowerKeys.Windows.Host
             if (InsertShapeCommands.IsInsertShape(command))
             {
                 return ExecuteInsertShape(command);
+            }
+
+            if (DuplicateCommands.IsDuplicateCommand(command))
+            {
+                return ExecuteDuplicate(command);
             }
 
             throw new NotSupportedException(
@@ -185,5 +191,41 @@ namespace PptPowerKeys.Windows.Host
                 CommandIds.InsertTextbox => "Text box inserted.",
                 _ => throw new InvalidOperationException($"Unknown insert-shape command: {command}."),
             };
+
+        private CommandExecutionResult ExecuteDuplicate(CommandIds command)
+        {
+            var sources = _host.ReadSelectedShapeBounds();
+            if (sources.Count == 0)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            double gap = DuplicateGapStore.GetGap(command);
+            var targets = new List<ShapeBounds>(sources.Count);
+            foreach (var source in sources)
+            {
+                var target = DuplicationEngine.ComputeDuplicate(command, source, gap);
+                if (target == null)
+                {
+                    throw new InvalidOperationException($"Unknown duplicate command: {command}.");
+                }
+
+                targets.Add(target.Value);
+            }
+
+            int count = _host.DuplicateSelectedAtPositions(sources, targets);
+            if (count == 0)
+            {
+                throw new InvalidOperationException("Could not duplicate the selected shapes.");
+            }
+
+            DuplicateGapStore.SetGap(command, gap);
+            string gapNote = gap > 0 ? $" (gap {gap} pt)" : string.Empty;
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = $"Duplicated {count} shape(s){gapNote}.",
+            };
+        }
     }
 }

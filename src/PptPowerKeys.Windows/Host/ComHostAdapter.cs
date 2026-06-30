@@ -204,6 +204,57 @@ namespace PptPowerKeys.Windows.Host
             }
         }
 
+        public int DuplicateSelectedAtPositions(
+            IReadOnlyList<ShapeBounds> sources,
+            IReadOnlyList<ShapeBounds> targets)
+        {
+            if (sources == null || targets == null || sources.Count == 0 || sources.Count != targets.Count)
+            {
+                return 0;
+            }
+
+            var selection = _application.ActiveWindow?.Selection;
+            if (selection == null || selection.Type != PpSelectionType.ppSelectionShapes)
+            {
+                return 0;
+            }
+
+            ShapeRange range = selection.ShapeRange;
+            if (range == null || range.Count < 1)
+            {
+                return 0;
+            }
+
+            var byId = new Dictionary<string, Shape>(range.Count, StringComparer.Ordinal);
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                byId[ShapeBoundsId.FromComShape(shape)] = shape;
+            }
+
+            int duplicated = 0;
+            for (int i = 0; i < sources.Count; i++)
+            {
+                if (!byId.TryGetValue(sources[i].Id, out Shape source))
+                {
+                    continue;
+                }
+
+                ShapeRange duplicatedRange = source.Duplicate();
+                if (duplicatedRange == null || duplicatedRange.Count < 1)
+                {
+                    continue;
+                }
+
+                Shape clone = duplicatedRange[1];
+                clone.Left = (float)targets[i].Left;
+                clone.Top = (float)targets[i].Top;
+                duplicated++;
+            }
+
+            return duplicated;
+        }
+
         private Slide GetActiveSlide() => _application.ActiveWindow?.View?.Slide;
 
         private static Dictionary<string, ShapeBounds> IndexBoundsById(IReadOnlyList<ShapeBounds> bounds)

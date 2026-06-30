@@ -16,6 +16,10 @@ public class HostScriptCommandMapTests
     [InlineData("btnInsertLine", CommandIds.InsertLine)]
     [InlineData("btnInsertTextbox", CommandIds.InsertTextbox)]
     [InlineData("btnInsertArrow", CommandIds.InsertArrow)]
+    [InlineData("btnDuplicateRight", CommandIds.DuplicateRight)]
+    [InlineData("btnDuplicateLeft", CommandIds.DuplicateLeft)]
+    [InlineData("btnDuplicateDown", CommandIds.DuplicateDown)]
+    [InlineData("btnDuplicateUp", CommandIds.DuplicateUp)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

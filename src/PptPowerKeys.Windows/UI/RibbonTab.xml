@@ -232,6 +232,33 @@
                   screentip="Insert arrow"
                   supertip="Insert a horizontal line with a triangle end arrowhead (COM full parity)." />
         </group>
+        <group id="grpDuplicate" label="Duplicate">
+          <button id="btnDuplicateRight"
+                  label="Right"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ObjectBringForward"
+                  screentip="Duplicate right"
+                  supertip="Duplicate each selected shape to the right (smart gap memory per direction)." />
+          <button id="btnDuplicateLeft"
+                  label="Left"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectSendBackward"
+                  screentip="Duplicate left"
+                  supertip="Duplicate each selected shape to the left (smart gap memory per direction)." />
+          <button id="btnDuplicateDown"
+                  label="Down"
+                  onAction="OnHostScriptCommand"
+                  imageMso="AlignBottom"
+                  screentip="Duplicate down"
+                  supertip="Duplicate each selected shape downward (smart gap memory per direction)." />
+          <button id="btnDuplicateUp"
+                  label="Up"
+                  onAction="OnHostScriptCommand"
+                  imageMso="AlignTop"
+                  screentip="Duplicate up"
+                  supertip="Duplicate each selected shape upward (smart gap memory per direction)." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"
