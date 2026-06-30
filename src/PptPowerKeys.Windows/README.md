@@ -21,7 +21,57 @@ Steps:
 4. Ribbon tab **PowerKeys** → **Test** shows bootstrap message with Core catalog count.
 5. Select 2+ shapes (anchor = last selected) → **Align Left** aligns to anchor left edge (in-process Core, no HTTP).
 
-### AlignLeft manual check (S07-003)
+## ServerLayout commands (S08-001)
+
+`CommandRouter.Execute(CommandIds)` routes **all 32** `LayoutEngine.IsLayoutCommand` ids through the
+in-process pipeline (no HTTP):
+
+```
+COM selection → ShapeBounds[] → LayoutEngine.Apply → ComHostAdapter.ApplyShapeBounds
+```
+
+Anchor = **last** selected shape (unchanged from S07-003). `LayoutOptions` is `null` (snap-to-grid: S08-002).
+Non-layout commands throw `NotSupportedException`.
+
+### Routable commands (32)
+
+**Alignment (12):** AlignLeft, AlignCenterHorizontal, AlignRight, AlignTop, AlignMiddleVertical,
+AlignBottom, DistributeHorizontal, DistributeVertical, AlignLeftToRight, AlignRightToLeft,
+AlignTopToBottom, AlignBottomToTop.
+
+**Resize (20):** SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect,
+WidthEqualsAnchorHeight, HeightEqualsAnchorWidth, StretchWidthToLeft, StretchWidthToRight,
+StretchHeightToTop, StretchHeightToBottom, IncreaseWidthLarge, DecreaseWidthLarge,
+IncreaseHeightLarge, DecreaseHeightLarge, IncreaseWidthSmall, DecreaseWidthSmall,
+IncreaseHeightSmall, DecreaseHeightSmall, IncreaseSizeKeepAspect, DecreaseSizeKeepAspect.
+
+Programmatic smoke (Immediate window / temporary debug hook):
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.SameWidth);
+```
+
+Ribbon exposes **Align Left** only until S08-003; other commands are testable via `CommandRouter` API.
+
+### Manual QA (Windows)
+
+Regression minimum — three commands covering align, resize, and distribute:
+
+| Command | Setup | Expected |
+|---------|-------|----------|
+| **AlignLeft** | 3 rectangles at different X; anchor = last selected | All left edges match anchor left |
+| **SameWidth** | 2+ shapes with different widths; anchor = widest | Non-anchor widths match anchor width |
+| **DistributeHorizontal** | 3+ shapes with uneven horizontal gaps; anchor unchanged | Equal gaps between shape bounds (anchor position fixed) |
+
+Steps (each command):
+
+1. Draw shapes on a slide; multi-select with **last** click = anchor.
+2. Call `CommandRouter.Execute(CommandIds.<name>)` (ribbon Align Left for AlignLeft, or programmatic for others).
+3. Confirm geometry updates in-process; no network activity.
+4. Single-shape or empty selection → `LayoutResult.NoChange` with message (no crash).
+
+### AlignLeft ribbon check (S07-003)
 
 1. Draw three rectangles at different horizontal positions.
 2. Multi-select: click first shapes, **last** click = anchor (rightmost or any anchor shape).
