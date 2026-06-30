@@ -96,6 +96,11 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S08-003:** Ribbon layout parity — **32** ServerLayout кнопки на вкладке **PowerKeys** в 6 группах
+  (Alignment 8, Stack 4, Size 6, Stretch 4, Nudge Large 6, Nudge Small 4) + **Options** (snap checkbox из S08-002);
+  единый `OnLayoutCommand` → `RibbonCommandMap.TryParse(btn{CommandIds})` → `CommandRouter.Execute`;
+  Bootstrap «Test» удалён; `imageMso` по VstoLegacy где возможно (Nudge Small → `HappyFace` fallback);
+  manual QA matrix per group в `PptPowerKeys.Windows/README.md`. PR #67; 146 dotnet tests green.
 - **S08-002:** Windows snap-to-grid parity с Web S05-002 — `WindowsUserSettingsStore` persist
   `%AppData%/PptPowerKeys/UserSettings.json` (camelCase `snapToGrid`, Web export/import v1 compatible);
   `CommandRouter` передаёт `LayoutOptions { SnapToGrid }` во все 32 ServerLayout; ribbon checkbox
