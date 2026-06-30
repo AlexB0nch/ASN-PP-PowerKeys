@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#78](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/78) |
-| **PR** | TBD |
+| **PR** | [#79](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/79) |
 
 ## Цель
 
@@ -122,14 +122,22 @@ if (GroupZOrderCommands.IsGroupZOrderCommand(command)) → ExecuteGroupZOrder(co
 
 ## Критерии приёмки
 
-- [ ] All 6 commands routed via `CommandRouter.Execute`
-- [ ] Group requires ≥2 shapes; Ungroup requires exactly one group
-- [ ] Z-order applies to all selected shapes; empty selection → error
-- [ ] Status messages match `runCommand.ts` strings
-- [ ] Ribbon grpOrder (6 buttons) wired via `OnHostScriptCommand`
-- [ ] `HostScriptCommandMap` + `GroupZOrderCommands` unit tests
-- [ ] `dotnet test PptPowerKeys.sln` green
-- [ ] PR manual QA note + `.github/review/CHECKLIST.md`
+- [x] All 6 commands routed via `CommandRouter.Execute`
+- [x] Group requires ≥2 shapes; Ungroup requires exactly one group
+- [x] Z-order applies to all selected shapes; empty selection → error
+- [x] Status messages match `runCommand.ts` strings
+- [x] Ribbon grpOrder (6 buttons) wired via `OnHostScriptCommand`
+- [x] `HostScriptCommandMap` + `GroupZOrderCommands` unit tests
+- [x] `dotnet test PptPowerKeys.sln` green (220 passed)
+- [x] PR manual QA note + `.github/review/CHECKLIST.md`
+
+## Приёмка (architect, 2026-06-30)
+
+- PR #79 merged. Scope соблюдён: Windows Group/Ungroup/Z-order; Regroup не включён (S10).
+- CI/local: 220 dotnet tests green.
+- Validation + messages match Web `powerpoint.ts` / `runCommand.ts`.
+- CHECKLIST: scope OK; Core/Api/AddIn без изменений.
+- Ручная проверка PowerPoint Windows — post-merge.
 
 ## Зависимости
 

@@ -96,12 +96,17 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S09-003:** Group / Ungroup / Z-order HostScript на Windows line — 6 команд (Group, Ungroup,
+  BringToFront, SendToBack, BringForward, SendBackward); COM `ShapeRange.Group()`, `Shape.Ungroup()`,
+  `Shape.ZOrder(MsoZOrderCmd)`; validation + messages parity с Web `powerpoint.ts` / `runCommand.ts`;
+  ribbon **Order** group (`grpOrder`, 6 buttons); `GroupZOrderCommandsTests` + map tests; Regroup — anti-scope (S10);
+  PR #79; 220 dotnet tests green. Next: S09-004 multi-slide paste/remove.
 - **S09-002:** Smart Duplicate HostScript на Windows line — `DuplicateRight/Left/Up/Down`; pipeline:
   `ReadSelectedShapeBounds` → `DuplicateGapStore.GetGap` → `DuplicationEngine.ComputeDuplicate` →
   `DuplicateSelectedAtPositions` (COM clone + Left/Top) → `DuplicateGapStore.SetGap`; in-memory per-`CommandId`
   gap (session scope, parity с Web `duplicateGapMemory.ts`); ribbon **Duplicate** group (4 buttons);
   `DuplicateCommandsTests` + `DuplicateGapStoreTests` + map tests; Windows csproj fix (Position* + new Host files);
-  PR #76; 202 dotnet tests green. Next: S09-003 Group/Z-order.
+  PR #76; 202 dotnet tests green.
 - **S09-001:** Insert shapes HostScript — 6 команд (InsertRectangle/Square/Ellipse/Line/Textbox/Arrow); COM
   (32 ServerLayout + 4 CopyAndAlign + 2 position clipboard); snap-to-grid; consolidated manual QA
   [`docs/migration/06-windows-layout-qa.md`](../docs/migration/06-windows-layout-qa.md); 169 dotnet tests green;
