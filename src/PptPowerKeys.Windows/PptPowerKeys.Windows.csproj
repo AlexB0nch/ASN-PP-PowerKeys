@@ -86,6 +86,7 @@
     <Compile Include="Host\CopyAndAlignCommands.cs" />
     <Compile Include="Host\DuplicateCommands.cs" />
     <Compile Include="Host\DuplicateGapStore.cs" />
+    <Compile Include="Host\GroupZOrderCommands.cs" />
     <Compile Include="Host\InsertShapeCommands.cs" />
     <Compile Include="Host\IComHostAdapter.cs" />
     <Compile Include="Host\PositionClipboardStore.cs" />

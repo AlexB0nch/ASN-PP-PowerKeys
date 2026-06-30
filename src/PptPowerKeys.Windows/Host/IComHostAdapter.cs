@@ -45,5 +45,23 @@ namespace PptPowerKeys.Windows.Host
         int DuplicateSelectedAtPositions(
             IReadOnlyList<ShapeBounds> sources,
             IReadOnlyList<ShapeBounds> targets);
+
+        /// <summary>
+        /// Groups the current shape selection via COM <c>ShapeRange.Group()</c>.
+        /// Throws when fewer than two shapes are selected. Returns the pre-group count.
+        /// </summary>
+        int GroupSelectedShapes();
+
+        /// <summary>
+        /// Ungroups the single selected group via COM <c>Shape.Ungroup()</c>.
+        /// Throws when selection is not exactly one group shape.
+        /// </summary>
+        void UngroupSelectedShape();
+
+        /// <summary>
+        /// Applies COM <c>Shape.ZOrder</c> to each selected shape for the given z-order command.
+        /// Throws when nothing is selected. Returns the number of shapes updated.
+        /// </summary>
+        int ApplyZOrderToSelection(CommandIds command);
     }
 }

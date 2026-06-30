@@ -15,6 +15,7 @@ namespace PptPowerKeys.Windows.Host
     /// S08-005: Position clipboard HostScript commands (Copy/Paste object position).
     /// S09-001: Insert-shape HostScript commands (rectangle, square, ellipse, line, textbox, arrow).
     /// S09-002: Smart-duplicate HostScript commands (DuplicateRight/Left/Up/Down + gap memory).
+    /// S09-003: Group / Ungroup / Z-order HostScript commands (6 COM parity commands).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -57,6 +58,11 @@ namespace PptPowerKeys.Windows.Host
             if (DuplicateCommands.IsDuplicateCommand(command))
             {
                 return ExecuteDuplicate(command);
+            }
+
+            if (GroupZOrderCommands.IsGroupZOrderCommand(command))
+            {
+                return ExecuteGroupZOrder(command);
             }
 
             throw new NotSupportedException(
@@ -227,5 +233,53 @@ namespace PptPowerKeys.Windows.Host
                 Message = $"Duplicated {count} shape(s){gapNote}.",
             };
         }
+
+        private CommandExecutionResult ExecuteGroupZOrder(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.Group:
+                {
+                    int count = _host.GroupSelectedShapes();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Grouped {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.Ungroup:
+                    _host.UngroupSelectedShape();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Ungrouped.",
+                    };
+
+                case CommandIds.BringToFront:
+                case CommandIds.SendToBack:
+                case CommandIds.BringForward:
+                case CommandIds.SendBackward:
+                    _host.ApplyZOrderToSelection(command);
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = GetZOrderSuccessMessage(command),
+                    };
+
+                default:
+                    throw new InvalidOperationException($"Unknown group/z-order command: {command}.");
+            }
+        }
+
+        private static string GetZOrderSuccessMessage(CommandIds command) =>
+            command switch
+            {
+                CommandIds.BringToFront => "Brought to front.",
+                CommandIds.SendToBack => "Sent to back.",
+                CommandIds.BringForward => "Brought forward.",
+                CommandIds.SendBackward => "Sent backward.",
+                _ => throw new InvalidOperationException($"Unknown z-order command: {command}."),
+            };
     }
 }

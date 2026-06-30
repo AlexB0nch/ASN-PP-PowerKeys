@@ -145,4 +145,4 @@ if (GroupZOrderCommands.IsGroupZOrderCommand(command)) → ExecuteGroupZOrder(co
 
 ## Трассировка
 
-Issue `#N` → `cursor/S09-003-group-zorder-e5fe` → PR `Closes #N`
+Issue `#78` → `cursor/S09-003-group-zorder-e5fe` → PR `Closes #78`

@@ -19,7 +19,7 @@ Steps:
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
 4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Objects** (6 commands),
-   **Duplicate** (4 commands), **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
+   **Duplicate** (4 commands), **Order** (6 commands), **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## Manual QA
@@ -189,6 +189,50 @@ var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.DuplicateRight
 // result.Changed == true, result.Message starts with "Duplicated"
 ```
 
+## Group / Ungroup / Z-order (S09-003)
+
+`CommandRouter.Execute(CommandIds)` routes **6** group/z-order HostScript commands through COM on the
+current shape selection. Parity with Web Add-in `groupSelectedShapes`, `ungroupSelectedShape`, `setZOrder`
+in `powerpoint.ts` and success messages in `runCommand.ts`.
+
+| CommandId | COM behavior | Success message |
+|-----------|--------------|-----------------|
+| Group | `ShapeRange.Group()` (≥2 shapes) | *Grouped N shape(s).* |
+| Ungroup | `Shape.Ungroup()` (exactly 1 group) | *Ungrouped.* |
+| BringToFront | `ZOrder(msoBringToFront)` per shape | *Brought to front.* |
+| SendToBack | `ZOrder(msoSendToBack)` per shape | *Sent to back.* |
+| BringForward | `ZOrder(msoBringForward)` per shape | *Brought forward.* |
+| SendBackward | `ZOrder(msoSendBackward)` per shape | *Sent backward.* |
+
+Validation errors match Web `powerpoint.ts`:
+
+- Group with &lt;2 shapes → *Select at least two shapes to group.*
+- Ungroup with ≠1 selection → *Select exactly one group to ungroup.*
+- Ungroup non-group → *Selected shape is not a group.*
+- Z-order with empty selection → *Select one or more shapes first.*
+
+Ribbon **PowerKeys** → **Order** (6 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute` → `ComHostAdapter.GroupSelectedShapes` / `UngroupSelectedShape` / `ApplyZOrderToSelection`.
+
+### Manual QA (Group / Ungroup / Z-order)
+
+1. Insert two rectangles (**Objects**). Select both → **Order → Group** → shapes become one group;
+   status *Grouped 2 shape(s).*
+2. Select the group → **Order → Ungroup** → status *Ungrouped.*; child shapes are separate again.
+3. Select a single rectangle (not a group) → **Ungroup** → error *Selected shape is not a group.*
+4. Select only one shape → **Group** → error *Select at least two shapes to group.*
+5. Overlap two shapes. Select both → **Bring to front** / **Send to back** / **Forward** / **Backward** —
+   confirm stacking order changes; status messages match the table above.
+6. Clear selection → any z-order button → error *Select one or more shapes first.*
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.Group);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.BringToFront);
+```
+
 ## Ribbon layout groups (S08-003)
 
 All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
@@ -199,6 +243,8 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 | **Alignment** | AlignLeft, AlignCenterHorizontal, AlignRight, AlignTop, AlignMiddleVertical, AlignBottom, DistributeHorizontal, DistributeVertical |
 | **Stack** | AlignLeftToRight, AlignRightToLeft, AlignTopToBottom, AlignBottomToTop |
 | **Objects** | InsertRectangle, InsertSquare, InsertEllipse, InsertLine, InsertTextbox, InsertArrow |
+| **Duplicate** | DuplicateRight, DuplicateLeft, DuplicateDown, DuplicateUp |
+| **Order** | BringToFront, SendToBack, BringForward, SendBackward, Group, Ungroup |
 | **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |

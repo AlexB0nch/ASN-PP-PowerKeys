@@ -10,6 +10,7 @@ namespace PptPowerKeys.Windows.UI
     /// S08-005: Position clipboard commands (Copy/Paste object position).
     /// S09-001: Insert-shape commands (rectangle, square, ellipse, line, textbox, arrow).
     /// S09-002: Smart-duplicate commands (DuplicateRight/Left/Up/Down).
+    /// S09-003: Group / Ungroup / Z-order commands (6 COM parity commands).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -34,7 +35,8 @@ namespace PptPowerKeys.Windows.UI
             return CopyAndAlignCommands.IsCopyAndAlign(command)
                 || PositionCommands.IsPositionCommand(command)
                 || InsertShapeCommands.IsInsertShape(command)
-                || DuplicateCommands.IsDuplicateCommand(command);
+                || DuplicateCommands.IsDuplicateCommand(command)
+                || GroupZOrderCommands.IsGroupZOrderCommand(command);
         }
     }
 }
