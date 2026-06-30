@@ -16,7 +16,7 @@
 
 | ID | Файл | Builder |
 |----|------|---------|
-| S08-001 | `tasks/S08-001-commandrouter-serverlayout-all.md` (создать) | `/builder выполни S08-001` |
+| S08-001 | [`tasks/S08-001-serverlayout-pipeline-all-32.md`](./tasks/S08-001-serverlayout-pipeline-all-32.md) | `/builder выполни S08-001` |
 | S08-002 | `tasks/S08-002-snap-to-grid-settings.md` (создать) | после merge 001 |
 | S08-003 | `tasks/S08-003-ribbon-layout-group.md` (создать) | после 001 |
 | S08-004 | `tasks/S08-004-copy-and-align-hostscript.md` (создать) | после 001–003 |

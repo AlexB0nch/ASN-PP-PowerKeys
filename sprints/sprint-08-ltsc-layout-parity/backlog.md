@@ -5,6 +5,13 @@
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
 | S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **Todo** | — |
+
+## Черновик S08-001 (первая задача builder)
+
+> [`tasks/S08-001-serverlayout-pipeline-all-32.md`](./tasks/S08-001-serverlayout-pipeline-all-32.md)
+
+- Generic dispatch через `LayoutEngine.IsLayoutCommand()` (не 32-case switch)
+- Snap-to-grid и ribbon — S08-002 / S08-003
 | S08-002 | Snap-to-grid (LayoutOptions + settings hook) | Windows + Core | **Todo** | — |
 | S08-003 | Ribbon layout command group | Windows UI | **Todo** | — |
 | S08-004 | Copy-and-align HostScript (4 commands) | Windows | **Todo** | — |
