@@ -11,6 +11,12 @@
                   imageMso="ObjectsAlignLeft"
                   screentip="Align Left"
                   supertip="Align selected shapes to the left edge of the anchor (last selected shape). Core in-process, no HTTP." />
+          <checkBox id="chkSnapToGrid"
+                    label="Snap to grid (0.1 cm)"
+                    getPressed="GetSnapToGridPressed"
+                    onAction="OnSnapToGridToggle"
+                    screentip="Snap to grid"
+                    supertip="When enabled, layout commands snap geometry to a 0.1 cm grid (Consulting Mode)." />
         </group>
         <group id="grpBootstrap" label="Bootstrap">
           <button id="btnBootstrap"

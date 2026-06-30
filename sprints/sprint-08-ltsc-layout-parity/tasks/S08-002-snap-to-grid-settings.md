@@ -10,8 +10,8 @@
 | **Спринт** | `sprint-08-ltsc-layout-parity` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + Core (reference) |
-| **Статус** | Todo |
-| **Issue** | — (architect создаёт) |
+| **Статус** | In Progress |
+| **Issue** | #64 |
 | **PR** | — |
 
 ## Цель
@@ -33,7 +33,7 @@
 ### Persistence — local JSON (Core shape)
 
 - Использовать **`PptPowerKeys.Core.Settings.UserSettings`** (не VstoLegacy).
-- Path: `%AppData%/PptPowerKeys/UserSettings.json` (или `%LocalAppData%` — architect выбирает один, document in README).
+- Path: **`%AppData%/PptPowerKeys/UserSettings.json`** (Roaming — sync across domain profiles; document in README).
 - Load on add-in startup; Save on toggle change.
 - JSON shape **совместим** с Web export/import v1 (`profile`, `snapToGrid`, `shortcuts[]`, optional `addupDisplayMode`).
 - **S08-002 scope:** persist **`SnapToGrid` only** required; shortcuts/profile — default empty/Custom OK (S10 expands).
