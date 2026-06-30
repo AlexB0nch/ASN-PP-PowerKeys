@@ -4,7 +4,7 @@
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
-| S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **Todo** | — |
+| S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **In Progress** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) |
 
 ## Черновик S08-001 (первая задача builder)
 
