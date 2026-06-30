@@ -18,6 +18,10 @@
 4. **S08-004** ✓ — CopyAndAlign HostScript
 5. **S08-005** — position clipboard + QA matrix ← **next**
 
-## Черновик S08-005 (следующая задача)
+## Черновик S08-005 (последняя задача Sprint 08)
 
-> Position clipboard + layout QA notes (см. backlog)
+> [`tasks/S08-005-position-clipboard-layout-qa.md`](./tasks/S08-005-position-clipboard-layout-qa.md)
+
+- CopyObjectPosition / PasteObjectPosition (in-memory clipboard, Left/Top only)
+- `docs/migration/06-windows-layout-qa.md` — consolidated M2 manual matrix
+- Architect post-merge: `retrospective.md`, close Sprint 08

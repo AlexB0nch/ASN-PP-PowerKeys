@@ -36,18 +36,19 @@
 4. Повторить для S08-002…005
 5. `retrospective.md` → kickoff S09
 
-## Copy-paste промпт (S08-004)
+## Copy-paste промпт (S08-005)
 
 ```
 /architect
 
-Sprint 08 — S08-004 Copy-and-align HostScript (4 commands).
+Sprint 08 — S08-005 Position clipboard + layout QA (последняя задача спринта).
 Прочитай:
-- sprints/sprint-08-ltsc-layout-parity/tasks/S08-004-copy-and-align-hostscript.md
+- sprints/sprint-08-ltsc-layout-parity/tasks/S08-005-position-clipboard-layout-qa.md
+- sprints/sprint-08-ltsc-layout-parity/goals.md
 - src/PptPowerKeys.Windows/Host/CommandRouter.cs
-- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
-- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (runCopyAndAlign)
-- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (cloneSelectedShapesAtSourcePositions)
+- src/PptPowerKeys.AddIn/src/office/positionClipboard.ts
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (copyObjectPosition, pasteObjectPosition)
 
-S08-001…003 Done (#63–#67). Issue S08-004 → backlog In Progress → /builder S08-004 → приёмка → merge.
+S08-001…004 Done (#63–#69). Issue S08-005 → backlog In Progress → /builder S08-005 → приёмка → merge.
+После merge: retrospective.md, goals DoD, PRODUCT_CONTEXT, закрыть Sprint 08 → kickoff S09.
 ```
