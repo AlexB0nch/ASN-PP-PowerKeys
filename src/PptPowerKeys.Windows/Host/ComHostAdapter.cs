@@ -310,6 +310,109 @@ namespace PptPowerKeys.Windows.Host
             return range.Count;
         }
 
+        public int PasteShapeToSelectedSlides()
+        {
+            SlideRange slideRange = GetSelectedSlideRangeOrThrow(minCount: 2, minCountError: "Select two or more slides first.");
+
+            Shape source = GetExactlyOneShapeOnActiveSlideOrThrow();
+            float sourceLeft = source.Left;
+            float sourceTop = source.Top;
+            float sourceWidth = source.Width;
+            float sourceHeight = source.Height;
+
+            Slide sourceSlide = GetActiveSlide();
+            if (sourceSlide == null)
+            {
+                throw new InvalidOperationException("Select exactly one shape on the active slide first.");
+            }
+
+            int pastedCount = 0;
+            for (int i = 1; i <= slideRange.Count; i++)
+            {
+                Slide targetSlide = slideRange[i];
+                if (targetSlide.SlideIndex == sourceSlide.SlideIndex)
+                {
+                    continue;
+                }
+
+                source.Copy();
+                ShapeRange pasted = targetSlide.Shapes.Paste();
+                if (pasted == null || pasted.Count < 1)
+                {
+                    continue;
+                }
+
+                Shape pastedShape = pasted[1];
+                pastedShape.Left = sourceLeft;
+                pastedShape.Top = sourceTop;
+                pastedShape.Width = sourceWidth;
+                pastedShape.Height = sourceHeight;
+                pastedCount++;
+            }
+
+            return pastedCount;
+        }
+
+        public (int SlidesProcessed, int ShapesRemoved) RemoveShapeFromSelectedSlides()
+        {
+            SlideRange slideRange = GetSelectedSlideRangeOrThrow(minCount: 1, minCountError: "Select one or more slides first.");
+
+            Shape source = GetExactlyOneShapeOnActiveSlideOrThrow();
+            string targetName = source.Name ?? string.Empty;
+            if (string.IsNullOrEmpty(targetName))
+            {
+                throw new InvalidOperationException("Selected shape has no name. Name the shape first.");
+            }
+
+            int shapesRemoved = 0;
+            int slidesProcessed = slideRange.Count;
+
+            for (int i = 1; i <= slideRange.Count; i++)
+            {
+                Slide slide = slideRange[i];
+                Shapes shapes = slide.Shapes;
+                for (int j = shapes.Count; j >= 1; j--)
+                {
+                    Shape shape = shapes[j];
+                    if (string.Equals(shape.Name, targetName, StringComparison.Ordinal))
+                    {
+                        shape.Delete();
+                        shapesRemoved++;
+                    }
+                }
+            }
+
+            return (slidesProcessed, shapesRemoved);
+        }
+
+        private SlideRange GetSelectedSlideRangeOrThrow(int minCount, string minCountError)
+        {
+            var selection = _application.ActiveWindow?.Selection;
+            if (selection == null || selection.Type != PpSelectionType.ppSelectionSlides)
+            {
+                throw new InvalidOperationException(minCountError);
+            }
+
+            SlideRange slideRange = selection.SlideRange;
+            if (slideRange == null || slideRange.Count < minCount)
+            {
+                throw new InvalidOperationException(minCountError);
+            }
+
+            return slideRange;
+        }
+
+        private Shape GetExactlyOneShapeOnActiveSlideOrThrow()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count != 1)
+            {
+                throw new InvalidOperationException("Select exactly one shape on the active slide first.");
+            }
+
+            return range[1];
+        }
+
         private ShapeRange GetSelectedShapeRangeOrEmpty()
         {
             var selection = _application.ActiveWindow?.Selection;

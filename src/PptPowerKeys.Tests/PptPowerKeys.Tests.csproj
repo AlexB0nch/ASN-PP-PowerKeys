@@ -31,6 +31,7 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateGapStore.cs" Link="Windows\DuplicateGapStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\GroupZOrderCommands.cs" Link="Windows\GroupZOrderCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\InsertShapeCommands.cs" Link="Windows\InsertShapeCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\MultiSlideShapeCommands.cs" Link="Windows\MultiSlideShapeCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionCommands.cs" Link="Windows\PositionCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionClipboardStore.cs" Link="Windows\PositionClipboardStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\UI\HostScriptCommandMap.cs" Link="Windows\HostScriptCommandMap.cs" />

@@ -19,7 +19,7 @@ Steps:
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
 4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Objects** (6 commands),
-   **Duplicate** (4 commands), **Order** (6 commands), **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
+   **Duplicate** (4 commands), **Order** (6 commands), **Multi-slide** (2 commands), **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## Manual QA
@@ -233,6 +233,48 @@ router.Execute(PptPowerKeys.Core.Commands.CommandIds.Group);
 router.Execute(PptPowerKeys.Core.Commands.CommandIds.BringToFront);
 ```
 
+## Multi-slide paste / remove shapes (S09-004)
+
+`CommandRouter.Execute(CommandIds)` routes **2** multi-slide shape HostScript commands through COM copy/paste
+and delete-by-name. Parity with Web Add-in `pasteShapeToSelectedSlides`, `removeShapeFromSelectedSlides` in
+`powerpoint.ts` and success messages in `runCommand.ts`.
+
+| CommandId | COM behavior | Success message |
+|-----------|--------------|-----------------|
+| PasteShapeToSelectedSlides | `Shape.Copy()` + `Slide.Shapes.Paste()` per target slide (≥2 slides, skip source slide, same Left/Top/Width/Height) | *Pasted shape to N slide(s).* |
+| RemoveShapeFromSelectedSlides | Delete shapes by exact `Name` on each selected slide (iterate shapes backwards) | *Removed X shape(s) from Y slide(s).* |
+
+Validation errors match Web `powerpoint.ts`:
+
+- Paste with &lt;2 slides → *Select two or more slides first.*
+- Remove with 0 slides → *Select one or more slides first.*
+- Either command with ≠1 shape on active slide → *Select exactly one shape on the active slide first.*
+- Remove with empty shape name → *Selected shape has no name. Name the shape first.*
+
+Ribbon **PowerKeys** → **Multi-slide** (2 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute` → `ComHostAdapter.PasteShapeToSelectedSlides` / `RemoveShapeFromSelectedSlides`.
+
+### Manual QA (Multi-slide paste / remove)
+
+1. Create a deck with at least 3 slides. On slide 1, insert a rectangle and name it `Logo` (Selection Pane).
+2. **Paste shape:** select the rectangle on slide 1, then multi-select slides 1–3 in the thumbnail pane
+   (Ctrl+click). Click **Multi-slide → Paste Shape** → rectangle appears on slides 2 and 3 at the same
+   position/size; slide 1 unchanged; status *Pasted shape to 2 slide(s).*
+3. Select only 1 slide → **Paste Shape** → error *Select two or more slides first.*
+4. Multi-select 2+ slides with no shape selected → **Paste Shape** → error *Select exactly one shape on the active slide first.*
+5. **Remove shape:** on slide 1 select the named `Logo` shape; multi-select slides 1–3 → **Multi-slide → Remove Shape**
+   → all `Logo` shapes deleted across slides; status *Removed N shape(s) from 3 slide(s).*
+6. Select a shape with no name → **Remove Shape** → error *Selected shape has no name. Name the shape first.*
+7. Multi-select slides with no shape selected → **Remove Shape** → error *Select exactly one shape on the active slide first.*
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.PasteShapeToSelectedSlides);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.RemoveShapeFromSelectedSlides);
+```
+
 ## Ribbon layout groups (S08-003)
 
 All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
@@ -245,6 +287,7 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 | **Objects** | InsertRectangle, InsertSquare, InsertEllipse, InsertLine, InsertTextbox, InsertArrow |
 | **Duplicate** | DuplicateRight, DuplicateLeft, DuplicateDown, DuplicateUp |
 | **Order** | BringToFront, SendToBack, BringForward, SendBackward, Group, Ungroup |
+| **Multi-slide** | PasteShapeToSelectedSlides, RemoveShapeFromSelectedSlides |
 | **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |
