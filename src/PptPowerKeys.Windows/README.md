@@ -19,6 +19,14 @@ Steps:
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
 4. Ribbon tab **PowerKeys** → **Test** shows bootstrap message with Core catalog count.
+5. Select 2+ shapes (anchor = last selected) → **Align Left** aligns to anchor left edge (in-process Core, no HTTP).
+
+### AlignLeft manual check (S07-003)
+
+1. Draw three rectangles at different horizontal positions.
+2. Multi-select: click first shapes, **last** click = anchor (rightmost or any anchor shape).
+3. **PowerKeys** → **Align Left** — all shapes' left edges match anchor's left edge.
+4. Confirm no network calls (offline / air-gap safe for layout path).
 
 ## Solution layout
 

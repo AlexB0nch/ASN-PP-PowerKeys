@@ -80,6 +80,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Host\ComHostAdapter.cs" />
+    <Compile Include="Host\CommandRouter.cs" />
+    <Compile Include="Host\IComHostAdapter.cs" />
+    <Compile Include="Host\ShapeBoundsId.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThisAddIn.cs">

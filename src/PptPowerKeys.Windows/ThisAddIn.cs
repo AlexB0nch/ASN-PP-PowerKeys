@@ -2,16 +2,22 @@ namespace PptPowerKeys.Windows
 {
     public partial class ThisAddIn
     {
+        private Host.CommandRouter _commandRouter;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            // S07-002 bootstrap: no host wiring yet (CommandRouter in S07-003).
+            var host = new Host.ComHostAdapter(Application);
+            _commandRouter = new Host.CommandRouter(host);
             System.Diagnostics.Debug.WriteLine(
                 $"PptPowerKeys.Windows loaded. Core catalog: {Core.Commands.CommandCatalog.All.Count} commands.");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
+            _commandRouter = null;
         }
+
+        internal Host.CommandRouter CommandRouter => _commandRouter;
 
         #region VSTO generated code
 

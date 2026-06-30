@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Office.Core;
+using PptPowerKeys.Core.Commands;
 
 namespace PptPowerKeys.Windows.UI
 {
@@ -18,6 +19,30 @@ namespace PptPowerKeys.Windows.UI
         public void OnLoad(IRibbonUI ribbonUI)
         {
             _ribbon = ribbonUI;
+        }
+
+        public void OnAlignLeft(IRibbonControl control)
+        {
+            var router = Globals.ThisAddIn?.CommandRouter;
+            if (router == null)
+            {
+                MessageBox.Show("Command router is not initialized.", "PPT PowerKeys", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                var result = router.Execute(CommandIds.AlignLeft);
+                Debug.WriteLine(
+                    result.Changed
+                        ? "AlignLeft applied via Core.LayoutEngine (in-process)."
+                        : $"AlignLeft no-op: {result.Message}");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine($"AlignLeft failed: {ex}");
+                MessageBox.Show(ex.Message, "PPT PowerKeys — Align Left", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void OnBootstrapAction(IRibbonControl control)

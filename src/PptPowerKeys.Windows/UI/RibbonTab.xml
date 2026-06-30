@@ -3,14 +3,23 @@
   <ribbon>
     <tabs>
       <tab id="tabPowerKeys" label="PowerKeys" insertAfterMso="TabHome">
+        <group id="grpLayout" label="Layout">
+          <button id="btnAlignLeft"
+                  label="Align Left"
+                  onAction="OnAlignLeft"
+                  size="large"
+                  imageMso="ObjectsAlignLeft"
+                  screentip="Align Left"
+                  supertip="Align selected shapes to the left edge of the anchor (last selected shape). Core in-process, no HTTP." />
+        </group>
         <group id="grpBootstrap" label="Bootstrap">
           <button id="btnBootstrap"
                   label="Test"
                   onAction="OnBootstrapAction"
-                  size="large"
+                  size="normal"
                   imageMso="HappyFace"
                   screentip="PptPowerKeys.Windows bootstrap"
-                  supertip="Confirms the VSTO add-in and shared Core catalog are loaded (S07-002)." />
+                  supertip="Confirms the VSTO add-in and shared Core catalog are loaded." />
         </group>
       </tab>
     </tabs>

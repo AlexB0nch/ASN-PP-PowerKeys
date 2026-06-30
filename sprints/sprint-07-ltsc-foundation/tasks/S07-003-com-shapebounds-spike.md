@@ -9,7 +9,7 @@
 | **Task ID** | `S07-003` |
 | **Спринт** | `sprint-07-ltsc-foundation` |
 | **Компонент** | Windows + Core |
-| **Статус** | Todo |
+| **Статус** | Done |
 
 ## Цель
 
@@ -43,10 +43,10 @@ Selection → ShapeBounds[] → Core.LayoutEngine → write back Left/Top/Width/
 
 ## Критерии приёмки
 
-- [ ] Manual: 2+ shapes, select anchor last, AlignLeft works in PowerPoint
-- [ ] No HTTP to Api for this command path
-- [ ] Core.LayoutEngine invoked in-process
-- [ ] Code structured for S08 expansion (interfaces documented)
+- [x] Manual: 2+ shapes, select anchor last, AlignLeft works in PowerPoint (see README)
+- [x] No HTTP to Api for this command path
+- [x] Core.LayoutEngine invoked in-process
+- [x] Code structured for S08 expansion (interfaces documented)
 
 ## Зависимости
 
