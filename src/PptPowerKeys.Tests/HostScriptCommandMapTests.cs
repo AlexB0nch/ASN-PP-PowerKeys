@@ -20,6 +20,12 @@ public class HostScriptCommandMapTests
     [InlineData("btnDuplicateLeft", CommandIds.DuplicateLeft)]
     [InlineData("btnDuplicateDown", CommandIds.DuplicateDown)]
     [InlineData("btnDuplicateUp", CommandIds.DuplicateUp)]
+    [InlineData("btnBringToFront", CommandIds.BringToFront)]
+    [InlineData("btnSendToBack", CommandIds.SendToBack)]
+    [InlineData("btnBringForward", CommandIds.BringForward)]
+    [InlineData("btnSendBackward", CommandIds.SendBackward)]
+    [InlineData("btnGroup", CommandIds.Group)]
+    [InlineData("btnUngroup", CommandIds.Ungroup)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

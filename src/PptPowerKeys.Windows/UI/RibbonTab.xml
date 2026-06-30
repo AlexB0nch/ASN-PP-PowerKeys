@@ -259,6 +259,45 @@
                   screentip="Duplicate up"
                   supertip="Duplicate each selected shape upward (smart gap memory per direction)." />
         </group>
+        <group id="grpOrder" label="Order">
+          <button id="btnBringToFront"
+                  label="To Front"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ObjectBringToFront"
+                  screentip="Bring to front"
+                  supertip="Move each selected shape to the front of the z-order stack." />
+          <button id="btnSendToBack"
+                  label="To Back"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectSendToBack"
+                  screentip="Send to back"
+                  supertip="Move each selected shape to the back of the z-order stack." />
+          <button id="btnBringForward"
+                  label="Forward"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectBringForward"
+                  screentip="Bring forward"
+                  supertip="Move each selected shape one step forward in the z-order." />
+          <button id="btnSendBackward"
+                  label="Backward"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectSendBackward"
+                  screentip="Send backward"
+                  supertip="Move each selected shape one step backward in the z-order." />
+          <button id="btnGroup"
+                  label="Group"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectsGroup"
+                  screentip="Group shapes"
+                  supertip="Group the selected shapes (requires at least two)." />
+          <button id="btnUngroup"
+                  label="Ungroup"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectsUngroup"
+                  screentip="Ungroup"
+                  supertip="Ungroup the selected group (requires exactly one group shape)." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"

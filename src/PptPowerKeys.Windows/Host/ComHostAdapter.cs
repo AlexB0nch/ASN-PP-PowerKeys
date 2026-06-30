@@ -255,6 +255,78 @@ namespace PptPowerKeys.Windows.Host
             return duplicated;
         }
 
+        public int GroupSelectedShapes()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count < 2)
+            {
+                throw new InvalidOperationException("Select at least two shapes to group.");
+            }
+
+            int count = range.Count;
+            range.Group();
+            return count;
+        }
+
+        public void UngroupSelectedShape()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count != 1)
+            {
+                throw new InvalidOperationException("Select exactly one group to ungroup.");
+            }
+
+            Shape shape = range[1];
+            if (shape.Type != MsoShapeType.msoGroup)
+            {
+                throw new InvalidOperationException("Selected shape is not a group.");
+            }
+
+            shape.Ungroup();
+        }
+
+        public int ApplyZOrderToSelection(CommandIds command)
+        {
+            MsoZOrderCmd zOrderCmd = command switch
+            {
+                CommandIds.BringToFront => MsoZOrderCmd.msoBringToFront,
+                CommandIds.SendToBack => MsoZOrderCmd.msoSendToBack,
+                CommandIds.BringForward => MsoZOrderCmd.msoBringForward,
+                CommandIds.SendBackward => MsoZOrderCmd.msoSendBackward,
+                _ => throw new ArgumentOutOfRangeException(nameof(command), command, "Not a z-order command."),
+            };
+
+            ShapeRange range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count < 1)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            for (int i = 1; i <= range.Count; i++)
+            {
+                range[i].ZOrder(zOrderCmd);
+            }
+
+            return range.Count;
+        }
+
+        private ShapeRange GetSelectedShapeRangeOrEmpty()
+        {
+            var selection = _application.ActiveWindow?.Selection;
+            if (selection == null || selection.Type != PpSelectionType.ppSelectionShapes)
+            {
+                return null;
+            }
+
+            ShapeRange range = selection.ShapeRange;
+            if (range == null || range.Count < 1)
+            {
+                return null;
+            }
+
+            return range;
+        }
+
         private Slide GetActiveSlide() => _application.ActiveWindow?.View?.Slide;
 
         private static Dictionary<string, ShapeBounds> IndexBoundsById(IReadOnlyList<ShapeBounds> bounds)

@@ -29,6 +29,7 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\CopyAndAlignCommands.cs" Link="Windows\CopyAndAlignCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateCommands.cs" Link="Windows\DuplicateCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateGapStore.cs" Link="Windows\DuplicateGapStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\GroupZOrderCommands.cs" Link="Windows\GroupZOrderCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\InsertShapeCommands.cs" Link="Windows\InsertShapeCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionCommands.cs" Link="Windows\PositionCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionClipboardStore.cs" Link="Windows\PositionClipboardStore.cs" />
