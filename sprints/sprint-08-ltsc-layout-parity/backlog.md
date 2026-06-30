@@ -6,7 +6,7 @@
 |----|--------|-----------|--------|------------|
 | S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **Done** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) / [#63](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/63) |
 | S08-002 | Snap-to-grid (LayoutOptions + local UserSettings) | Windows + Core | **Todo** | — |
-| S08-003 | Ribbon layout command group | Windows UI | **Todo** | — |
+| S08-003 | Ribbon layout command group (32 ServerLayout) | Windows UI | **Todo** | — |
 | S08-004 | Copy-and-align HostScript (4 commands) | Windows | **Todo** | — |
 | S08-005 | Position clipboard + layout QA notes | Windows + docs | **Todo** | — |
 
@@ -18,10 +18,10 @@
 4. **S08-004** — CopyAndAlign HostScript
 5. **S08-005** — position clipboard + QA matrix
 
-## Черновик S08-002 (следующая задача)
+## Черновик S08-003 (следующая после S08-002)
 
-> [`tasks/S08-002-snap-to-grid-settings.md`](./tasks/S08-002-snap-to-grid-settings.md)
+> [`tasks/S08-003-ribbon-layout-group.md`](./tasks/S08-003-ribbon-layout-group.md)
 
-- `UserSettings.SnapToGrid` → `LayoutOptions` в `CommandRouter`
-- Local JSON `%AppData%/PptPowerKeys/UserSettings.json` (Core shape, Web-compatible)
-- Ribbon checkbox «Snap to grid (0.1 cm)»
+- 32 ribbon buttons → generic `OnLayoutCommand` → `CommandRouter`
+- 6 groups: Alignment, Stack, Size, Stretch, Nudge L/S
+- Remove Bootstrap Test button

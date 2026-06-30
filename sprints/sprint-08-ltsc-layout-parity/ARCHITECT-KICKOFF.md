@@ -36,16 +36,20 @@
 4. Повторить для S08-002…005
 5. `retrospective.md` → kickoff S09
 
-## Copy-paste промпт
+## Copy-paste промпт (S08-003)
 
 ```
 /architect
 
-Sprint 08 — LTSC Layout Parity (PptPowerKeys.Windows).
+Sprint 08 — S08-003 Ribbon layout group (32 ServerLayout buttons).
 Прочитай:
-- sprints/sprint-08-ltsc-layout-parity/ARCHITECT-KICKOFF.md
-- sprints/sprint-07-ltsc-foundation/retrospective.md
-- docs/migration/04-powerpoint-ltsc-windows-native.md
+- sprints/sprint-08-ltsc-layout-parity/tasks/S08-003-ribbon-layout-group.md
+- src/PptPowerKeys.Windows/UI/RibbonTab.xml
+- src/PptPowerKeys.Windows/UI/PowerKeysRibbon.cs
+- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (reference only)
+- src/PptPowerKeys.Core/Layout/LayoutEngine.cs (IsLayoutCommand)
 
-Создай Issue S08-001, backlog In Progress, запусти /builder выполни S08-001.
+Зависимости: S08-001 Done (#63). S08-002 желательно Done (snap checkbox — не дублировать).
+
+Issue S08-003 → backlog In Progress → /builder выполни S08-003 → приёмка → merge.
 ```
