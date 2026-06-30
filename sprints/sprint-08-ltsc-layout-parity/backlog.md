@@ -15,13 +15,13 @@
 1. **S08-001** ✓ — generic ServerLayout dispatch
 2. **S08-002** ✓ — snap flag + `%AppData%` settings + ribbon checkbox
 3. **S08-003** ✓ — ribbon buttons для layout cmds
-4. **S08-004** — CopyAndAlign HostScript
+4. **S08-004** — CopyAndAlign HostScript ← **next**
 5. **S08-005** — position clipboard + QA matrix
 
-## Черновик S08-003 (следующая после S08-002)
+## Черновик S08-004 (следующая задача)
 
-> [`tasks/S08-003-ribbon-layout-group.md`](./tasks/S08-003-ribbon-layout-group.md)
+> [`tasks/S08-004-copy-and-align-hostscript.md`](./tasks/S08-004-copy-and-align-hostscript.md)
 
-- 32 ribbon buttons → generic `OnLayoutCommand` → `CommandRouter`
-- 6 groups: Alignment, Stack, Size, Stretch, Nudge L/S
-- Remove Bootstrap Test button
+- Clone COM + combined bounds + Core layout + ApplyShapeBoundsOnSlide
+- 4 cmds: CopyAndAlignLeft/Right/Top/Bottom
+- Ribbon group «Copy & Align»

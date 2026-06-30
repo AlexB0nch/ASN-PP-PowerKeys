@@ -36,20 +36,18 @@
 4. Повторить для S08-002…005
 5. `retrospective.md` → kickoff S09
 
-## Copy-paste промпт (S08-003)
+## Copy-paste промпт (S08-004)
 
 ```
 /architect
 
-Sprint 08 — S08-003 Ribbon layout group (32 ServerLayout buttons).
+Sprint 08 — S08-004 Copy-and-align HostScript (4 commands).
 Прочитай:
-- sprints/sprint-08-ltsc-layout-parity/tasks/S08-003-ribbon-layout-group.md
-- src/PptPowerKeys.Windows/UI/RibbonTab.xml
-- src/PptPowerKeys.Windows/UI/PowerKeysRibbon.cs
-- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (reference only)
-- src/PptPowerKeys.Core/Layout/LayoutEngine.cs (IsLayoutCommand)
+- sprints/sprint-08-ltsc-layout-parity/tasks/S08-004-copy-and-align-hostscript.md
+- src/PptPowerKeys.Windows/Host/CommandRouter.cs
+- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
+- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (runCopyAndAlign)
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (cloneSelectedShapesAtSourcePositions)
 
-Зависимости: S08-001 Done (#63). S08-002 желательно Done (snap checkbox — не дублировать).
-
-Issue S08-003 → backlog In Progress → /builder выполни S08-003 → приёмка → merge.
+S08-001…003 Done (#63–#67). Issue S08-004 → backlog In Progress → /builder S08-004 → приёмка → merge.
 ```
