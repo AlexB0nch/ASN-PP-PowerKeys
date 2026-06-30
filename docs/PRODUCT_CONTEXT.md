@@ -96,6 +96,16 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **Sprint 08 complete (M2 Layout beta):** S08-001…005 Done (PR #63–#71); 38 layout commands on Windows line
+  (32 ServerLayout + 4 CopyAndAlign + 2 position clipboard); snap-to-grid; consolidated manual QA
+  [`docs/migration/06-windows-layout-qa.md`](../docs/migration/06-windows-layout-qa.md); 169 dotnet tests green;
+  retrospective [`sprints/sprint-08-ltsc-layout-parity/retrospective.md`](../sprints/sprint-08-ltsc-layout-parity/retrospective.md).
+  Next: Sprint 09 Objects/Format/Text.
+- **S08-005:** Position clipboard HostScript — `CopyObjectPosition` / `PasteObjectPosition`; in-memory
+  `PositionClipboardStore` (Left/Top only, session scope, not UserSettings); `ApplyPositionToSelection` on COM
+  (width/height unchanged); ribbon **Position** group → `OnHostScriptCommand`; `HostScriptCommandMap` extended for
+  CopyAndAlign + position; consolidated M2 QA matrix `docs/migration/06-windows-layout-qa.md`; parity с Web
+  `positionClipboard.ts` / `runCommand.ts`; `PositionClipboardStoreTests` + map tests; PR #71; 169 dotnet tests green.
 - **S08-004:** Первая HostScript-волна Windows — **4** Copy-and-align команды (CopyAndAlignLeft/Right/Top/Bottom);
   pipeline: `ReadSelectedShapeBounds` → `CloneSelectedAtSourcePositions` (COM Duplicate at source Left/Top) →
   combined + `anchorIndex = originals.Count - 1` → `LayoutEngine.Apply` (mapped Align*) → `ApplyShapeBoundsOnSlide` (by id);
