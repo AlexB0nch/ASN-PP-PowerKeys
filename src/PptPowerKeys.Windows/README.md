@@ -18,8 +18,14 @@ Steps:
 1. Open `src/PptPowerKeys.Windows.sln` in Visual Studio.
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
-4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
+4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Position** (2 commands),
+   **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
+
+## Manual QA
+
+Consolidated M2 test matrix (32 ServerLayout + snap + Copy-and-align + position clipboard):
+[`docs/migration/06-windows-layout-qa.md`](../../docs/migration/06-windows-layout-qa.md).
 
 ## ServerLayout commands (S08-001)
 
@@ -31,7 +37,7 @@ COM selection → ShapeBounds[] → LayoutEngine.Apply → ComHostAdapter.ApplyS
 ```
 
 Anchor = **last** selected shape (unchanged from S07-003). `LayoutOptions.SnapToGrid` comes from
-local `UserSettings.json` (S08-002). Non-layout / non-CopyAndAlign commands throw `NotSupportedException`.
+local `UserSettings.json` (S08-002). Non-layout / non-host-script commands throw `NotSupportedException`.
 
 ### Routable commands (32)
 
@@ -85,21 +91,31 @@ var router = Globals.ThisAddIn.CommandRouter;
 var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.CopyAndAlignLeft);
 ```
 
-### Manual QA — Copy-and-align
+## Position clipboard (S08-005)
 
-1. Open PowerPoint with the add-in loaded → **PowerKeys** tab → confirm **Copy & Align** group (4 buttons).
-2. Draw 2+ rectangles at different positions; multi-select with **last** click = anchor.
-3. Click **Copy + Left** — each shape is duplicated at its source position; clones align their left edges to the anchor's left edge.
-4. Repeat for **Copy + Right**, **Copy + Top**, **Copy + Bottom** as needed.
-5. Empty selection → error dialog: "Select one or more shapes first." (no crash).
-6. With **Snap to grid** enabled (S08-002), aligned positions should land on 0.1 cm grid.
+`CommandRouter.Execute(CommandIds)` routes **CopyObjectPosition** and **PasteObjectPosition** through an
+in-memory session store (`PositionClipboardStore`) — Left/Top only, **not** persisted to disk.
 
-| Command | Setup | Expected |
-|---------|-------|----------|
-| **CopyAndAlignLeft** | 2+ shapes; anchor = last selected | Clones created; all clone left edges match anchor left |
-| **CopyAndAlignRight** | 2+ shapes; anchor = last selected | Clones created; all clone right edges match anchor right |
-| **CopyAndAlignTop** | 2+ shapes; anchor = last selected | Clones created; all clone top edges match anchor top |
-| **CopyAndAlignBottom** | 2+ shapes; anchor = last selected | Clones created; all clone bottom edges match anchor bottom |
+| Command | Behavior |
+|---------|----------|
+| CopyObjectPosition | Read anchor (last selected) Left/Top → store → *"Copied position (X, Y)."* |
+| PasteObjectPosition | Apply stored Left/Top to all selected shapes (width/height unchanged) |
+
+Parity with Web Add-in `positionClipboard.ts` and `copyObjectPosition` / `pasteObjectPosition` in
+`powerpoint.ts`.
+
+Ribbon **PowerKeys** → **Position** (2 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute`.
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.CopyObjectPosition);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.PasteObjectPosition);
+```
+
+Copy → paste manual steps: see [06-windows-layout-qa.md](../../docs/migration/06-windows-layout-qa.md#copy--paste-flow-required-pr-manual-check).
 
 ## Ribbon layout groups (S08-003)
 
@@ -110,28 +126,13 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 |-------|----------|
 | **Alignment** | AlignLeft, AlignCenterHorizontal, AlignRight, AlignTop, AlignMiddleVertical, AlignBottom, DistributeHorizontal, DistributeVertical |
 | **Stack** | AlignLeftToRight, AlignRightToLeft, AlignTopToBottom, AlignBottomToTop |
+| **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |
 | **Nudge Large** | IncreaseWidthLarge, DecreaseWidthLarge, IncreaseHeightLarge, DecreaseHeightLarge, IncreaseSizeKeepAspect, DecreaseSizeKeepAspect |
 | **Nudge Small** | IncreaseWidthSmall, DecreaseWidthSmall, IncreaseHeightSmall, DecreaseHeightSmall |
+| **Copy & Align** | CopyAndAlignLeft, CopyAndAlignRight, CopyAndAlignTop, CopyAndAlignBottom |
 | **Options** | Snap to grid checkbox only (S08-002) |
-
-### Manual QA — ribbon groups (≥1 command per group)
-
-1. Open PowerPoint with the add-in loaded → **PowerKeys** tab; confirm **Bootstrap / Test** button is gone.
-2. Draw 3 rectangles at different positions; multi-select with **last** click = anchor.
-3. Run one command from each group (examples below); geometry updates in-process, no network.
-4. Single-shape selection → no crash; command is a no-op with message in debug output.
-
-| Group | Sample command | Expected |
-|-------|----------------|----------|
-| **Alignment** | **Left** | All left edges match anchor left |
-| **Stack** | **To Right** | Each shape's left edge meets anchor's right edge |
-| **Size** | **Same Width** | Non-anchor widths match anchor width |
-| **Stretch** | **To Left** (Stretch width) | Width stretches toward anchor left |
-| **Nudge Large** | **+ Width** | Width increases by large step |
-| **Nudge Small** | **+ W** | Width increases by small step |
-| **Options** | Toggle **Snap to grid** | Persists to `%AppData%\PptPowerKeys\UserSettings.json` |
 
 ## Snap-to-grid (S08-002)
 
@@ -143,53 +144,7 @@ Ribbon **PowerKeys** → **Options** → checkbox **Snap to grid (0.1 cm)** togg
 changes save immediately. All 32 ServerLayout commands receive
 `LayoutOptions { SnapToGrid = settings.SnapToGrid }` via `CommandRouter` (grid step = default 0.1 cm).
 
-### Manual QA — snap toggle
-
-1. Open PowerPoint with the add-in loaded → **PowerKeys** tab.
-2. Confirm checkbox **Snap to grid (0.1 cm)** is unchecked on first run (or matches prior session).
-3. Check the box → run **Align Left** on 2+ shapes → left edges should land on 0.1 cm grid
-   (use Format Shape position/size in cm to verify).
-4. Uncheck → **Align Left** again → positions follow raw layout math (S08-001 behavior, no snap).
-5. Check box, close PowerPoint, reopen → checkbox remains checked; `%AppData%\PptPowerKeys\UserSettings.json`
-   contains `"snapToGrid": true`.
-
-### Manual QA — snap geometry (snap ON)
-
-| Command | Setup | Expected |
-|---------|-------|----------|
-| **AlignLeft** | 3 rectangles at different X; anchor = last selected | All left edges match anchor left **and** are multiples of 0.1 cm |
-| **SameWidth** | 2+ shapes with different widths; anchor = widest | Non-anchor widths match anchor width; width/position values snap to 0.1 cm grid |
-
-Steps:
-
-1. Enable **Snap to grid (0.1 cm)** on the ribbon.
-2. Draw shapes; multi-select with **last** click = anchor.
-3. Run command (ribbon **Alignment** → **Left**, or **Size** → **Same Width**, or programmatic).
-4. Inspect shape position/size in cm — values should be multiples of 0.1.
-
-### Manual QA (Windows) — layout regression (snap OFF)
-
-Regression minimum — three commands covering align, resize, and distribute:
-
-| Command | Setup | Expected |
-|---------|-------|----------|
-| **AlignLeft** | 3 rectangles at different X; anchor = last selected | All left edges match anchor left |
-| **SameWidth** | 2+ shapes with different widths; anchor = widest | Non-anchor widths match anchor width |
-| **DistributeHorizontal** | 3+ shapes with uneven horizontal gaps; anchor unchanged | Equal gaps between shape bounds (anchor position fixed) |
-
-Steps (each command):
-
-1. Draw shapes on a slide; multi-select with **last** click = anchor.
-2. Call `CommandRouter.Execute(CommandIds.<name>)` or use the matching ribbon button.
-3. Confirm geometry updates in-process; no network activity.
-4. Single-shape or empty selection → `LayoutResult.NoChange` with message (no crash).
-
-### AlignLeft ribbon check (S07-003 / S08-003)
-
-1. Draw three rectangles at different horizontal positions.
-2. Multi-select: click first shapes, **last** click = anchor (rightmost or any anchor shape).
-3. **PowerKeys** → **Alignment** → **Left** — all shapes' left edges match anchor's left edge.
-4. Confirm no network calls (offline / air-gap safe for layout path).
+Snap manual QA: [06-windows-layout-qa.md](../../docs/migration/06-windows-layout-qa.md#snap-to-grid-regression).
 
 ## Solution layout
 
@@ -203,4 +158,5 @@ Root `PptPowerKeys.sln` (Linux CI) does **not** include this solution.
 ## Related docs
 
 - [`docs/migration/04-powerpoint-ltsc-windows-native.md`](../../docs/migration/04-powerpoint-ltsc-windows-native.md)
+- [`docs/migration/06-windows-layout-qa.md`](../../docs/migration/06-windows-layout-qa.md)
 - [`sprints/epic-ltsc-windows-native/ROADMAP.md`](../../sprints/epic-ltsc-windows-native/ROADMAP.md)

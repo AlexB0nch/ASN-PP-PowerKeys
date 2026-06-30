@@ -7,6 +7,7 @@ namespace PptPowerKeys.Windows.UI
     /// <summary>
     /// Maps ribbon control ids (<c>btn{CommandIds}</c>) to HostScript <see cref="CommandIds"/>.
     /// S08-004: Copy-and-align commands (separate from layout-only <see cref="RibbonCommandMap"/>).
+    /// S08-005: Position clipboard commands (Copy/Paste object position).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -28,7 +29,8 @@ namespace PptPowerKeys.Windows.UI
                 return false;
             }
 
-            return CopyAndAlignCommands.IsCopyAndAlign(command);
+            return CopyAndAlignCommands.IsCopyAndAlign(command)
+                || PositionCommands.IsPositionCommand(command);
         }
     }
 }

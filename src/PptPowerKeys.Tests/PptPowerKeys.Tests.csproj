@@ -27,6 +27,9 @@
   <ItemGroup>
     <Compile Include="..\PptPowerKeys.Windows\Settings\WindowsUserSettingsStore.cs" Link="Windows\WindowsUserSettingsStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\CopyAndAlignCommands.cs" Link="Windows\CopyAndAlignCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\PositionCommands.cs" Link="Windows\PositionCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\PositionClipboardStore.cs" Link="Windows\PositionClipboardStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\UI\HostScriptCommandMap.cs" Link="Windows\HostScriptCommandMap.cs" />
   </ItemGroup>
 
 </Project>
