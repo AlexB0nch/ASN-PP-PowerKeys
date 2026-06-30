@@ -5,27 +5,23 @@
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
 | S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **Done** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) / [#63](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/63) |
-
-## Черновик S08-001 (первая задача builder)
-
-> [`tasks/S08-001-serverlayout-pipeline-all-32.md`](./tasks/S08-001-serverlayout-pipeline-all-32.md)
-
-- Generic dispatch через `LayoutEngine.IsLayoutCommand()` (не 32-case switch)
-- Snap-to-grid и ribbon — S08-002 / S08-003
-| S08-002 | Snap-to-grid (LayoutOptions + settings hook) | Windows + Core | **Todo** | — |
+| S08-002 | Snap-to-grid (LayoutOptions + local UserSettings) | Windows + Core | **Todo** | — |
 | S08-003 | Ribbon layout command group | Windows UI | **Todo** | — |
 | S08-004 | Copy-and-align HostScript (4 commands) | Windows | **Todo** | — |
 | S08-005 | Position clipboard + layout QA notes | Windows + docs | **Todo** | — |
 
 ## Порядок исполнения
 
-1. **S08-001** — расширяет S07-003 `CommandRouter` на все ServerLayout
-2. **S08-002** — snap flag из settings (совместимость с Web `UserSettings.SnapToGrid`)
-3. **S08-003** — ribbon UX (может параллельно после 001)
-4. **S08-004** — первая HostScript волна (copy-and-align)
-5. **S08-005** — position clipboard + manual matrix
+1. **S08-001** ✓ — generic ServerLayout dispatch
+2. **S08-002** — snap flag + `%AppData%` settings + ribbon checkbox
+3. **S08-003** — ribbon buttons для layout cmds
+4. **S08-004** — CopyAndAlign HostScript
+5. **S08-005** — position clipboard + QA matrix
 
-## Ссылка на ServerLayout список
+## Черновик S08-002 (следующая задача)
 
-См. `CommandCatalog` entries с `ExecutionKind.ServerLayout` (32 cmds) — parity matrix в
-[`epic-ltsc-windows-native/FEATURE_PARITY.md`](../epic-ltsc-windows-native/FEATURE_PARITY.md).
+> [`tasks/S08-002-snap-to-grid-settings.md`](./tasks/S08-002-snap-to-grid-settings.md)
+
+- `UserSettings.SnapToGrid` → `LayoutOptions` в `CommandRouter`
+- Local JSON `%AppData%/PptPowerKeys/UserSettings.json` (Core shape, Web-compatible)
+- Ribbon checkbox «Snap to grid (0.1 cm)»
