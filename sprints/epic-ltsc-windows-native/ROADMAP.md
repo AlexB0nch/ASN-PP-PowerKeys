@@ -83,5 +83,5 @@
 
 ## Следующий шаг
 
-**Sprint 08** — [`sprint-08-ltsc-layout-parity/ARCHITECT-KICKOFF.md`](../sprint-08-ltsc-layout-parity/ARCHITECT-KICKOFF.md)  
-Первая задача: **S08-001** CommandRouter all ServerLayout.
+**Sprint 09** — [`sprint-09-ltsc-objects-format-text/ARCHITECT-KICKOFF.md`](../sprint-09-ltsc-objects-format-text/ARCHITECT-KICKOFF.md)  
+Первая задача: **S09-001** Insert shapes (6 HostScript commands).

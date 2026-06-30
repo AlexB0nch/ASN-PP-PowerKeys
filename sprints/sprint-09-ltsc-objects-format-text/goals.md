@@ -1,6 +1,7 @@
 # Sprint 09 — LTSC Objects · Format · Text
 
-> **Depends on:** Sprint 08 Done
+> **Depends on:** Sprint 08 Done  
+> **Kickoff:** [`ARCHITECT-KICKOFF.md`](./ARCHITECT-KICKOFF.md)
 
 ## Цель
 
