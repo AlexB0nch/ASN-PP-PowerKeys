@@ -23,5 +23,11 @@ namespace PptPowerKeys.Windows.Host
         /// Applies computed geometry to shapes on the active slide by id (not limited to selection).
         /// </summary>
         void ApplyShapeBoundsOnSlide(IReadOnlyList<ShapeBounds> bounds);
+
+        /// <summary>
+        /// Sets <c>Left</c> and <c>Top</c> for all selected shapes; width and height are unchanged.
+        /// Returns the number of shapes updated (0 if nothing selected).
+        /// </summary>
+        int ApplyPositionToSelection(double left, double top);
     }
 }

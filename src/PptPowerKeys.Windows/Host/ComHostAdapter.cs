@@ -136,6 +136,32 @@ namespace PptPowerKeys.Windows.Host
             }
         }
 
+        public int ApplyPositionToSelection(double left, double top)
+        {
+            var selection = _application.ActiveWindow?.Selection;
+            if (selection == null || selection.Type != PpSelectionType.ppSelectionShapes)
+            {
+                return 0;
+            }
+
+            ShapeRange range = selection.ShapeRange;
+            if (range == null || range.Count < 1)
+            {
+                return 0;
+            }
+
+            float leftPt = (float)left;
+            float topPt = (float)top;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                shape.Left = leftPt;
+                shape.Top = topPt;
+            }
+
+            return range.Count;
+        }
+
         private Slide GetActiveSlide() => _application.ActiveWindow?.View?.Slide;
 
         private static Dictionary<string, ShapeBounds> IndexBoundsById(IReadOnlyList<ShapeBounds> bounds)

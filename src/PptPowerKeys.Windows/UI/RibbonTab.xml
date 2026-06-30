@@ -70,6 +70,21 @@
                   imageMso="AlignTop"
                   screentip="Place Above Anchor" />
         </group>
+        <group id="grpPosition" label="Position">
+          <button id="btnCopyObjectPosition"
+                  label="Copy Position"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="Copy"
+                  screentip="Copy object position"
+                  supertip="Save the anchor (last selected) shape Left/Top to the in-memory clipboard." />
+          <button id="btnPasteObjectPosition"
+                  label="Paste Position"
+                  onAction="OnHostScriptCommand"
+                  imageMso="Paste"
+                  screentip="Paste object position"
+                  supertip="Apply the copied Left/Top to all selected shapes (width and height unchanged)." />
+        </group>
         <group id="grpSize" label="Size">
           <button id="btnSameWidth"
                   label="Same Width"

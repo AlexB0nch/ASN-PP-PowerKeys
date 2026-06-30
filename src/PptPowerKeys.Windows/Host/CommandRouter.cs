@@ -12,6 +12,7 @@ namespace PptPowerKeys.Windows.Host
     /// S08-001: all 32 <see cref="LayoutEngine.IsLayoutCommand"/> ids via <see cref="ExecuteServerLayout"/>.
     /// S08-002: passes <see cref="LayoutOptions.SnapToGrid"/> from <see cref="WindowsUserSettingsStore"/>.
     /// S08-004: Copy-and-align HostScript commands (duplicate + layout).
+    /// S08-005: Position clipboard HostScript commands (Copy/Paste object position).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -34,6 +35,16 @@ namespace PptPowerKeys.Windows.Host
             if (CopyAndAlignCommands.IsCopyAndAlign(command))
             {
                 return ExecuteCopyAndAlign(command);
+            }
+
+            if (PositionCommands.IsPositionCommand(command))
+            {
+                return command switch
+                {
+                    CommandIds.CopyObjectPosition => ExecuteCopyObjectPosition(),
+                    CommandIds.PasteObjectPosition => ExecutePasteObjectPosition(),
+                    _ => throw new InvalidOperationException($"Unknown position command: {command}."),
+                };
             }
 
             throw new NotSupportedException(
@@ -108,6 +119,44 @@ namespace PptPowerKeys.Windows.Host
             {
                 Changed = true,
                 Message = $"Duplicated and aligned {clones.Count} shape(s).",
+            };
+        }
+
+        private CommandExecutionResult ExecuteCopyObjectPosition()
+        {
+            var shapes = _host.ReadSelectedShapeBounds();
+            if (shapes.Count == 0)
+            {
+                throw new InvalidOperationException("Select a shape first.");
+            }
+
+            var anchor = shapes[shapes.Count - 1];
+            PositionClipboardStore.Set(anchor.Left, anchor.Top);
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = $"Copied position ({anchor.Left:F1}, {anchor.Top:F1}).",
+            };
+        }
+
+        private CommandExecutionResult ExecutePasteObjectPosition()
+        {
+            var snapshot = PositionClipboardStore.Get();
+            if (snapshot == null)
+            {
+                throw new InvalidOperationException("Copy a position first (Copy object position).");
+            }
+
+            var count = _host.ApplyPositionToSelection(snapshot.Value.Left, snapshot.Value.Top);
+            if (count == 0)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = $"Pasted position to {count} shape(s).",
             };
         }
     }
