@@ -178,6 +178,30 @@
                   imageMso="HappyFace"
                   screentip="Decrease Height (Small)" />
         </group>
+        <group id="grpCopyAndAlign" label="Copy &amp; Align">
+          <button id="btnCopyAndAlignLeft"
+                  label="Copy + Left"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ObjectsAlignLeft"
+                  screentip="Duplicate + Align Left"
+                  supertip="Duplicate each selected shape at its position, then align clones to the anchor (last selected)." />
+          <button id="btnCopyAndAlignRight"
+                  label="Copy + Right"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectsAlignRight"
+                  screentip="Duplicate + Align Right" />
+          <button id="btnCopyAndAlignTop"
+                  label="Copy + Top"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectsAlignTop"
+                  screentip="Duplicate + Align Top" />
+          <button id="btnCopyAndAlignBottom"
+                  label="Copy + Bottom"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ObjectsAlignBottom"
+                  screentip="Duplicate + Align Bottom" />
+        </group>
         <group id="grpOptions" label="Options">
           <checkBox id="chkSnapToGrid"
                     label="Snap to grid (0.1 cm)"

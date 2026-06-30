@@ -81,7 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Host\ComHostAdapter.cs" />
+    <Compile Include="Host\CommandExecutionResult.cs" />
     <Compile Include="Host\CommandRouter.cs" />
+    <Compile Include="Host\CopyAndAlignCommands.cs" />
     <Compile Include="Host\IComHostAdapter.cs" />
     <Compile Include="Host\ShapeBoundsId.cs" />
     <Compile Include="Globals.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="ThisAddIn.Designer.cs">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\HostScriptCommandMap.cs" />
     <Compile Include="UI\PowerKeysRibbon.cs" />
     <Compile Include="UI\RibbonCommandMap.cs" />
   </ItemGroup>

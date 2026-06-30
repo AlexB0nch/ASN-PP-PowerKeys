@@ -18,7 +18,7 @@ Steps:
 1. Open `src/PptPowerKeys.Windows.sln` in Visual Studio.
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
-4. Ribbon tab **PowerKeys** shows six layout groups (32 commands) plus **Options** → snap checkbox.
+4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## ServerLayout commands (S08-001)
@@ -31,7 +31,7 @@ COM selection → ShapeBounds[] → LayoutEngine.Apply → ComHostAdapter.ApplyS
 ```
 
 Anchor = **last** selected shape (unchanged from S07-003). `LayoutOptions.SnapToGrid` comes from
-local `UserSettings.json` (S08-002). Non-layout commands throw `NotSupportedException`.
+local `UserSettings.json` (S08-002). Non-layout / non-CopyAndAlign commands throw `NotSupportedException`.
 
 ### Routable commands (32)
 
@@ -50,7 +50,56 @@ Programmatic smoke (Immediate window / temporary debug hook):
 ```csharp
 var router = Globals.ThisAddIn.CommandRouter;
 var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.SameWidth);
+// result.Changed, result.Message
 ```
+
+## Copy-and-align HostScript (S08-004)
+
+`CommandRouter.Execute(CommandIds)` routes **4** Copy-and-align commands through the host-script pipeline
+(duplicate at source position → in-process Core layout → apply geometry on slide by id):
+
+| CommandId | Layout step |
+|-----------|-------------|
+| CopyAndAlignLeft | AlignLeft |
+| CopyAndAlignRight | AlignRight |
+| CopyAndAlignTop | AlignTop |
+| CopyAndAlignBottom | AlignBottom |
+
+```
+COM selection → ShapeBounds[] (originals)
+  → COM Duplicate (clones at source Left/Top)
+  → combined + anchorIndex = originals.Count - 1
+  → LayoutEngine.Apply → ComHostAdapter.ApplyShapeBoundsOnSlide
+```
+
+Parity with Web Add-in `runCopyAndAlign()` in `runCommand.ts`. Snap-to-grid (S08-002) applies via the same
+`LayoutOptions` as ServerLayout commands.
+
+Ribbon **PowerKeys** → **Copy & Align** (4 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute`.
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.CopyAndAlignLeft);
+```
+
+### Manual QA — Copy-and-align
+
+1. Open PowerPoint with the add-in loaded → **PowerKeys** tab → confirm **Copy & Align** group (4 buttons).
+2. Draw 2+ rectangles at different positions; multi-select with **last** click = anchor.
+3. Click **Copy + Left** — each shape is duplicated at its source position; clones align their left edges to the anchor's left edge.
+4. Repeat for **Copy + Right**, **Copy + Top**, **Copy + Bottom** as needed.
+5. Empty selection → error dialog: "Select one or more shapes first." (no crash).
+6. With **Snap to grid** enabled (S08-002), aligned positions should land on 0.1 cm grid.
+
+| Command | Setup | Expected |
+|---------|-------|----------|
+| **CopyAndAlignLeft** | 2+ shapes; anchor = last selected | Clones created; all clone left edges match anchor left |
+| **CopyAndAlignRight** | 2+ shapes; anchor = last selected | Clones created; all clone right edges match anchor right |
+| **CopyAndAlignTop** | 2+ shapes; anchor = last selected | Clones created; all clone top edges match anchor top |
+| **CopyAndAlignBottom** | 2+ shapes; anchor = last selected | Clones created; all clone bottom edges match anchor bottom |
 
 ## Ribbon layout groups (S08-003)
 
