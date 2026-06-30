@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-08-ltsc-layout-parity` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + docs |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#70](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/70) |
-| **PR** | — |
+| **PR** | [#71](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/71) |
 
 ## Цель
 

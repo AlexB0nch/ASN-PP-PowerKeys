@@ -92,8 +92,8 @@ S06-003 Done — import/export settings JSON (PR #52). S06-004 Done — Object S
 S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
-Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 in progress** (M2 layout parity).
-См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 Done** (M2 layout beta);
+**Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
 - **S08-004:** Первая HostScript-волна Windows — **4** Copy-and-align команды (CopyAndAlignLeft/Right/Top/Bottom);

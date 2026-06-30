@@ -8,7 +8,7 @@
 | S08-002 | Snap-to-grid (LayoutOptions + local UserSettings) | Windows + Core | **Done** | [#64](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/64) / [#65](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/65) |
 | S08-003 | Ribbon layout command group (32 ServerLayout) | Windows UI | **Done** | [#66](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/66) / [#67](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/67) |
 | S08-004 | Copy-and-align HostScript (4 commands) | Windows | **Done** | [#68](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/68) / [#69](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/69) |
-| S08-005 | Position clipboard + layout QA notes | Windows + docs | **In Progress** | [#70](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/70) |
+| S08-005 | Position clipboard + layout QA notes | Windows + docs | **Done** | [#70](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/70) / [#71](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/71) |
 
 ## Порядок исполнения
 
@@ -16,7 +16,9 @@
 2. **S08-002** ✓ — snap flag + `%AppData%` settings + ribbon checkbox
 3. **S08-003** ✓ — ribbon buttons для layout cmds
 4. **S08-004** ✓ — CopyAndAlign HostScript
-5. **S08-005** — position clipboard + QA matrix ← **next**
+5. **S08-005** ✓ — position clipboard + QA matrix
+
+**Sprint 08 complete** — see [`retrospective.md`](./retrospective.md). Next: [`Sprint 09`](../sprint-09-ltsc-objects-format-text/goals.md).
 
 ## Черновик S08-005 (последняя задача Sprint 08)
 

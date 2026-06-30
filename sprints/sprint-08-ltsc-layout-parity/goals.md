@@ -27,10 +27,10 @@ snap-to-grid; copy-and-align и position clipboard (по parity matrix).
 
 ## Definition of Done спринта
 
-- [ ] S08-001…005 Done
-- [ ] `dotnet test PptPowerKeys.sln` зелёный
-- [ ] Manual: representative ServerLayout commands on Windows PP
-- [ ] `retrospective.md` при закрытии
+- [x] S08-001…005 Done
+- [x] `dotnet test PptPowerKeys.sln` зелёный (169 passed)
+- [x] Manual: representative ServerLayout commands on Windows PP — [`docs/migration/06-windows-layout-qa.md`](../../docs/migration/06-windows-layout-qa.md)
+- [x] `retrospective.md` при закрытии
 
 ## Зависимости
 
