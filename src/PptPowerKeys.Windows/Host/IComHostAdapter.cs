@@ -36,5 +36,14 @@ namespace PptPowerKeys.Windows.Host
         /// Throws <see cref="System.InvalidOperationException"/> when no active slide is available.
         /// </summary>
         void InsertShape(CommandIds command);
+
+        /// <summary>
+        /// Clones each source shape and moves the copy to the target left/top.
+        /// Width and height of the clone are preserved from the source.
+        /// Returns the number of shapes duplicated (0 if none).
+        /// </summary>
+        int DuplicateSelectedAtPositions(
+            IReadOnlyList<ShapeBounds> sources,
+            IReadOnlyList<ShapeBounds> targets);
     }
 }

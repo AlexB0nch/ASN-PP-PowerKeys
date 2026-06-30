@@ -19,7 +19,7 @@ Steps:
 2. Restore/build — Core resolves as `netstandard2.0`.
 3. Press F5 to debug-sideload into PowerPoint.
 4. Ribbon tab **PowerKeys** shows six layout groups (32 commands), **Objects** (6 commands),
-   **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
+   **Duplicate** (4 commands), **Position** (2 commands), **Copy & Align** (4 commands), plus **Options** → snap checkbox.
 5. Select 2+ shapes (anchor = last selected) → any layout button runs in-process Core (no HTTP).
 
 ## Manual QA
@@ -152,6 +152,41 @@ Programmatic smoke:
 var router = Globals.ThisAddIn.CommandRouter;
 var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.InsertRectangle);
 // result.Changed == true, result.Message == "Rectangle inserted."
+```
+
+## Smart Duplicate (S09-002)
+
+`CommandRouter.Execute(CommandIds)` routes **4** smart-duplicate HostScript commands through COM clone +
+in-process `DuplicationEngine.ComputeDuplicate` with per-direction gap memory (`DuplicateGapStore`).
+
+| CommandId | Behavior |
+|-----------|----------|
+| DuplicateRight / Left / Up / Down | COM `Duplicate()` per selected shape → set clone `Left`/`Top` from Core offset |
+
+Gap memory (parity with Web `duplicateGapMemory.ts` / S05-005):
+
+- First duplicate in a direction → `gap = 0` (touching).
+- Repeat duplicate of the same `CommandId` → uses remembered gap.
+- In-memory session scope — **not** persisted to disk.
+
+Ribbon **PowerKeys** → **Duplicate** (4 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute`.
+
+### Manual QA (Smart Duplicate)
+
+1. Select one or more shapes on the active slide.
+2. Click **Duplicate → Right** twice → second clone is the same offset as the first (touching, gap 0).
+3. Manually move the first clone to create a visible gap, then duplicate right again — gap memory still uses
+   the **requested** gap (0 unless a prior command stored a non-zero gap); status shows `(gap X pt)` when gap > 0.
+4. Switch direction (**Duplicate → Down**) → first down duplicate uses gap 0 independently of right.
+5. Empty selection → clear error (*Select one or more shapes first.*).
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+var result = router.Execute(PptPowerKeys.Core.Commands.CommandIds.DuplicateRight);
+// result.Changed == true, result.Message starts with "Duplicated"
 ```
 
 ## Ribbon layout groups (S08-003)

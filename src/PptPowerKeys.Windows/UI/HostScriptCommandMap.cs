@@ -9,6 +9,7 @@ namespace PptPowerKeys.Windows.UI
     /// S08-004: Copy-and-align commands (separate from layout-only <see cref="RibbonCommandMap"/>).
     /// S08-005: Position clipboard commands (Copy/Paste object position).
     /// S09-001: Insert-shape commands (rectangle, square, ellipse, line, textbox, arrow).
+    /// S09-002: Smart-duplicate commands (DuplicateRight/Left/Up/Down).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -32,7 +33,8 @@ namespace PptPowerKeys.Windows.UI
 
             return CopyAndAlignCommands.IsCopyAndAlign(command)
                 || PositionCommands.IsPositionCommand(command)
-                || InsertShapeCommands.IsInsertShape(command);
+                || InsertShapeCommands.IsInsertShape(command)
+                || DuplicateCommands.IsDuplicateCommand(command);
         }
     }
 }
