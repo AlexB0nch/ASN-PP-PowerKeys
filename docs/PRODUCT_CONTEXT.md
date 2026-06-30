@@ -96,6 +96,12 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S08-004:** Первая HostScript-волна Windows — **4** Copy-and-align команды (CopyAndAlignLeft/Right/Top/Bottom);
+  pipeline: `ReadSelectedShapeBounds` → `CloneSelectedAtSourcePositions` (COM Duplicate at source Left/Top) →
+  combined + `anchorIndex = originals.Count - 1` → `LayoutEngine.Apply` (mapped Align*) → `ApplyShapeBoundsOnSlide` (by id);
+  `CommandExecutionResult` unified return; `HostScriptCommandMap` отдельно от layout-only `RibbonCommandMap`;
+  ribbon group **Copy & Align** → `OnHostScriptCommand`; snap via S08-002 `LayoutOptions`; parity с Web `runCopyAndAlign`;
+  `CopyAndAlignCommandsTests` (7 tests); manual QA matrix в `PptPowerKeys.Windows/README.md`. PR #69; 153 dotnet tests green.
 - **S08-003:** Ribbon layout parity — **32** ServerLayout кнопки на вкладке **PowerKeys** в 6 группах
   (Alignment 8, Stack 4, Size 6, Stretch 4, Nudge Large 6, Nudge Small 4) + **Options** (snap checkbox из S08-002);
   единый `OnLayoutCommand` → `RibbonCommandMap.TryParse(btn{CommandIds})` → `CommandRouter.Execute`;
