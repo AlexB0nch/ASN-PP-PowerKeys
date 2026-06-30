@@ -139,6 +139,32 @@ S09-001…003 Done. Issue S09-004 → backlog In Progress → /builder выпо�
 CopySlide/MoveSlidesToBackup — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-004).
 ```
 
+## Copy-paste промпт (S09-005 — Format colors + palette)
+
+```
+/architect
+
+Sprint 09 — S09-005 Format colors + palette (4 HostScript commands).
+Прочитай:
+- sprints/sprint-09-ltsc-objects-format-text/tasks/S09-005-format-colors-palette.md
+- sprints/sprint-04-smart-color-picker/tasks/S04-001-theme-colors-from-presentation.md
+- sprints/sprint-09-ltsc-objects-format-text/goals.md
+- sprints/sprint-09-ltsc-objects-format-text/backlog.md
+- src/PptPowerKeys.Windows/Host/CommandRouter.cs
+- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
+- src/PptPowerKeys.Windows/UI/HostScriptCommandMap.cs
+- src/PptPowerKeys.Windows/Settings/WindowsUserSettingsStore.cs (pattern)
+- src/PptPowerKeys.Core/Colors/ColorPaletteBuilder.cs
+- src/PptPowerKeys.AddIn/src/office/formatColorState.ts
+- src/PptPowerKeys.AddIn/src/office/themeColors.ts
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (applyFillColor, toggleFillBlackWhite)
+- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (FillColor, LineColor, TextColor, ToggleFillBlackWhite)
+- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (grpFormat)
+
+S09-001…004 Done. Issue S09-005 → backlog In Progress → /builder выполни S09-005 → приёмка → merge.
+FormatPainter/OpenColorScheme — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-005).
+```
+
 ## Copy-paste промпт (S09-006 — закрытие спринта)
 
 ```
