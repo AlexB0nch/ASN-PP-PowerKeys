@@ -92,9 +92,15 @@ S06-003 Done — import/export settings JSON (PR #52). S06-004 Done — Object S
 S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
-Core in-process) для LTSC/perpetual Office. Sprint 07 next — foundation. См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 in progress** (M2 layout parity).
+См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S08-001:** `CommandRouter` — generic dispatch через `LayoutEngine.IsLayoutCommand()` для всех **32 ServerLayout**
+  команд (Alignment 12 + Resize 20); один `ExecuteServerLayout` (COM → `ShapeBounds[]` → `LayoutEngine.Apply` → write back);
+  `LayoutOptions` = null (snap-to-grid — S08-002); non-layout → `NotSupportedException`; ribbon по-прежнему только AlignLeft
+  (полный layout ribbon — S08-003); manual QA note AlignLeft + SameWidth + DistributeHorizontal в `PptPowerKeys.Windows/README.md`.
+  PR #63; 143 dotnet tests green.
 - **ADR-001 / LTSC line:** Вторая официальная product line для PowerPoint LTSC/perpetual Windows — **Variant D**
   (VSTO host + in-process Core); не PPAM/VBA; не размораживать `VstoLegacy*`; новый проект `PptPowerKeys.Windows`;
   полный паритет 79 cmd + unlock 9 `OfficeJsSupport.None`; hotkeys via native hook (S11); Track 0 doc (S07-004).

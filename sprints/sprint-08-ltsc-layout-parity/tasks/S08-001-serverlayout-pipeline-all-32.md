@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-08-ltsc-layout-parity` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + Core (reference only) |
-| **Статус** | In Progress |
-| **Issue** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) |
-| **PR** | — |
+| **Статус** | Done |
+| **Issue** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) (closed) |
+| **PR** | [#63](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/63) |
 
 ## Цель
 
@@ -102,13 +102,13 @@ return ExecuteServerLayout(command, layoutOptions: null); // snap in S08-002
 
 ## Критерии приёмки
 
-- [ ] `CommandRouter.Execute(commandId)` работает для **всех 32** `LayoutEngine.IsLayoutCommand` ids
-- [ ] Non-layout commands → `NotSupportedException` (или явный guard)
-- [ ] In-process `LayoutEngine.Apply`; **no HTTP**
-- [ ] Anchor semantics unchanged (last selected)
-- [ ] `dotnet test PptPowerKeys.sln` — зелёный
-- [ ] Manual QA note (Windows): минимум AlignLeft + SameWidth + DistributeHorizontal regression (в PR или README)
-- [ ] `.github/review/CHECKLIST.md` — architect post-merge
+- [x] `CommandRouter.Execute(commandId)` работает для **всех 32** `LayoutEngine.IsLayoutCommand` ids
+- [x] Non-layout commands → `NotSupportedException` (или явный guard)
+- [x] In-process `LayoutEngine.Apply`; **no HTTP**
+- [x] Anchor semantics unchanged (last selected)
+- [x] `dotnet test PptPowerKeys.sln` — зелёный (143 passed)
+- [x] Manual QA note (Windows): минимум AlignLeft + SameWidth + DistributeHorizontal regression (в PR или README)
+- [x] `.github/review/CHECKLIST.md` — architect post-merge
 
 ## Зависимости
 
