@@ -193,6 +193,45 @@
                   imageMso="HappyFace"
                   screentip="Decrease Height (Small)" />
         </group>
+        <group id="grpObjects" label="Objects">
+          <button id="btnInsertRectangle"
+                  label="Rectangle"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ShapeRectangle"
+                  screentip="Insert rectangle"
+                  supertip="Insert a rectangle near the top-left of the active slide (100,100 — 150×100 pt)." />
+          <button id="btnInsertSquare"
+                  label="Square"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ShapeRectangle"
+                  screentip="Insert square"
+                  supertip="Insert a square near the top-left of the active slide (100×100 pt)." />
+          <button id="btnInsertEllipse"
+                  label="Ellipse"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ShapeOval"
+                  screentip="Insert ellipse"
+                  supertip="Insert an ellipse near the top-left of the active slide (100,100 — 150×100 pt)." />
+          <button id="btnInsertLine"
+                  label="Line"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ShapeStraightLine"
+                  screentip="Insert line"
+                  supertip="Insert a horizontal line near the top-left of the active slide." />
+          <button id="btnInsertTextbox"
+                  label="Textbox"
+                  onAction="OnHostScriptCommand"
+                  imageMso="TextBoxInsert"
+                  screentip="Insert text box"
+                  supertip="Insert an empty text box near the top-left of the active slide (100,100 — 200×80 pt)." />
+          <button id="btnInsertArrow"
+                  label="Arrow"
+                  onAction="OnHostScriptCommand"
+                  imageMso="ShapeRightArrow"
+                  screentip="Insert arrow"
+                  supertip="Insert a horizontal line with a triangle end arrowhead (COM full parity)." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"

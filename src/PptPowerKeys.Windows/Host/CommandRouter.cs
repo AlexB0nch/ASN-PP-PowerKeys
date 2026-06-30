@@ -13,6 +13,7 @@ namespace PptPowerKeys.Windows.Host
     /// S08-002: passes <see cref="LayoutOptions.SnapToGrid"/> from <see cref="WindowsUserSettingsStore"/>.
     /// S08-004: Copy-and-align HostScript commands (duplicate + layout).
     /// S08-005: Position clipboard HostScript commands (Copy/Paste object position).
+    /// S09-001: Insert-shape HostScript commands (rectangle, square, ellipse, line, textbox, arrow).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -45,6 +46,11 @@ namespace PptPowerKeys.Windows.Host
                     CommandIds.PasteObjectPosition => ExecutePasteObjectPosition(),
                     _ => throw new InvalidOperationException($"Unknown position command: {command}."),
                 };
+            }
+
+            if (InsertShapeCommands.IsInsertShape(command))
+            {
+                return ExecuteInsertShape(command);
             }
 
             throw new NotSupportedException(
@@ -159,5 +165,25 @@ namespace PptPowerKeys.Windows.Host
                 Message = $"Pasted position to {count} shape(s).",
             };
         }
+
+        private CommandExecutionResult ExecuteInsertShape(CommandIds command)
+        {
+            _host.InsertShape(command);
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = GetInsertShapeSuccessMessage(command),
+            };
+        }
+
+        private static string GetInsertShapeSuccessMessage(CommandIds command) =>
+            command switch
+            {
+                CommandIds.InsertRectangle or CommandIds.InsertSquare => "Rectangle inserted.",
+                CommandIds.InsertEllipse => "Ellipse inserted.",
+                CommandIds.InsertLine or CommandIds.InsertArrow => "Line inserted.",
+                CommandIds.InsertTextbox => "Text box inserted.",
+                _ => throw new InvalidOperationException($"Unknown insert-shape command: {command}."),
+            };
     }
 }

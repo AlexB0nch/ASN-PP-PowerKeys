@@ -84,6 +84,7 @@
     <Compile Include="Host\CommandExecutionResult.cs" />
     <Compile Include="Host\CommandRouter.cs" />
     <Compile Include="Host\CopyAndAlignCommands.cs" />
+    <Compile Include="Host\InsertShapeCommands.cs" />
     <Compile Include="Host\IComHostAdapter.cs" />
     <Compile Include="Host\ShapeBoundsId.cs" />
     <Compile Include="Globals.cs" />
