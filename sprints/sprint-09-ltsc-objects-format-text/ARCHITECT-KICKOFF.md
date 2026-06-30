@@ -95,6 +95,28 @@ Issue S09-001 → backlog In Progress → /builder выполни S09-001 → п
 После S09-006: retrospective.md, goals DoD, PRODUCT_CONTEXT, kickoff S10.
 ```
 
+## Copy-paste промпт (S09-003 — Group / Z-order)
+
+```
+/architect
+
+Sprint 09 — S09-003 Group / Ungroup / Z-order (6 HostScript commands).
+Прочитай:
+- sprints/sprint-09-ltsc-objects-format-text/tasks/S09-003-group-zorder.md
+- sprints/sprint-09-ltsc-objects-format-text/goals.md
+- sprints/sprint-09-ltsc-objects-format-text/backlog.md
+- src/PptPowerKeys.Windows/Host/CommandRouter.cs
+- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
+- src/PptPowerKeys.Windows/UI/HostScriptCommandMap.cs
+- src/PptPowerKeys.Windows/Host/CopyAndAlignCommands.cs (pattern)
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (groupSelectedShapes, ungroupSelectedShape, setZOrder)
+- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (Group, Ungroup, BringToFront…)
+- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (grpOrder)
+
+S09-001…002 Done. Issue S09-003 → backlog In Progress → /builder выполни S09-003 → приёмка → merge.
+Regroup — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-003).
+```
+
 ## Copy-paste промпт (S09-006 — закрытие спринта)
 
 ```
