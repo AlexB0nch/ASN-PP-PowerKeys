@@ -5,7 +5,7 @@
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
 | S08-001 | CommandRouter: all 32 ServerLayout commands | Windows + Core | **Done** | [#62](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/62) / [#63](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/63) |
-| S08-002 | Snap-to-grid (LayoutOptions + local UserSettings) | Windows + Core | **Todo** | — |
+| S08-002 | Snap-to-grid (LayoutOptions + local UserSettings) | Windows + Core | **In Progress** | [#64](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/64) |
 | S08-003 | Ribbon layout command group | Windows UI | **Todo** | — |
 | S08-004 | Copy-and-align HostScript (4 commands) | Windows | **Todo** | — |
 | S08-005 | Position clipboard + layout QA notes | Windows + docs | **Todo** | — |
