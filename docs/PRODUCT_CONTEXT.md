@@ -96,7 +96,13 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
-- **Sprint 08 complete (M2 Layout beta):** S08-001…005 Done (PR #63–#71); 38 layout commands on Windows line
+- **S09-002:** Smart Duplicate HostScript на Windows line — `DuplicateRight/Left/Up/Down`; pipeline:
+  `ReadSelectedShapeBounds` → `DuplicateGapStore.GetGap` → `DuplicationEngine.ComputeDuplicate` →
+  `DuplicateSelectedAtPositions` (COM clone + Left/Top) → `DuplicateGapStore.SetGap`; in-memory per-`CommandId`
+  gap (session scope, parity с Web `duplicateGapMemory.ts`); ribbon **Duplicate** group (4 buttons);
+  `DuplicateCommandsTests` + `DuplicateGapStoreTests` + map tests; Windows csproj fix (Position* + new Host files);
+  PR #76; 202 dotnet tests green. Next: S09-003 Group/Z-order.
+- **S09-001:** Insert shapes HostScript — 6 команд (InsertRectangle/Square/Ellipse/Line/Textbox/Arrow); COM
   (32 ServerLayout + 4 CopyAndAlign + 2 position clipboard); snap-to-grid; consolidated manual QA
   [`docs/migration/06-windows-layout-qa.md`](../docs/migration/06-windows-layout-qa.md); 169 dotnet tests green;
   retrospective [`sprints/sprint-08-ltsc-layout-parity/retrospective.md`](../sprints/sprint-08-ltsc-layout-parity/retrospective.md).

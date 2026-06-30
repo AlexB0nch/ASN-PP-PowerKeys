@@ -10,8 +10,9 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + Core (`DuplicationEngine`) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#75](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/75) |
+| **PR** | [#76](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/76) |
 
 ## Цель
 
@@ -108,17 +109,21 @@ In-memory `Dictionary<CommandIds, double>`; `GetGap` → 0 default; `SetGap` cla
 
 ## Критерии приёмки
 
-- [ ] All 4 Duplicate commands routed via `CommandRouter.Execute`
-- [ ] First duplicate in direction uses gap=0; repeat uses remembered gap
-- [ ] Status message includes `(gap X pt)` when gap > 0
-- [ ] Ribbon grpDuplicate (4 buttons) wired via `OnHostScriptCommand`
-- [ ] `HostScriptCommandMap` + `DuplicateCommands` + `DuplicateGapStore` unit tests
-- [ ] `dotnet test PptPowerKeys.sln` green
-- [ ] PR manual QA note + `.github/review/CHECKLIST.md`
+- [x] All 4 Duplicate commands routed via `CommandRouter.Execute`
+- [x] First duplicate in direction uses gap=0; repeat uses remembered gap
+- [x] Status message includes `(gap X pt)` when gap > 0
+- [x] Ribbon grpDuplicate (4 buttons) wired via `OnHostScriptCommand`
+- [x] `HostScriptCommandMap` + `DuplicateCommands` + `DuplicateGapStore` unit tests
+- [x] `dotnet test PptPowerKeys.sln` green (202 passed)
+- [x] PR manual QA note + `.github/review/CHECKLIST.md`
 
-## Зависимости
+## Приёмка (architect, 2026-06-30)
 
-- S09-001 Done (#74)
+- PR #76 merged. Scope соблюдён: Windows Duplicate* + gap memory; Core без изменений.
+- CI/local: 202 dotnet tests green.
+- Gap memory per CommandId, in-memory session scope; negative gap clamped to 0.
+- CHECKLIST: scope OK; CommandCatalog без изменений (79 команд).
+- Ручная проверка PowerPoint Windows — post-merge.
 
 ## Трассировка
 
