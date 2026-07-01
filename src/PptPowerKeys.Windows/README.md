@@ -275,6 +275,31 @@ router.Execute(PptPowerKeys.Core.Commands.CommandIds.PasteShapeToSelectedSlides)
 router.Execute(PptPowerKeys.Core.Commands.CommandIds.RemoveShapeFromSelectedSlides);
 ```
 
+### Manual QA (Format colors)
+
+1. Open a presentation with a themed Slide Master. Insert a rectangle and select it.
+2. **Fill color:** click **Format → Fill** → fill changes to first theme/recent palette color; status
+   *Fill color #RRGGBB applied to 1 shape(s).* Repeat click → cycles palette; recent colors persist in
+   `%AppData%\PptPowerKeys\UserSettings.json` (`recentColors` array).
+3. **Line color:** select shape → **Format → Line** → outline color cycles; status *Line color …*
+4. **Text color:** insert text box, type text, select → **Format → Text Color** → font color cycles.
+   Shape without text → error *Selected shape(s) have no text to color.*
+5. No selection → Fill/Line/Text → *Select one or more shapes first.*
+6. **Toggle black/white** (programmatic / future shortcut): black fill → white; colored fill → black.
+
+Ribbon **PowerKeys** → **Format** (3 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute` → `ComHostAdapter` + `ColorPaletteBuilder` + `FormatColorCycleStore`.
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.FillColor);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.LineColor);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.TextColor);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.ToggleFillBlackWhite);
+```
+
 ## Ribbon layout groups (S08-003)
 
 All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
@@ -288,6 +313,7 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 | **Duplicate** | DuplicateRight, DuplicateLeft, DuplicateDown, DuplicateUp |
 | **Order** | BringToFront, SendToBack, BringForward, SendBackward, Group, Ungroup |
 | **Multi-slide** | PasteShapeToSelectedSlides, RemoveShapeFromSelectedSlides |
+| **Format** | FillColor, LineColor, TextColor |
 | **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |

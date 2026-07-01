@@ -28,6 +28,9 @@ public class HostScriptCommandMapTests
     [InlineData("btnUngroup", CommandIds.Ungroup)]
     [InlineData("btnPasteShapeToSelectedSlides", CommandIds.PasteShapeToSelectedSlides)]
     [InlineData("btnRemoveShapeFromSelectedSlides", CommandIds.RemoveShapeFromSelectedSlides)]
+    [InlineData("btnFillColor", CommandIds.FillColor)]
+    [InlineData("btnLineColor", CommandIds.LineColor)]
+    [InlineData("btnTextColor", CommandIds.TextColor)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));
