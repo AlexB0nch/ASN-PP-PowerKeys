@@ -12,7 +12,7 @@
 | **Компонент** | `PptPowerKeys.Windows` |
 | **Статус** | In Progress |
 | **Issue** | — |
-| **PR** | — |
+| **PR** | #93 |
 
 ## Цель
 
