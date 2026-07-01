@@ -22,6 +22,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-004: Multi-slide paste / remove shape HostScript commands (2 COM parity commands).
     /// S09-005: Format color HostScript commands (Fill/Line/Text + toggle black/white).
     /// S09-006: Text HostScript commands (paste plain, ellipsis, scripts, addup).
+    /// S10-001: Slide HostScript commands (CopySlide, MoveSlidesToBackup).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -84,6 +85,11 @@ namespace PptPowerKeys.Windows.Host
             if (TextCommands.IsTextCommand(command))
             {
                 return ExecuteText(command);
+            }
+
+            if (SlideCommands.IsSlideCommand(command))
+            {
+                return ExecuteSlide(command);
             }
 
             throw new NotSupportedException(
@@ -442,6 +448,33 @@ namespace PptPowerKeys.Windows.Host
 
                 default:
                     throw new InvalidOperationException($"Unknown text command: {command}.");
+            }
+        }
+
+        private CommandExecutionResult ExecuteSlide(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.CopySlide:
+                    _host.DuplicateSelectedSlide();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Slide duplicated.",
+                    };
+
+                case CommandIds.MoveSlidesToBackup:
+                {
+                    int count = _host.MoveSelectedSlidesToBackup();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Moved {count} slide(s) to backup (end of deck).",
+                    };
+                }
+
+                default:
+                    throw new InvalidOperationException($"Unknown slide command: {command}.");
             }
         }
     }

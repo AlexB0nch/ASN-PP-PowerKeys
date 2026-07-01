@@ -385,6 +385,15 @@
                   imageMso="ObjectsAlignBottom"
                   screentip="Duplicate + Align Bottom" />
         </group>
+        <group id="grpSlides" label="Slides">
+          <button id="btnCopySlide"
+                  label="Copy Slide"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="SlideDuplicate"
+                  screentip="Duplicate slide"
+                  supertip="Duplicate the first selected slide immediately after the source slide." />
+        </group>
         <group id="grpOptions" label="Options">
           <checkBox id="chkSnapToGrid"
                     label="Snap to grid (0.1 cm)"

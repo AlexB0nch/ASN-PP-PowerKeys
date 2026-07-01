@@ -36,6 +36,7 @@ public class HostScriptCommandMapTests
     [InlineData("btnAddup", CommandIds.AddupTextFields)]
     [InlineData("btnToggleSuperscript", CommandIds.ToggleSuperscript)]
     [InlineData("btnToggleSubscript", CommandIds.ToggleSubscript)]
+    [InlineData("btnCopySlide", CommandIds.CopySlide)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

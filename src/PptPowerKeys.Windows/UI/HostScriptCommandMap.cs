@@ -14,6 +14,7 @@ namespace PptPowerKeys.Windows.UI
     /// S09-004: Multi-slide paste / remove shape commands (2 COM parity commands).
     /// S09-005: Format color commands (Fill/Line/Text + toggle black/white).
     /// S09-006: Text commands (paste plain, addup, superscript, subscript).
+    /// S10-001: Slide commands (CopySlide, MoveSlidesToBackup).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -48,7 +49,8 @@ namespace PptPowerKeys.Windows.UI
                 || GroupZOrderCommands.IsGroupZOrderCommand(command)
                 || MultiSlideShapeCommands.IsMultiSlideShapeCommand(command)
                 || FormatColorCommands.IsPaletteColorCommand(command)
-                || TextCommands.IsTextCommand(command);
+                || TextCommands.IsTextCommand(command)
+                || SlideCommands.IsSlideCommand(command);
         }
     }
 }
