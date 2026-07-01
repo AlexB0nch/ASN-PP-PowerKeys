@@ -12,7 +12,7 @@
 | **Компонент** | `PptPowerKeys.Windows` + Core (`NumberAggregator`, `AddupStatusFormatter`) |
 | **Статус** | In Review |
 | **Issue** | [#90](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/90) |
-| **PR** | TBD |
+| **PR** | [#91](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/91) |
 
 ## Цель
 
@@ -188,4 +188,4 @@ Reference: `PptPowerKeys.VstoLegacy/UI/RibbonTab.xml` (`grpText`).
 
 ## Трассировка
 
-Issue TBD → `cursor/s09-006-text-addup-c04a` → PR `Closes #<issue>`
+Issue #90 → `cursor/s09-006-text-addup-c04a` → PR #91 `Closes #90`
