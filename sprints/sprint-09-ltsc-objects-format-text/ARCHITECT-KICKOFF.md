@@ -165,18 +165,41 @@ S09-001…004 Done. Issue S09-005 → backlog In Progress → /builder выпо�
 FormatPainter/OpenColorScheme — anti-scope (S10). После merge: backlog Done, PRODUCT_CONTEXT journal (S09-005).
 ```
 
-## Copy-paste промпт (S09-006 — закрытие спринта)
+## Copy-paste промпт (S09-006 — Text + Addup, закрытие Sprint 09)
 
 ```
 /architect
 
-Sprint 09 — S09-006 Text + Addup (последняя задача спринта).
+Sprint 09 — S09-006 Text + Addup (последняя задача спринта, закрытие Sprint 09).
 Прочитай:
 - sprints/sprint-09-ltsc-objects-format-text/tasks/S09-006-text-addup.md
 - sprints/sprint-09-ltsc-objects-format-text/goals.md
+- sprints/sprint-09-ltsc-objects-format-text/backlog.md
+- sprints/sprint-09-ltsc-objects-format-text/ARCHITECT-KICKOFF.md
+- .github/review/CHECKLIST.md
+- src/PptPowerKeys.Windows/Host/CommandRouter.cs
+- src/PptPowerKeys.Windows/Host/ComHostAdapter.cs
+- src/PptPowerKeys.Windows/UI/HostScriptCommandMap.cs
+- src/PptPowerKeys.Windows/Settings/WindowsUserSettingsStore.cs
 - src/PptPowerKeys.Core/Text/NumberAggregator.cs
-- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (Text cases)
+- src/PptPowerKeys.Core/Text/AddupStatusFormatter.cs
+- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (pasteUnformattedText, replaceSelectedTextWithEllipsis, toggleSuperscript/Subscript, getSelectedShapeTexts)
+- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (Text + Addup cases)
+- src/PptPowerKeys.AddIn/src/text/addupStatus.ts
+- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (grpText)
 
-S09-001…005 Done. Issue S09-006 → backlog In Progress → /builder S09-006 → приёмка → merge.
-После merge: retrospective.md, goals DoD, PRODUCT_CONTEXT, закрыть Sprint 09 → kickoff S10.
+S09-001…005 Done.
+
+Шаг 1 — постановка builder:
+Issue S09-006 → backlog In Progress → /builder выполни S09-006
+
+Шаг 2 — приёмка PR builder:
+- Scope только S09-006 (5 text commands + ribbon grpText)
+- dotnet test PptPowerKeys.sln green
+- CHECKLIST.md; messages match Web; btnAddupTextFields
+
+Шаг 3 — после merge (architect):
+- retrospective.md, goals DoD, PRODUCT_CONTEXT, README/ROADMAP → Sprint 10 Next
+
+PasteFormatted — anti-scope (S10).
 ```
