@@ -93,9 +93,15 @@ S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
 Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 Done** (M2 layout beta);
-**Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 next** (Slides + Settings + None unlock). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S09-006:** Text HostScript на Windows line — 5 команд (`PasteUnformatted`, `ReplaceWithEllipsis`,
+  `ToggleSuperscript`, `ToggleSubscript`, `AddupTextFields`); COM clipboard + `TextFrame.TextRange` +
+  `Font.Superscript/Subscript` (mutual exclusion); Addup in-process через `NumberAggregator` +
+  `AddupStatusFormatter` + `AddupDisplayMode` из `WindowsUserSettingsStore`; ribbon **Text** group
+  (`grpText`, 4 buttons; `btnAddupTextFields` + alias `btnAddup`); PasteFormatted — anti-scope (S10);
+  PR #91; 270 dotnet tests green. **Sprint 09 closed.** Next: S10-001 slides.
 - **S09-005:** Format color HostScript на Windows line — 4 команды (`FillColor`, `LineColor`, `TextColor`,
   `ToggleFillBlackWhite`); COM `Shape.Fill` / `Line.ForeColor` / `Font.Color`; Slide Master
   `ThemeColorScheme` (accent1–6 + dark/light) + Core `ColorPaletteBuilder` merge; recent colors persist

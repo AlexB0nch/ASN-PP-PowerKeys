@@ -1,6 +1,6 @@
 # Architect Kickoff — Sprint 09 LTSC Objects · Format · Text
 
-> **Статус:** Ready to start. Первая задача: **S09-001**.
+> **Статус:** Done. Sprint закрыт 2026-07-01. См. [`retrospective.md`](./retrospective.md).
 
 ## Контекст
 
