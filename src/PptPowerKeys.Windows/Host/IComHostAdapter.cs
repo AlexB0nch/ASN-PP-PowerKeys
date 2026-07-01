@@ -93,5 +93,20 @@ namespace PptPowerKeys.Windows.Host
 
         /// <summary>Toggles fill between black and white for each selected shape.</summary>
         int ToggleFillBlackWhite();
+
+        /// <summary>Reads text per selected shape; empty string when no text frame.</summary>
+        IReadOnlyList<string> ReadSelectedShapeTexts();
+
+        /// <summary>Pastes plain clipboard text into selected shapes with text frames.</summary>
+        int PasteUnformattedText();
+
+        /// <summary>Replaces text in selected shapes with <c>"..."</c>.</summary>
+        int ReplaceSelectedTextWithEllipsis();
+
+        /// <summary>Toggles superscript on selected shapes; enabling disables subscript.</summary>
+        int ToggleSuperscript();
+
+        /// <summary>Toggles subscript on selected shapes; enabling disables superscript.</summary>
+        int ToggleSubscript();
     }
 }

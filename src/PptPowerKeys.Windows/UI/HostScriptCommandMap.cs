@@ -13,6 +13,7 @@ namespace PptPowerKeys.Windows.UI
     /// S09-003: Group / Ungroup / Z-order commands (6 COM parity commands).
     /// S09-004: Multi-slide paste / remove shape commands (2 COM parity commands).
     /// S09-005: Format color commands (Fill/Line/Text + toggle black/white).
+    /// S09-006: Text commands (paste plain, addup, superscript, subscript).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -21,6 +22,12 @@ namespace PptPowerKeys.Windows.UI
         public static bool TryParse(string controlId, out CommandIds command)
         {
             command = CommandIds.None;
+            if (controlId == "btnAddup")
+            {
+                command = CommandIds.AddupTextFields;
+                return true;
+            }
+
             if (string.IsNullOrEmpty(controlId)
                 || !controlId.StartsWith(ButtonPrefix, StringComparison.Ordinal)
                 || controlId.Length <= ButtonPrefix.Length)
@@ -40,7 +47,8 @@ namespace PptPowerKeys.Windows.UI
                 || DuplicateCommands.IsDuplicateCommand(command)
                 || GroupZOrderCommands.IsGroupZOrderCommand(command)
                 || MultiSlideShapeCommands.IsMultiSlideShapeCommand(command)
-                || FormatColorCommands.IsPaletteColorCommand(command);
+                || FormatColorCommands.IsPaletteColorCommand(command)
+                || TextCommands.IsTextCommand(command);
         }
     }
 }

@@ -5,6 +5,7 @@ using PptPowerKeys.Core.Commands;
 using PptPowerKeys.Core.Colors;
 using PptPowerKeys.Core.Geometry;
 using PptPowerKeys.Core.Layout;
+using PptPowerKeys.Core.Text;
 using PptPowerKeys.Windows.Settings;
 
 namespace PptPowerKeys.Windows.Host
@@ -20,6 +21,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-003: Group / Ungroup / Z-order HostScript commands (6 COM parity commands).
     /// S09-004: Multi-slide paste / remove shape HostScript commands (2 COM parity commands).
     /// S09-005: Format color HostScript commands (Fill/Line/Text + toggle black/white).
+    /// S09-006: Text HostScript commands (paste plain, ellipsis, scripts, addup).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -77,6 +79,11 @@ namespace PptPowerKeys.Windows.Host
             if (FormatColorCommands.IsFormatColorCommand(command))
             {
                 return ExecuteFormatColor(command);
+            }
+
+            if (TextCommands.IsTextCommand(command))
+            {
+                return ExecuteText(command);
             }
 
             throw new NotSupportedException(
@@ -375,6 +382,67 @@ namespace PptPowerKeys.Windows.Host
                 Changed = true,
                 Message = $"{label} color {color} applied to {count} shape(s).",
             };
+        }
+
+        private CommandExecutionResult ExecuteText(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.PasteUnformatted:
+                {
+                    int count = _host.PasteUnformattedText();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Pasted plain text into {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.ReplaceWithEllipsis:
+                {
+                    int count = _host.ReplaceSelectedTextWithEllipsis();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Replaced text with \"...\" on {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.ToggleSuperscript:
+                {
+                    int count = _host.ToggleSuperscript();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Toggled superscript on {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.ToggleSubscript:
+                {
+                    int count = _host.ToggleSubscript();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Toggled subscript on {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.AddupTextFields:
+                {
+                    var texts = _host.ReadSelectedShapeTexts();
+                    var stats = NumberAggregator.Compute(texts);
+                    string mode = _settingsStore.Current.AddupDisplayMode;
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = AddupStatusFormatter.Format(stats, mode),
+                    };
+                }
+
+                default:
+                    throw new InvalidOperationException($"Unknown text command: {command}.");
+            }
         }
     }
 }
