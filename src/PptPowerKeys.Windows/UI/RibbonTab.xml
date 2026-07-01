@@ -334,6 +334,33 @@
                   screentip="Text color"
                   supertip="Cycle theme + recent palette colors on shape text." />
         </group>
+        <group id="grpText" label="Text">
+          <button id="btnPasteUnformatted"
+                  label="Paste Plain"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="PasteTextOnly"
+                  screentip="Paste plain text"
+                  supertip="Paste plain text from the clipboard into each selected shape with a text frame." />
+          <button id="btnAddupTextFields"
+                  label="Addup"
+                  onAction="OnHostScriptCommand"
+                  imageMso="CalculateNow"
+                  screentip="Sum numeric fields"
+                  supertip="Sum numbers found in selected shape text (display mode from UserSettings.json)." />
+          <button id="btnToggleSuperscript"
+                  label="Superscript"
+                  onAction="OnHostScriptCommand"
+                  imageMso="FontSuperscript"
+                  screentip="Toggle superscript"
+                  supertip="Toggle superscript on selected shape text; enabling disables subscript." />
+          <button id="btnToggleSubscript"
+                  label="Subscript"
+                  onAction="OnHostScriptCommand"
+                  imageMso="FontSubscript"
+                  screentip="Toggle subscript"
+                  supertip="Toggle subscript on selected shape text; enabling disables superscript." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"

@@ -31,6 +31,11 @@ public class HostScriptCommandMapTests
     [InlineData("btnFillColor", CommandIds.FillColor)]
     [InlineData("btnLineColor", CommandIds.LineColor)]
     [InlineData("btnTextColor", CommandIds.TextColor)]
+    [InlineData("btnPasteUnformatted", CommandIds.PasteUnformatted)]
+    [InlineData("btnAddupTextFields", CommandIds.AddupTextFields)]
+    [InlineData("btnAddup", CommandIds.AddupTextFields)]
+    [InlineData("btnToggleSuperscript", CommandIds.ToggleSuperscript)]
+    [InlineData("btnToggleSubscript", CommandIds.ToggleSubscript)]
     public void TryParse_returns_true_for_host_script_commands(string controlId, CommandIds expected)
     {
         Assert.True(HostScriptCommandMap.TryParse(controlId, out var command));

@@ -300,6 +300,35 @@ router.Execute(PptPowerKeys.Core.Commands.CommandIds.TextColor);
 router.Execute(PptPowerKeys.Core.Commands.CommandIds.ToggleFillBlackWhite);
 ```
 
+### Manual QA (Text commands)
+
+1. Copy plain text to the Windows clipboard (e.g. `Hello world`).
+2. Insert a text box, select it → **Text → Paste Plain** → text replaces box content;
+   status *Pasted plain text into 1 shape(s).* Empty clipboard → *Clipboard is empty.*
+   Rectangle without text frame → *Selected shape(s) have no text frame to paste into.*
+3. Select text box → run **ReplaceWithEllipsis** (shortcut / programmatic) → text becomes `...`;
+   status *Replaced text with "..." on 1 shape(s).*
+4. **Superscript** / **Subscript:** type in text box, select → toggle via ribbon buttons;
+   enabling one disables the other. No text → *Selected shape(s) have no text to format.*
+5. **Addup:** select shapes with numbers (e.g. `100` and `200`) → **Text → Addup** → status shows
+   sum/avg/min/max per `addupDisplayMode` in `%AppData%\PptPowerKeys\UserSettings.json`.
+   No numbers → *No numbers found in selection.* (success path, not an error).
+6. No selection → Paste Plain / Superscript / Subscript → *Select one or more shapes first.*
+
+Ribbon **PowerKeys** → **Text** (4 buttons) → `OnHostScriptCommand` → `HostScriptCommandMap` →
+`CommandRouter.Execute` → `ComHostAdapter` + Core `NumberAggregator` / `AddupStatusFormatter`.
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.PasteUnformatted);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.ReplaceWithEllipsis);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.ToggleSuperscript);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.ToggleSubscript);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.AddupTextFields);
+```
+
 ## Ribbon layout groups (S08-003)
 
 All **32** ServerLayout commands are on the **PowerKeys** tab via a single callback `OnLayoutCommand` →
@@ -314,6 +343,7 @@ All **32** ServerLayout commands are on the **PowerKeys** tab via a single callb
 | **Order** | BringToFront, SendToBack, BringForward, SendBackward, Group, Ungroup |
 | **Multi-slide** | PasteShapeToSelectedSlides, RemoveShapeFromSelectedSlides |
 | **Format** | FillColor, LineColor, TextColor |
+| **Text** | PasteUnformatted, AddupTextFields, ToggleSuperscript, ToggleSubscript |
 | **Position** | CopyObjectPosition, PasteObjectPosition |
 | **Size** | SameWidth, SameHeight, SameWidthKeepAspect, SameHeightKeepAspect, WidthEqualsAnchorHeight, HeightEqualsAnchorWidth |
 | **Stretch** | StretchWidthToLeft, StretchWidthToRight, StretchHeightToTop, StretchHeightToBottom |

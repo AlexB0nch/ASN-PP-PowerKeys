@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
 using PptPowerKeys.Core.Commands;
@@ -487,6 +488,177 @@ namespace PptPowerKeys.Windows.Host
             }
 
             return range.Count;
+        }
+
+        public IReadOnlyList<string> ReadSelectedShapeTexts()
+        {
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            var texts = new List<string>(range.Count);
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    texts.Add(string.Empty);
+                    continue;
+                }
+
+                try
+                {
+                    texts.Add(shape.TextFrame.TextRange.Text ?? string.Empty);
+                }
+                catch
+                {
+                    texts.Add(string.Empty);
+                }
+            }
+
+            return texts;
+        }
+
+        public int PasteUnformattedText()
+        {
+            string text = Clipboard.GetText();
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new InvalidOperationException("Clipboard is empty.");
+            }
+
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            int applied = 0;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    shape.TextFrame.TextRange.Text = text;
+                    applied++;
+                }
+                catch
+                {
+                    // Shape has no usable text frame — skip.
+                }
+            }
+
+            if (applied == 0)
+            {
+                throw new InvalidOperationException("Selected shape(s) have no text frame to paste into.");
+            }
+
+            return applied;
+        }
+
+        public int ReplaceSelectedTextWithEllipsis()
+        {
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            const string ellipsis = "...";
+            int applied = 0;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    shape.TextFrame.TextRange.Text = ellipsis;
+                    applied++;
+                }
+                catch
+                {
+                    // Shape has no usable text frame — skip.
+                }
+            }
+
+            if (applied == 0)
+            {
+                throw new InvalidOperationException("Selected shape(s) have no text to replace.");
+            }
+
+            return applied;
+        }
+
+        public int ToggleSuperscript() => ToggleScript(superscript: true);
+
+        public int ToggleSubscript() => ToggleScript(superscript: false);
+
+        private int ToggleScript(bool superscript)
+        {
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            var fonts = new List<Microsoft.Office.Interop.PowerPoint.Font>(range.Count);
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    fonts.Add(shape.TextFrame.TextRange.Font);
+                }
+                catch
+                {
+                    // Shape has no usable text frame — skip.
+                }
+            }
+
+            if (fonts.Count == 0)
+            {
+                throw new InvalidOperationException("Selected shape(s) have no text to format.");
+            }
+
+            foreach (Microsoft.Office.Interop.PowerPoint.Font font in fonts)
+            {
+                if (superscript)
+                {
+                    bool isOn = font.Superscript == MsoTriState.msoTrue;
+                    font.Superscript = isOn ? MsoTriState.msoFalse : MsoTriState.msoTrue;
+                    if (!isOn)
+                    {
+                        font.Subscript = MsoTriState.msoFalse;
+                    }
+                }
+                else
+                {
+                    bool isOn = font.Subscript == MsoTriState.msoTrue;
+                    font.Subscript = isOn ? MsoTriState.msoFalse : MsoTriState.msoTrue;
+                    if (!isOn)
+                    {
+                        font.Superscript = MsoTriState.msoFalse;
+                    }
+                }
+            }
+
+            return fonts.Count;
         }
 
         private static readonly MsoThemeColorIndex[] ThemeColorSlots =
