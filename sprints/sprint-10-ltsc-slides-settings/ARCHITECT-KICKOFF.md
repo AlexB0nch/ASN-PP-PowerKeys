@@ -1,12 +1,13 @@
 # Architect Kickoff — Sprint 10 LTSC Slides · Settings · Web-None unlock
 
-> **Статус:** Ready to start. Первая задача: **S10-001**.
+> **Статус:** In Progress. Следующая задача: **S10-002**.
 
 ## Контекст
 
 - Sprint 09 **Done** — M3 Objects/Format/Text beta: 27 HostScript + 32 ServerLayout = 65 commands routed.
+- **S10-001 Done** (PR #93) — +2 Slide HostScript → **67 commands routed**.
 - `CommandRouter` + `ComHostAdapter` + `HostScriptCommandMap` готовы к wave 3.
-- Linux CI green (`dotnet test` 270 passed at S09 close).
+- Linux CI green (`dotnet test` 276 passed at S10-001 close).
 
 ## Цель Sprint 10
 
@@ -24,8 +25,8 @@
 
 | ID | Файл | Builder |
 |----|------|---------|
-| S10-001 | [`tasks/S10-001-slide-commands.md`](./tasks/S10-001-slide-commands.md) | `/builder выполни S10-001` |
-| S10-002 | `tasks/S10-002-view-print-none.md` (создать при старте) | после 001 |
+| S10-001 | [`tasks/S10-001-slide-commands.md`](./tasks/S10-001-slide-commands.md) | Done (#93) |
+| S10-002 | [`tasks/S10-002-view-print-none.md`](./tasks/S10-002-view-print-none.md) | `/builder выполни S10-002` |
 | S10-003 | `tasks/S10-003-format-regroup-none.md` (создать) | после 002 |
 | S10-004 | `tasks/S10-004-settings-pane.md` (создать) | после 003 |
 | S10-005 | `tasks/S10-005-color-picker-profiles.md` (создать) | после 004 |
@@ -45,21 +46,18 @@
 4. Повторить для S10-002…005
 5. `retrospective.md` → goals DoD → `PRODUCT_CONTEXT` → kickoff S11
 
-## Copy-paste промпт (S10-001)
+## Copy-paste промпт (S10-002)
 
 ```
 /architect
 
-Sprint 10 — S10-001 Slide HostScript (CopySlide + MoveSlidesToBackup).
-Sprint 09 Done (#73–#91). S09-006 merged.
-Прочитай:
+Sprint 10 — S10-002 None unlock view/print (6 COM commands).
+S10-001 Done (#93 merged). Прочитай:
 - sprints/sprint-10-ltsc-slides-settings/ARCHITECT-KICKOFF.md
-- sprints/sprint-10-ltsc-slides-settings/tasks/S10-001-slide-commands.md
-- sprints/epic-ltsc-windows-native/FEATURE_PARITY.md (Slides)
+- sprints/sprint-10-ltsc-slides-settings/tasks/S10-002-view-print-none.md
+- sprints/epic-ltsc-windows-native/FEATURE_PARITY.md (Slides None unlocks)
+- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (grpSlides: Zoom, Sorter, Print)
 - src/PptPowerKeys.Windows/Host/CommandRouter.cs
-- src/PptPowerKeys.AddIn/src/office/powerpoint.ts (duplicateSelectedSlide, moveSelectedSlidesToBackup)
-- src/PptPowerKeys.AddIn/src/taskpane/runCommand.ts (CopySlide, MoveSlidesToBackup)
-- src/PptPowerKeys.VstoLegacy/UI/RibbonTab.xml (grpSlides reference)
 
-Issue S10-001 → backlog In Progress → /builder выполни S10-001 → приёмка → merge.
+Issue S10-002 → backlog In Progress → /builder выполни S10-002 → приёмка → merge.
 ```
