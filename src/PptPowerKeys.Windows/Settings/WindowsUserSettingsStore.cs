@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using PptPowerKeys.Core.Colors;
 using PptPowerKeys.Core.Settings;
 
 namespace PptPowerKeys.Windows.Settings
@@ -57,6 +60,54 @@ namespace PptPowerKeys.Windows.Settings
                 }
 
                 _settings.SnapToGrid = value;
+                WriteAtomically(_filePath, Serialize(_settings));
+            }
+        }
+
+        /// <summary>Returns persisted recent format colors (newest first).</summary>
+        public IReadOnlyList<string> GetRecentColors()
+        {
+            lock (_sync)
+            {
+                return _settings.RecentColors?.ToList() ?? new List<string>();
+            }
+        }
+
+        /// <summary>Records an applied color in recent list (FIFO, max 5, dedupe).</summary>
+        public void RecordRecentColor(string hex)
+        {
+            if (!ThemeColor.IsValidHex(hex))
+            {
+                return;
+            }
+
+            string normalized;
+            try
+            {
+                normalized = ThemeColor.NormalizeHex(hex);
+            }
+            catch (FormatException)
+            {
+                return;
+            }
+
+            lock (_sync)
+            {
+                _settings.RecentColors ??= new List<string>();
+                _settings.RecentColors.RemoveAll(existing =>
+                    ThemeColor.IsValidHex(existing)
+                    && string.Equals(
+                        ThemeColor.NormalizeHex(existing),
+                        normalized,
+                        StringComparison.OrdinalIgnoreCase));
+                _settings.RecentColors.Insert(0, normalized);
+                if (_settings.RecentColors.Count > ColorPaletteBuilder.MaxRecentColors)
+                {
+                    _settings.RecentColors = _settings.RecentColors
+                        .Take(ColorPaletteBuilder.MaxRecentColors)
+                        .ToList();
+                }
+
                 WriteAtomically(_filePath, Serialize(_settings));
             }
         }

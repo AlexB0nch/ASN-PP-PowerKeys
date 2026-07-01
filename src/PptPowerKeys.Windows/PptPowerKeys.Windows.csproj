@@ -81,11 +81,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Host\ComHostAdapter.cs" />
+    <Compile Include="Host\ColorRgbHelper.cs" />
     <Compile Include="Host\CommandExecutionResult.cs" />
     <Compile Include="Host\CommandRouter.cs" />
     <Compile Include="Host\CopyAndAlignCommands.cs" />
     <Compile Include="Host\DuplicateCommands.cs" />
     <Compile Include="Host\DuplicateGapStore.cs" />
+    <Compile Include="Host\FormatColorCommands.cs" />
+    <Compile Include="Host\FormatColorCycleStore.cs" />
     <Compile Include="Host\GroupZOrderCommands.cs" />
     <Compile Include="Host\InsertShapeCommands.cs" />
     <Compile Include="Host\MultiSlideShapeCommands.cs" />

@@ -75,5 +75,23 @@ namespace PptPowerKeys.Windows.Host
         /// Returns aggregate counts for the status bar.
         /// </summary>
         (int SlidesProcessed, int ShapesRemoved) RemoveShapeFromSelectedSlides();
+
+        /// <summary>
+        /// Reads accent1–6 and dark1/2 + light1/2 from the active presentation Slide Master.
+        /// Returns an empty list when unavailable.
+        /// </summary>
+        IReadOnlyList<string> ReadPresentationThemeColors();
+
+        /// <summary>Applies a solid fill color to all selected shapes.</summary>
+        int ApplyFillColor(string hex);
+
+        /// <summary>Applies a line color to all selected shapes.</summary>
+        int ApplyLineColor(string hex);
+
+        /// <summary>Applies a font color to selected shapes with text.</summary>
+        int ApplyTextColor(string hex);
+
+        /// <summary>Toggles fill between black and white for each selected shape.</summary>
+        int ToggleFillBlackWhite();
     }
 }

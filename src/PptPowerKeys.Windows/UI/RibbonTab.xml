@@ -313,6 +313,27 @@
                   screentip="Remove shape from selected slides (by name)"
                   supertip="Delete every shape with the same name as the selected shape on each selected slide." />
         </group>
+        <group id="grpFormat" label="Format">
+          <button id="btnFillColor"
+                  label="Fill"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ShapeFillColorPicker"
+                  screentip="Fill color"
+                  supertip="Cycle theme + recent palette colors on the selected shapes (repeat to advance)." />
+          <button id="btnLineColor"
+                  label="Line"
+                  onAction="OnHostScriptCommand"
+                  imageMso="OutlineColorPicker"
+                  screentip="Line color"
+                  supertip="Cycle theme + recent palette colors on shape outlines." />
+          <button id="btnTextColor"
+                  label="Text Color"
+                  onAction="OnHostScriptCommand"
+                  imageMso="FontColorPicker"
+                  screentip="Text color"
+                  supertip="Cycle theme + recent palette colors on shape text." />
+        </group>
         <group id="grpCopyAndAlign" label="Copy &amp; Align">
           <button id="btnCopyAndAlignLeft"
                   label="Copy + Left"

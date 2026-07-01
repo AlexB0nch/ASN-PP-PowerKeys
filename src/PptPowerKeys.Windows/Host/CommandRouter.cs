@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Colors;
 using PptPowerKeys.Core.Geometry;
 using PptPowerKeys.Core.Layout;
 using PptPowerKeys.Windows.Settings;
@@ -17,6 +19,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-002: Smart-duplicate HostScript commands (DuplicateRight/Left/Up/Down + gap memory).
     /// S09-003: Group / Ungroup / Z-order HostScript commands (6 COM parity commands).
     /// S09-004: Multi-slide paste / remove shape HostScript commands (2 COM parity commands).
+    /// S09-005: Format color HostScript commands (Fill/Line/Text + toggle black/white).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -69,6 +72,11 @@ namespace PptPowerKeys.Windows.Host
             if (MultiSlideShapeCommands.IsMultiSlideShapeCommand(command))
             {
                 return ExecuteMultiSlideShape(command);
+            }
+
+            if (FormatColorCommands.IsFormatColorCommand(command))
+            {
+                return ExecuteFormatColor(command);
             }
 
             throw new NotSupportedException(
@@ -315,6 +323,58 @@ namespace PptPowerKeys.Windows.Host
                 default:
                     throw new InvalidOperationException($"Unknown multi-slide shape command: {command}.");
             }
+        }
+
+        private CommandExecutionResult ExecuteFormatColor(CommandIds command)
+        {
+            if (command == CommandIds.ToggleFillBlackWhite)
+            {
+                int toggled = _host.ToggleFillBlackWhite();
+                return new CommandExecutionResult
+                {
+                    Changed = true,
+                    Message = $"Toggled fill on {toggled} shape(s).",
+                };
+            }
+
+            var shapes = _host.ReadSelectedShapeBounds();
+            if (shapes.Count == 0)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            var theme = _host.ReadPresentationThemeColors();
+            var recent = _settingsStore.GetRecentColors();
+            var palette = ColorPaletteBuilder.Build(
+                theme,
+                recent,
+                DefaultColorPalette.FallbackTheme);
+
+            var shapeIds = shapes.Select(shape => shape.Id).ToList();
+            string color = FormatColorCycleStore.NextPaletteColor(command, palette, shapeIds);
+
+            int count = command switch
+            {
+                CommandIds.FillColor => _host.ApplyFillColor(color),
+                CommandIds.LineColor => _host.ApplyLineColor(color),
+                CommandIds.TextColor => _host.ApplyTextColor(color),
+                _ => throw new InvalidOperationException($"Unknown palette color command: {command}."),
+            };
+
+            _settingsStore.RecordRecentColor(color);
+            string label = command switch
+            {
+                CommandIds.FillColor => "Fill",
+                CommandIds.LineColor => "Line",
+                CommandIds.TextColor => "Text",
+                _ => "Color",
+            };
+
+            return new CommandExecutionResult
+            {
+                Changed = true,
+                Message = $"{label} color {color} applied to {count} shape(s).",
+            };
         }
     }
 }

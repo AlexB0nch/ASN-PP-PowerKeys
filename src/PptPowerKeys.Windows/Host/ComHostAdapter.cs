@@ -385,6 +385,135 @@ namespace PptPowerKeys.Windows.Host
             return (slidesProcessed, shapesRemoved);
         }
 
+        public IReadOnlyList<string> ReadPresentationThemeColors()
+        {
+            Presentation? presentation = _application.ActivePresentation;
+            if (presentation == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            try
+            {
+                ThemeColorScheme scheme = presentation.SlideMaster.ThemeColorScheme;
+                var colors = new List<string>(ThemeColorSlots.Length);
+                foreach (MsoThemeColorIndex slot in ThemeColorSlots)
+                {
+                    ThemeColor themeColor = scheme.Colors(slot);
+                    colors.Add(ColorRgbHelper.OleRgbToHex(themeColor.RGB));
+                }
+
+                return colors;
+            }
+            catch
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        public int ApplyFillColor(string hex)
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select one or more shapes first.");
+            int oleRgb = ColorRgbHelper.HexToOleRgb(hex);
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Fill fill = range[i].Fill;
+                fill.Visible = MsoTriState.msoTrue;
+                fill.Solid();
+                fill.ForeColor.RGB = oleRgb;
+            }
+
+            return range.Count;
+        }
+
+        public int ApplyLineColor(string hex)
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select one or more shapes first.");
+            int oleRgb = ColorRgbHelper.HexToOleRgb(hex);
+            for (int i = 1; i <= range.Count; i++)
+            {
+                LineFormat line = range[i].Line;
+                line.Visible = MsoTriState.msoTrue;
+                line.ForeColor.RGB = oleRgb;
+            }
+
+            return range.Count;
+        }
+
+        public int ApplyTextColor(string hex)
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select one or more shapes first.");
+            int oleRgb = ColorRgbHelper.HexToOleRgb(hex);
+            int applied = 0;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    shape.TextFrame.TextRange.Font.Color.RGB = oleRgb;
+                    applied++;
+                }
+                catch
+                {
+                    // Shape has no usable text frame — skip.
+                }
+            }
+
+            if (applied == 0)
+            {
+                throw new InvalidOperationException("Selected shape(s) have no text to color.");
+            }
+
+            return applied;
+        }
+
+        public int ToggleFillBlackWhite()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select one or more shapes first.");
+            const int blackRgb = 0;
+            const int whiteRgb = 0xFFFFFF;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Fill fill = range[i].Fill;
+                int current = fill.ForeColor.RGB;
+                fill.Visible = MsoTriState.msoTrue;
+                fill.Solid();
+                fill.ForeColor.RGB = ColorRgbHelper.IsNearBlackOle(current) ? whiteRgb : blackRgb;
+            }
+
+            return range.Count;
+        }
+
+        private static readonly MsoThemeColorIndex[] ThemeColorSlots =
+        {
+            MsoThemeColorIndex.msoThemeColorAccent1,
+            MsoThemeColorIndex.msoThemeColorAccent2,
+            MsoThemeColorIndex.msoThemeColorAccent3,
+            MsoThemeColorIndex.msoThemeColorAccent4,
+            MsoThemeColorIndex.msoThemeColorAccent5,
+            MsoThemeColorIndex.msoThemeColorAccent6,
+            MsoThemeColorIndex.msoThemeColorDark1,
+            MsoThemeColorIndex.msoThemeColorDark2,
+            MsoThemeColorIndex.msoThemeColorLight1,
+            MsoThemeColorIndex.msoThemeColorLight2,
+        };
+
+        private ShapeRange GetSelectedShapeRangeOrThrow(string emptySelectionError)
+        {
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count < 1)
+            {
+                throw new InvalidOperationException(emptySelectionError);
+            }
+
+            return range;
+        }
+
         private SlideRange GetSelectedSlideRangeOrThrow(int minCount, string minCountError)
         {
             var selection = _application.ActiveWindow?.Selection;

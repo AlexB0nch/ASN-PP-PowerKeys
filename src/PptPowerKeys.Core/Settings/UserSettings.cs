@@ -24,6 +24,9 @@ public sealed class UserSettings
 
     public List<ShortcutBinding> Shortcuts { get; set; } = new();
 
+    /// <summary>Recently applied format colors (max 5, newest first). Windows parity with Web localStorage.</summary>
+    public List<string> RecentColors { get; set; } = new();
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
