@@ -10,8 +10,9 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + Core (`ColorPaletteBuilder`) |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | [#86](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/86) |
+| **PR** | [#87](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/87) |
 
 ## Цель
 

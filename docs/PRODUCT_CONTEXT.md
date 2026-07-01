@@ -96,12 +96,18 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 next** (Objects/Format/Text). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S09-005:** Format color HostScript на Windows line — 4 команды (`FillColor`, `LineColor`, `TextColor`,
+  `ToggleFillBlackWhite`); COM `Shape.Fill` / `Line.ForeColor` / `Font.Color`; Slide Master
+  `ThemeColorScheme` (accent1–6 + dark/light) + Core `ColorPaletteBuilder` merge; recent colors persist
+  в `UserSettings.RecentColors` (`%AppData%/PptPowerKeys/UserSettings.json`, max 5 — parity с Web
+  `localStorage`); `FormatColorCycleStore` fingerprint cycle; ribbon **Format** group (`grpFormat`, 3 buttons);
+  FormatPainter/OpenColorScheme — anti-scope (S10); PR #87; 257 dotnet tests green. Next: S09-006 text + addup.
 - **S09-004:** Multi-slide paste/remove HostScript на Windows line — 2 команды (`PasteShapeToSelectedSlides`,
   `RemoveShapeFromSelectedSlides`); COM `Shape.Copy()` + `Slide.Shapes.Paste()` per target slide (skip source,
   preserve Left/Top/Width/Height); remove by exact `Name` (backwards delete); validation + success messages parity
   с Web `powerpoint.ts` / `runCommand.ts`; ribbon **Multi-slide** group (`grpMultiSlide`, 2 buttons);
   `MultiSlideShapeCommandsTests` + map tests; CopySlide/MoveSlidesToBackup — anti-scope (S10); PR #83; 230 dotnet
-  tests green. Next: S09-005 format colors + palette.
+  tests green.
 - **S09-003:** Group / Ungroup / Z-order HostScript на Windows line — 6 команд (Group, Ungroup,
   BringToFront, SendToBack, BringForward, SendBackward); COM `ShapeRange.Group()`, `Shape.Ungroup()`,
   `Shape.ZOrder(MsoZOrderCmd)`; validation + messages parity с Web `powerpoint.ts` / `runCommand.ts`;
