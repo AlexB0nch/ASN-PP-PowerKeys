@@ -125,15 +125,28 @@ if (FormatColorCommands.IsFormatColorCommand(command)) → ExecuteFormatColor(co
 
 ## Критерии приёмки
 
-- [ ] 4 commands routed via `CommandRouter.Execute`
-- [ ] Palette cycle + `ColorPaletteBuilder` merge (theme + recent + fallback)
-- [ ] Recent colors persisted in `UserSettings.json`
-- [ ] Theme from Slide Master (10 slots)
-- [ ] Messages match Web `runCommand.ts`
-- [ ] Ribbon grpFormat (3 buttons) wired via `OnHostScriptCommand`
-- [ ] Unit tests for pure helpers + map tests
-- [ ] `dotnet test PptPowerKeys.sln` green
-- [ ] PR: `cursor/s09-005-format-colors-palette-b84a`, Task ID, `Closes #86`
+- [x] 4 commands routed via `CommandRouter.Execute`
+- [x] Palette cycle + `ColorPaletteBuilder` merge (theme + recent + fallback)
+- [x] Recent colors persisted in `UserSettings.json`
+- [x] Theme from Slide Master (10 slots)
+- [x] Messages match Web `runCommand.ts`
+- [x] Ribbon grpFormat (3 buttons) wired via `OnHostScriptCommand`
+- [x] Unit tests for pure helpers + map tests
+- [x] `dotnet test PptPowerKeys.sln` green (257 passed)
+- [x] PR: `cursor/s09-005-format-colors-palette-b84a`, Task ID, `Closes #86`
+- [x] `.github/review/CHECKLIST.md` — scope OK
+- [x] После merge: backlog S09-005 → **Done**; `PRODUCT_CONTEXT` journal (S09-005)
+
+## Приёмка (architect, 2026-07-01)
+
+- PR #87 merged. Scope соблюдён: Windows format colors + palette; FormatPainter/OpenColorScheme не тронуты;
+  Core/Api/AddIn/VstoLegacy без изменений (кроме `UserSettings.RecentColors` + `DefaultColorPalette`).
+- CI/local: 257 dotnet tests green.
+- Fill/Line/Text: COM apply + `ColorPaletteBuilder` merge (Slide Master theme + `recentColors` in UserSettings.json);
+  `FormatColorCycleStore` fingerprint cycle parity с Web.
+- ToggleFillBlackWhite: near-black → white, else black (CommandRouter; ribbon shortcut-only).
+- Ribbon **Format** group (`grpFormat`, 3 buttons).
+- Ручная проверка PowerPoint Windows — post-merge.
 
 ## Зависимости
 
