@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-10-ltsc-slides-settings` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | Done |
 | **Issue** | — |
-| **PR** | #93 |
+| **PR** | #93 (merged) |
 
 ## Цель
 
@@ -82,11 +82,11 @@ if (SlideCommands.IsSlideCommand(command)) → ExecuteSlide(command)
 
 ## Критерии приёмки
 
-- [ ] 2 commands routed via `CommandRouter.Execute`
-- [ ] Messages match Web `runCommand.ts`
-- [ ] Ribbon `grpSlides` with `btnCopySlide`
-- [ ] Unit tests + `dotnet test PptPowerKeys.sln` green
-- [ ] PR: `cursor/s10-001-slide-commands-c04a`, Task ID, `Closes #<issue>`
+- [x] 2 commands routed via `CommandRouter.Execute`
+- [x] Messages match Web `runCommand.ts`
+- [x] Ribbon `grpSlides` with `btnCopySlide`
+- [x] Unit tests + `dotnet test PptPowerKeys.sln` green
+- [x] PR #93 merged, Task ID S10-001
 
 ## Reference files
 

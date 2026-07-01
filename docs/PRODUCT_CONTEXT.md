@@ -93,9 +93,14 @@ S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
 Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 Done** (M2 layout beta);
-**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 next** (Slides + Settings + None unlock). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 in progress** (Slides + Settings + None unlock). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S10-001:** Slide HostScript на Windows line — 2 команды (`CopySlide`, `MoveSlidesToBackup`);
+  COM `Slide.Duplicate()` (first selected) + `Slide.MoveTo(Slides.Count)` (high index first);
+  validation + success messages parity с Web `powerpoint.ts` / `runCommand.ts`; ribbon **Slides** group
+  (`grpSlides`, `btnCopySlide`); `MoveSlidesToBackup` — router/shortcuts only; `SlideCommandsTests` +
+  map tests; PR #93; 276 dotnet tests green. Next: S10-002 view/print None unlocks.
 - **S09-006:** Text HostScript на Windows line — 5 команд (`PasteUnformatted`, `ReplaceWithEllipsis`,
   `ToggleSuperscript`, `ToggleSubscript`, `AddupTextFields`); COM clipboard + `TextFrame.TextRange` +
   `Font.Superscript/Subscript` (mutual exclusion); Addup in-process через `NumberAggregator` +
