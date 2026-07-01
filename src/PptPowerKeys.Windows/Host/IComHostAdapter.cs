@@ -108,5 +108,17 @@ namespace PptPowerKeys.Windows.Host
 
         /// <summary>Toggles subscript on selected shapes; enabling disables superscript.</summary>
         int ToggleSubscript();
+
+        /// <summary>
+        /// Duplicates the first selected slide immediately after the source via COM <c>Slide.Duplicate()</c>.
+        /// Throws when no slide is selected.
+        /// </summary>
+        void DuplicateSelectedSlide();
+
+        /// <summary>
+        /// Moves each selected slide to the end of the deck (high index first to preserve relative order).
+        /// Throws when no slide is selected. Returns the number of slides moved.
+        /// </summary>
+        int MoveSelectedSlidesToBackup();
     }
 }

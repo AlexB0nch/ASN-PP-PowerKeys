@@ -661,6 +661,44 @@ namespace PptPowerKeys.Windows.Host
             return fonts.Count;
         }
 
+        public void DuplicateSelectedSlide()
+        {
+            SlideRange slideRange = GetSelectedSlideRangeOrThrow(
+                minCount: 1,
+                minCountError: "Select a slide first.");
+
+            Slide source = slideRange[1];
+            source.Duplicate();
+        }
+
+        public int MoveSelectedSlidesToBackup()
+        {
+            SlideRange slideRange = GetSelectedSlideRangeOrThrow(
+                minCount: 1,
+                minCountError: "Select one or more slides first.");
+
+            Presentation? presentation = _application.ActivePresentation;
+            if (presentation == null)
+            {
+                throw new InvalidOperationException("Select one or more slides first.");
+            }
+
+            var slides = new List<Slide>(slideRange.Count);
+            for (int i = 1; i <= slideRange.Count; i++)
+            {
+                slides.Add(slideRange[i]);
+            }
+
+            slides.Sort((a, b) => b.SlideIndex.CompareTo(a.SlideIndex));
+
+            foreach (Slide slide in slides)
+            {
+                slide.MoveTo(presentation.Slides.Count);
+            }
+
+            return slides.Count;
+        }
+
         private static readonly MsoThemeColorIndex[] ThemeColorSlots =
         {
             MsoThemeColorIndex.msoThemeColorAccent1,
