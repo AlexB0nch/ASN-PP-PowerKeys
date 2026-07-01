@@ -1,6 +1,6 @@
 # Sprint 09 — Backlog
 
-> **Status:** In Progress (S09-006 next)
+> **Status:** Done (2026-07-01). См. [`retrospective.md`](./retrospective.md).
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
@@ -9,4 +9,4 @@
 | S09-003 | Group / Ungroup / Z-order | Windows | **Done** | #78 / #79 |
 | S09-004 | Multi-slide shape paste/remove | Windows | **Done** | #82 / #83 |
 | S09-005 | Format colors + palette | Windows + Core | **Done** | #86 / #87 |
-| S09-006 | Text + Addup | Windows + Core | **In Review** | #90 / #91 |
+| S09-006 | Text + Addup | Windows + Core | **Done** | #90 / #91 |

@@ -19,8 +19,8 @@ HostScript parity wave 1: **Objects (19) + Format (5) + Text (6)** via COM.
 
 ## Definition of Done
 
-- [ ] 30 HostScript commands in Objects/Format/Text categories
-- [ ] Color picker COM (theme master + recent localStorage equivalent)
+- [x] 27 HostScript commands routed (Objects/Format/Text wave; Regroup, FormatPainter, PasteFormatted → S10)
+- [x] Color picker COM foundation (theme master + recent colors in UserSettings.json)
 
 ## Anti-scope
 

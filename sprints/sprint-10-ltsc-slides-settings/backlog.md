@@ -1,6 +1,6 @@
 # Sprint 10 — Backlog
 
-> **Status:** Planned
+> **Status:** In Progress (S10-001 next)
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
