@@ -10,7 +10,7 @@
 | **Спринт** | `sprint-09-ltsc-objects-format-text` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` + Core (`NumberAggregator`, `AddupStatusFormatter`) |
-| **Статус** | In Progress |
+| **Статус** | In Review |
 | **Issue** | [#90](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/90) |
 | **PR** | TBD |
 
@@ -154,15 +154,22 @@ Reference: `PptPowerKeys.VstoLegacy/UI/RibbonTab.xml` (`grpText`).
 
 ## Критерии приёмки
 
-- [ ] 5 commands routed via `CommandRouter.Execute`
-- [ ] Messages match Web `runCommand.ts` / `AddupStatusFormatter`
-- [ ] Addup respects `UserSettings.AddupDisplayMode` from `WindowsUserSettingsStore`
-- [ ] Superscript/subscript mutual exclusion
-- [ ] Clipboard empty / no selection / no text frame — понятные ошибки (match Web strings)
-- [ ] Ribbon grpText (4 buttons) wired via `OnHostScriptCommand`; `btnAddupTextFields` maps to Addup
-- [ ] Unit tests for `TextCommands` + map tests
-- [ ] `dotnet test PptPowerKeys.sln` green
-- [ ] PR: `cursor/s09-006-text-addup-c04a`, Task ID, `Closes #<issue>`
+- [x] 5 commands routed via `CommandRouter.Execute`
+- [x] Messages match Web `runCommand.ts` / `AddupStatusFormatter`
+- [x] Addup respects `UserSettings.AddupDisplayMode` from `WindowsUserSettingsStore`
+- [x] Superscript/subscript mutual exclusion
+- [x] Clipboard empty / no selection / no text frame — понятные ошибки (match Web strings)
+- [x] Ribbon grpText (4 buttons) wired via `OnHostScriptCommand`; `btnAddupTextFields` maps to Addup
+- [x] Unit tests for `TextCommands` + map tests
+- [x] `dotnet test PptPowerKeys.sln` green (270 passed)
+- [ ] PR merged: `cursor/s09-006-text-addup-c04a`, Task ID, `Closes #90`
+
+## Приёмка (architect, 2026-07-01)
+
+- PR [#91](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/91), ветка `cursor/s09-006-text-addup-c04a` — **In Review**.
+- `dotnet test PptPowerKeys.sln`: 270 passed, 0 failed.
+- CHECKLIST: scope соблюдён (5 Text commands + grpText); PasteFormatted не тронут; Core без изменений; messages match Web; `btnAddupTextFields` + alias `btnAddup`.
+- Ручная проверка в PowerPoint Desktop — post-merge (Windows VM).
 
 ## Зависимости
 

@@ -9,4 +9,4 @@
 | S09-003 | Group / Ungroup / Z-order | Windows | **Done** | #78 / #79 |
 | S09-004 | Multi-slide shape paste/remove | Windows | **Done** | #82 / #83 |
 | S09-005 | Format colors + palette | Windows + Core | **Done** | #86 / #87 |
-| S09-006 | Text + Addup | Windows + Core | **In Progress** | #90 / — |
+| S09-006 | Text + Addup | Windows + Core | **In Review** | #90 / #91 |
