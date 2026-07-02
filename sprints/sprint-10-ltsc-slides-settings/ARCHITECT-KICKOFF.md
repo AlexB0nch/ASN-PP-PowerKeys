@@ -1,12 +1,13 @@
 # Architect Kickoff — Sprint 10 LTSC Slides · Settings · Web-None unlock
 
-> **Статус:** In Progress. Следующая задача: **S10-003**.
+> **Статус:** In Progress. Следующая задача: **S10-004** (после merge S10-003).
 
 ## Контекст
 
 - Sprint 09 **Done** — M3 Objects/Format/Text beta: 27 HostScript + 32 ServerLayout = 65 commands routed.
 - **S10-001 Done** (PR #93) — +2 Slide HostScript → **67 commands routed**.
 - **S10-002 Done** (PR #95) — +6 view/print None unlocks → **73 commands routed**.
+- **S10-003 In Review** (PR #97) — +3 format/objects/text None unlocks → **76 commands routed**.
 - `CommandRouter` + `ComHostAdapter` + `HostScriptCommandMap` готовы к wave 4.
 - Linux CI green (`dotnet test` 289 passed at S10-002 close).
 
@@ -18,7 +19,7 @@
 |------|---------|--------|
 | Slides COM | CopySlide, MoveSlidesToBackup | S10-001 ✅ |
 | None unlock view/print | Zoom, Sorter, SlideShow, Grid, Guides, Print | S10-002 ✅ |
-| None unlock format/objects/text | FormatPainter, PasteFormatted, Regroup | S10-003 |
+| None unlock format/objects/text | FormatPainter, PasteFormatted, Regroup | S10-003 ✅ PR #97 |
 | Settings WPF pane | profiles, shortcuts, import/export, addupDisplayMode | S10-004 |
 | Color picker + profiles | COM theme panel + consulting presets | S10-005 |
 
@@ -28,7 +29,7 @@
 |----|------|---------|
 | S10-001 | [`tasks/S10-001-slide-commands.md`](./tasks/S10-001-slide-commands.md) | Done (#93) |
 | S10-002 | [`tasks/S10-002-view-print-none.md`](./tasks/S10-002-view-print-none.md) | Done (#95) |
-| S10-003 | [`tasks/S10-003-format-regroup-none.md`](./tasks/S10-003-format-regroup-none.md) | `/builder выполни S10-003` |
+| S10-003 | [`tasks/S10-003-format-regroup-none.md`](./tasks/S10-003-format-regroup-none.md) | In Review (#97) |
 | S10-004 | `tasks/S10-004-settings-pane.md` (создать) | после 003 |
 | S10-005 | `tasks/S10-005-color-picker-profiles.md` (создать) | после 004 |
 
