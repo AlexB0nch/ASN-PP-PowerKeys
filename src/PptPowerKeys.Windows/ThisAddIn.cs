@@ -10,11 +10,14 @@ namespace PptPowerKeys.Windows
         {
             _settingsStore = new Settings.WindowsUserSettingsStore();
             var host = new Host.ComHostAdapter(Application);
+            var paletteProvider = new Host.FormatColorPaletteProvider(host, _settingsStore);
             _taskPaneService = new UI.TaskPaneService(
                 CustomTaskPanes,
                 _settingsStore,
+                host,
+                paletteProvider,
                 () => UI.PowerKeysRibbon.InvalidateControl("chkSnapToGrid"));
-            _commandRouter = new Host.CommandRouter(host, _settingsStore, _taskPaneService);
+            _commandRouter = new Host.CommandRouter(host, _settingsStore, _taskPaneService, paletteProvider);
             System.Diagnostics.Debug.WriteLine(
                 $"PptPowerKeys.Windows loaded. Core catalog: {Core.Commands.CommandCatalog.All.Count} commands. " +
                 $"SnapToGrid={_settingsStore.Current.SnapToGrid}.");

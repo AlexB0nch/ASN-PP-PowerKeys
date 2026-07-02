@@ -373,7 +373,7 @@ Snap manual QA: [06-windows-layout-qa.md](../../docs/migration/06-windows-layout
 | CommandId | Ribbon | Behavior |
 |-----------|--------|----------|
 | OpenShortcutManager | **Settings → Shortcuts** | Show task pane, scroll to shortcuts grid |
-| OpenColorScheme | **Settings → Colors** | Show task pane, **Colors** tab (placeholder → S10-005) |
+| OpenColorScheme | **Settings → Colors** | Show task pane, **Colors** tab with color picker |
 | ResetToDefaults | **Settings → Reset** | `UserSettings.CreateDefaults()` + persist + reload pane |
 
 `UserSettings.json` at `%AppData%\PptPowerKeys\` supports full parity with Web export/import v1
@@ -393,7 +393,7 @@ Ribbon **PowerKeys** → **Settings** (3 buttons) → `OnSettingsCommand` → `S
 4. **Import JSON** (Web-exported file) → UI updates; click **Save** to persist.
 5. **Reset to defaults** (pane button or ribbon **Settings → Reset**) → shortcuts restored from catalog;
    `recentColors` preserved.
-6. Click **Settings → Colors** → **Colors** tab shows *Color picker — S10-005* placeholder.
+6. Click **Settings → Colors** → **Colors** tab shows the Smart Color Picker (theme + recent swatches).
 7. Edit shortcut keys in the grid → **Save** → reload PowerPoint session → bindings persist in JSON
    (global hotkey runtime = S11 anti-scope).
 
@@ -402,7 +402,47 @@ Programmatic smoke:
 ```csharp
 var router = Globals.ThisAddIn.CommandRouter;
 router.Execute(PptPowerKeys.Core.Commands.CommandIds.OpenShortcutManager);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.OpenColorScheme);
 router.Execute(PptPowerKeys.Core.Commands.CommandIds.ResetToDefaults);
+```
+
+## Color picker (S10-005)
+
+`OpenColorScheme` opens the WPF **Smart Color Picker** on the **Colors** tab — parity with Web
+`ColorPickerPanel.tsx`. Theme colors come from `ComHostAdapter.ReadPresentationThemeColors` (fallback
+`DefaultColorPalette.FallbackTheme`); recent colors from `%AppData%\PptPowerKeys\UserSettings.json`.
+`FormatColorPaletteProvider` shares palette math with Fill/Line/Text cycle commands.
+
+| Feature | Behavior |
+|---------|----------|
+| Theme swatches | Up to 10 colors from Slide Master (or fallback palette + warning) |
+| Recent swatches | Up to 5 from `recentColors` in UserSettings |
+| Custom HEX | Live validation; Enter or **Set** applies selection |
+| Pick from shape | **Fill** / **Line** / **Text** reads first selected shape via COM |
+| Apply | **Apply Fill** / **Line** / **Text** via COM; records recent color |
+
+Ribbon **PowerKeys** → **Settings → Colors** → `OnSettingsCommand` → `CommandRouter.Execute(OpenColorScheme)`
+→ `TaskPaneService.ShowColorPicker()`.
+
+### Manual QA (Color picker)
+
+1. Open a themed presentation. Click **Settings → Colors** → task pane opens on **Colors** tab with
+   theme swatch grid (not the S10-005 placeholder).
+2. Click a theme swatch → preview and HEX update; selected swatch shows blue outline.
+3. Select a shape → **Apply Fill** → fill changes; status dialog confirms; color appears in **Recent**.
+4. **Apply Line** / **Apply Text** on shapes with outline/text — same pattern.
+5. Type `FF0000` or `#FF0000` in HEX box → preview turns red; invalid input shows inline error.
+6. Select a colored shape → **Pick from shape → Fill** (or Line/Text) → picker adopts that color;
+   color is recorded in recent.
+7. Close presentation / open unthemed deck → warning *Theme colors unavailable — using default palette.*
+8. Run **Format → Fill** ribbon cycle → uses same palette as picker (shared `FormatColorPaletteProvider`).
+9. Confirm `recentColors` in `%AppData%\PptPowerKeys\UserSettings.json` (max 5, dedupe, newest first).
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.OpenColorScheme);
 ```
 
 ## Solution layout

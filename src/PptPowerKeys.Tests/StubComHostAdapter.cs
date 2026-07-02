@@ -6,7 +6,7 @@ using PptPowerKeys.Windows.Host;
 namespace PptPowerKeys.Tests;
 
 /// <summary>Minimal COM host stub for CommandRouter routability tests (no PowerPoint).</summary>
-internal sealed class StubComHostAdapter : IComHostAdapter
+internal class StubComHostAdapter : IComHostAdapter
 {
     public IReadOnlyList<ShapeBounds> ReadSelectedShapeBounds() => Array.Empty<ShapeBounds>();
 
@@ -42,13 +42,16 @@ internal sealed class StubComHostAdapter : IComHostAdapter
 
     public (int SlidesProcessed, int ShapesRemoved) RemoveShapeFromSelectedSlides() => (0, 0);
 
-    public IReadOnlyList<string> ReadPresentationThemeColors() => Array.Empty<string>();
+    public virtual IReadOnlyList<string> ReadPresentationThemeColors() => Array.Empty<string>();
 
     public int ApplyFillColor(string hex) => 0;
 
     public int ApplyLineColor(string hex) => 0;
 
     public int ApplyTextColor(string hex) => 0;
+
+    public string ReadColorFromSelection(ColorPickSource source) =>
+        throw new InvalidOperationException("Select a shape first.");
 
     public int ToggleFillBlackWhite() => 0;
 

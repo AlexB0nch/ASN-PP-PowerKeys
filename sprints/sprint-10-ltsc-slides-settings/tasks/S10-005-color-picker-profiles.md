@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-10-ltsc-slides-settings` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | In Review |
 | **Issue** | [#103](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/103) |
-| **PR** | — |
+| **PR** | [#104](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/104) |
 
 ## Цель
 

@@ -117,19 +117,7 @@
         </ScrollViewer>
       </TabItem>
 
-      <TabItem x:Name="ColorsTab" Header="Colors">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="16">
-          <TextBlock Text="Color picker — S10-005"
-                     FontSize="14"
-                     TextAlignment="Center"
-                     TextWrapping="Wrap" />
-          <TextBlock Text="Full theme color picker will be implemented in S10-005."
-                     Margin="0,8,0,0"
-                     TextAlignment="Center"
-                     TextWrapping="Wrap"
-                     Foreground="Gray" />
-        </StackPanel>
-      </TabItem>
+      <TabItem x:Name="ColorsTab" Header="Colors" />
     </TabControl>
   </Grid>
 </UserControl>

@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Host\ColorPickSource.cs" />
     <Compile Include="Host\ComHostAdapter.cs" />
     <Compile Include="Host\ColorRgbHelper.cs" />
     <Compile Include="Host\CommandExecutionResult.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Host\DuplicateGapStore.cs" />
     <Compile Include="Host\FormatColorCommands.cs" />
     <Compile Include="Host\FormatColorCycleStore.cs" />
+    <Compile Include="Host\FormatColorPaletteProvider.cs" />
     <Compile Include="Host\FormatPainterStore.cs" />
     <Compile Include="Host\FormatRegroupCommands.cs" />
     <Compile Include="Host\GroupZOrderCommands.cs" />
@@ -116,6 +118,9 @@
     <Compile Include="ThisAddIn.Designer.cs">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ColorPickerPane.xaml.cs">
+      <DependentUpon>ColorPickerPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\HostScriptCommandMap.cs" />
     <Compile Include="UI\PowerKeysRibbon.cs" />
     <Compile Include="UI\RibbonCommandMap.cs" />
@@ -126,6 +131,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\ColorPickerPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SettingsPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
