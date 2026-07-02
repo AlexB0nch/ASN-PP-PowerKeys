@@ -699,6 +699,130 @@ namespace PptPowerKeys.Windows.Host
             return slides.Count;
         }
 
+        public bool ToggleZoomFit()
+        {
+            DocumentWindow window = GetActiveWindowOrThrow("No active window.");
+            View view = window.View ?? throw new InvalidOperationException("No active view.");
+
+            int fitZoom = CalculateFitZoom(window, view);
+            int currentZoom = view.Zoom;
+            bool atFit = Math.Abs(currentZoom - fitZoom) <= 2;
+
+            view.Zoom = atFit ? 100 : fitZoom;
+            return !atFit;
+        }
+
+        public bool ToggleSlideSorterView()
+        {
+            DocumentWindow window = GetActiveWindowOrThrow("No active window.");
+
+            bool toSorter = window.ViewType != PpViewType.ppViewSlideSorter;
+            window.ViewType = toSorter
+                ? PpViewType.ppViewSlideSorter
+                : PpViewType.ppViewNormal;
+
+            return toSorter;
+        }
+
+        public void StartSlideShowFromCurrentSlide()
+        {
+            Presentation presentation = _application.ActivePresentation
+                ?? throw new InvalidOperationException("Open a presentation first.");
+
+            DocumentWindow window = GetActiveWindowOrThrow("No active window.");
+            Slide slide = window.View?.Slide
+                ?? throw new InvalidOperationException("No active slide.");
+
+            SlideShowSettings settings = presentation.SlideShowSettings;
+            settings.StartingSlide = slide.SlideIndex;
+            settings.EndingSlide = presentation.Slides.Count;
+            settings.Run();
+        }
+
+        public bool ToggleGridLines()
+        {
+            View view = GetActiveViewOrThrow();
+            bool isOn = view.GridLines == MsoTriState.msoTrue;
+            view.GridLines = isOn ? MsoTriState.msoFalse : MsoTriState.msoTrue;
+            return !isOn;
+        }
+
+        public bool ToggleGuides()
+        {
+            View view = GetActiveViewOrThrow();
+            bool isOn = view.Guides == MsoTriState.msoTrue;
+            view.Guides = isOn ? MsoTriState.msoFalse : MsoTriState.msoTrue;
+            return !isOn;
+        }
+
+        public void PrintCurrentSlide()
+        {
+            Presentation presentation = _application.ActivePresentation
+                ?? throw new InvalidOperationException("Open a presentation first.");
+
+            DocumentWindow window = GetActiveWindowOrThrow("No active window.");
+            Slide slide = window.View?.Slide
+                ?? throw new InvalidOperationException("No active slide.");
+
+            int slideIndex = slide.SlideIndex;
+            presentation.PrintOut(
+                slideIndex,
+                slideIndex,
+                string.Empty,
+                1,
+                MsoTriState.msoFalse,
+                MsoTriState.msoFalse,
+                MsoTriState.msoTrue,
+                Type.Missing,
+                MsoTriState.msoFalse,
+                MsoTriState.msoFalse);
+        }
+
+        private static int CalculateFitZoom(DocumentWindow window, View view)
+        {
+            Slide slide = view.Slide;
+            if (slide == null)
+            {
+                return 100;
+            }
+
+            float slideWidth = slide.Master.Width;
+            float slideHeight = slide.Master.Height;
+            if (slideWidth <= 0 || slideHeight <= 0)
+            {
+                return 100;
+            }
+
+            // Reserve space for slide pane chrome (thumbnail strip / scroll bars).
+            const float chromeWidth = 40f;
+            const float chromeHeight = 115f;
+            float availableWidth = Math.Max(1f, window.Width - chromeWidth);
+            float availableHeight = Math.Max(1f, window.Height - chromeHeight);
+
+            float widthRatio = availableWidth / slideWidth;
+            float heightRatio = availableHeight / slideHeight;
+            float zoom = Math.Min(widthRatio, heightRatio) * 100f;
+
+            return (int)Math.Max(10, Math.Min(400, Math.Round(zoom)));
+        }
+
+        private DocumentWindow GetActiveWindowOrThrow(string message)
+        {
+            DocumentWindow window = _application.ActiveWindow;
+            if (window == null)
+            {
+                throw new InvalidOperationException(message);
+            }
+
+            return window;
+        }
+
+        private View GetActiveViewOrThrow()
+        {
+            DocumentWindow window = GetActiveWindowOrThrow("No active window.");
+            return window.View ?? throw new InvalidOperationException("No active view.");
+        }
+
         private static readonly MsoThemeColorIndex[] ThemeColorSlots =
         {
             MsoThemeColorIndex.msoThemeColorAccent1,

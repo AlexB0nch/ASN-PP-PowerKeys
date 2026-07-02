@@ -386,10 +386,28 @@
                   screentip="Duplicate + Align Bottom" />
         </group>
         <group id="grpSlides" label="Slides">
+          <button id="btnToggleZoom"
+                  label="Zoom"
+                  onAction="OnHostScriptCommand"
+                  size="large"
+                  imageMso="ZoomDialog"
+                  screentip="Toggle zoom fit"
+                  supertip="Toggle between fit-to-window and 100% zoom (F1)." />
+          <button id="btnSlideSorter"
+                  label="Sorter"
+                  onAction="OnHostScriptCommand"
+                  imageMso="SlideSorter"
+                  screentip="Toggle slide sorter"
+                  supertip="Switch between normal view and slide sorter." />
+          <button id="btnPrintSlide"
+                  label="Print"
+                  onAction="OnHostScriptCommand"
+                  imageMso="FilePrint"
+                  screentip="Print slide"
+                  supertip="Print the current slide." />
           <button id="btnCopySlide"
                   label="Copy Slide"
                   onAction="OnHostScriptCommand"
-                  size="large"
                   imageMso="SlideDuplicate"
                   screentip="Duplicate slide"
                   supertip="Duplicate the first selected slide immediately after the source slide." />

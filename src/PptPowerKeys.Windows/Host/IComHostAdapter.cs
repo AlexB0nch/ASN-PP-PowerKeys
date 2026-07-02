@@ -120,5 +120,27 @@ namespace PptPowerKeys.Windows.Host
         /// Throws when no slide is selected. Returns the number of slides moved.
         /// </summary>
         int MoveSelectedSlidesToBackup();
+
+        /// <summary>
+        /// Toggles zoom between fit-to-window and 100%. Returns <c>true</c> when set to fit.
+        /// </summary>
+        bool ToggleZoomFit();
+
+        /// <summary>
+        /// Toggles between normal and slide sorter view. Returns <c>true</c> when sorter is active.
+        /// </summary>
+        bool ToggleSlideSorterView();
+
+        /// <summary>Starts a slide show from the current slide.</summary>
+        void StartSlideShowFromCurrentSlide();
+
+        /// <summary>Toggles grid lines on the active view. Returns <c>true</c> when enabled.</summary>
+        bool ToggleGridLines();
+
+        /// <summary>Toggles drawing guides on the active view. Returns <c>true</c> when enabled.</summary>
+        bool ToggleGuides();
+
+        /// <summary>Prints the current slide via COM <c>PrintOut</c>.</summary>
+        void PrintCurrentSlide();
     }
 }

@@ -96,6 +96,7 @@
     <Compile Include="Host\PositionClipboardStore.cs" />
     <Compile Include="Host\PositionCommands.cs" />
     <Compile Include="Host\SlideCommands.cs" />
+    <Compile Include="Host\ViewPrintCommands.cs" />
     <Compile Include="Host\TextCommands.cs" />
     <Compile Include="Host\ShapeBoundsId.cs" />
     <Compile Include="Globals.cs" />

@@ -15,6 +15,7 @@ namespace PptPowerKeys.Windows.UI
     /// S09-005: Format color commands (Fill/Line/Text + toggle black/white).
     /// S09-006: Text commands (paste plain, addup, superscript, subscript).
     /// S10-001: Slide commands (CopySlide, MoveSlidesToBackup).
+    /// S10-002: View/print commands (zoom, sorter, slideshow, grid, guides, print).
     /// </summary>
     public static class HostScriptCommandMap
     {
@@ -26,6 +27,12 @@ namespace PptPowerKeys.Windows.UI
             if (controlId == "btnAddup")
             {
                 command = CommandIds.AddupTextFields;
+                return true;
+            }
+
+            if (controlId == "btnSlideSorter")
+            {
+                command = CommandIds.ToggleSlideSorter;
                 return true;
             }
 
@@ -50,7 +57,8 @@ namespace PptPowerKeys.Windows.UI
                 || MultiSlideShapeCommands.IsMultiSlideShapeCommand(command)
                 || FormatColorCommands.IsPaletteColorCommand(command)
                 || TextCommands.IsTextCommand(command)
-                || SlideCommands.IsSlideCommand(command);
+                || SlideCommands.IsSlideCommand(command)
+                || ViewPrintCommands.IsViewPrintCommand(command);
         }
     }
 }

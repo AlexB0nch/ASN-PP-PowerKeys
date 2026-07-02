@@ -23,6 +23,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-005: Format color HostScript commands (Fill/Line/Text + toggle black/white).
     /// S09-006: Text HostScript commands (paste plain, ellipsis, scripts, addup).
     /// S10-001: Slide HostScript commands (CopySlide, MoveSlidesToBackup).
+    /// S10-002: View/print HostScript commands (zoom, sorter, slideshow, grid, guides, print).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -90,6 +91,11 @@ namespace PptPowerKeys.Windows.Host
             if (SlideCommands.IsSlideCommand(command))
             {
                 return ExecuteSlide(command);
+            }
+
+            if (ViewPrintCommands.IsViewPrintCommand(command))
+            {
+                return ExecuteViewPrint(command);
             }
 
             throw new NotSupportedException(
@@ -475,6 +481,73 @@ namespace PptPowerKeys.Windows.Host
 
                 default:
                     throw new InvalidOperationException($"Unknown slide command: {command}.");
+            }
+        }
+
+        private CommandExecutionResult ExecuteViewPrint(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.ToggleZoom:
+                {
+                    bool fit = _host.ToggleZoomFit();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = fit ? "Zoom set to fit." : "Zoom set to 100%.",
+                    };
+                }
+
+                case CommandIds.ToggleSlideSorter:
+                {
+                    bool sorter = _host.ToggleSlideSorterView();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = sorter
+                            ? "Switched to slide sorter."
+                            : "Switched to normal view.",
+                    };
+                }
+
+                case CommandIds.StartSlideShow:
+                    _host.StartSlideShowFromCurrentSlide();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Slide show started.",
+                    };
+
+                case CommandIds.ToggleGrid:
+                {
+                    bool on = _host.ToggleGridLines();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = on ? "Grid lines on." : "Grid lines off.",
+                    };
+                }
+
+                case CommandIds.ToggleGuides:
+                {
+                    bool on = _host.ToggleGuides();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = on ? "Guides on." : "Guides off.",
+                    };
+                }
+
+                case CommandIds.PrintSlide:
+                    _host.PrintCurrentSlide();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Printing current slide.",
+                    };
+
+                default:
+                    throw new InvalidOperationException($"Unknown view/print command: {command}.");
             }
         }
     }
