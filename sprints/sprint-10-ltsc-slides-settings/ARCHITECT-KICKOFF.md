@@ -1,15 +1,15 @@
 # Architect Kickoff — Sprint 10 LTSC Slides · Settings · Web-None unlock
 
-> **Статус:** In Progress. Следующая задача: **S10-004** (после merge S10-003).
+> **Статус:** In Progress. Следующая задача: **S10-004**.
 
 ## Контекст
 
 - Sprint 09 **Done** — M3 Objects/Format/Text beta: 27 HostScript + 32 ServerLayout = 65 commands routed.
 - **S10-001 Done** (PR #93) — +2 Slide HostScript → **67 commands routed**.
 - **S10-002 Done** (PR #95) — +6 view/print None unlocks → **73 commands routed**.
-- **S10-003 In Review** (PR #97) — +3 format/objects/text None unlocks → **76 commands routed**.
-- `CommandRouter` + `ComHostAdapter` + `HostScriptCommandMap` готовы к wave 4.
-- Linux CI green (`dotnet test` 289 passed at S10-002 close).
+- **S10-003 Done** (PR #97) — +3 format/objects/text None unlocks → **76 commands routed**. **9/9 None unlocks complete.**
+- `CommandRouter` + `ComHostAdapter` + `HostScriptCommandMap` готовы к wave 4 (Settings).
+- Linux CI green (`dotnet test` 298 passed at S10-003 close).
 
 ## Цель Sprint 10
 
@@ -29,8 +29,8 @@
 |----|------|---------|
 | S10-001 | [`tasks/S10-001-slide-commands.md`](./tasks/S10-001-slide-commands.md) | Done (#93) |
 | S10-002 | [`tasks/S10-002-view-print-none.md`](./tasks/S10-002-view-print-none.md) | Done (#95) |
-| S10-003 | [`tasks/S10-003-format-regroup-none.md`](./tasks/S10-003-format-regroup-none.md) | In Review (#97) |
-| S10-004 | `tasks/S10-004-settings-pane.md` (создать) | после 003 |
+| S10-003 | [`tasks/S10-003-format-regroup-none.md`](./tasks/S10-003-format-regroup-none.md) | Done (#97) |
+| S10-004 | `tasks/S10-004-settings-pane.md` (создать) | `/builder выполни S10-004` |
 | S10-005 | `tasks/S10-005-color-picker-profiles.md` (создать) | после 004 |
 
 ## Инварианты
