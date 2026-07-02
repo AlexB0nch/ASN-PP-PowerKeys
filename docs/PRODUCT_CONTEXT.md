@@ -93,15 +93,20 @@ S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
 Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 Done** (M2 layout beta);
-**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 in progress** (Slides + Settings + None unlock — **79/79 routed**; color picker S10-005 remaining). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 Done** (M3 Feature beta — **79/79 routed**, Settings UI + color picker COM). **Sprint 11 Next** (hotkeys, MSI, QA). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S10-005:** Color picker COM panel на Windows line — `ColorPickerPane` (theme + recent swatches, HEX input,
+  pick from shape, Apply Fill/Line/Text); `FormatColorPaletteProvider` shared с cycle commands;
+  `ComHostAdapter.ReadColorFromSelection`; `OpenColorScheme` → `ShowColorPicker()`; `RecordRecentColor`;
+  parity Web `ColorPickerPanel.tsx`; screen eyedropper — anti-scope; PR #104; 319 dotnet tests green.
+  **Sprint 10 closed.** Next: S11-001 ShortcutManager.
 - **S10-004:** Settings WPF task pane на Windows line — 3 Settings-команды (`OpenShortcutManager`,
   `OpenColorScheme`, `ResetToDefaults`); `SettingsCommands` + `ITaskPaneService` + `SettingsPane.xaml`
   (profile, snap, addup mode, shortcuts editor, Save/Reset/Export/Import); ribbon `grpSettings`
-  (Shortcuts, Colors, Reset); `WindowsUserSettingsStore` Save/Reset/Import; Colors tab placeholder → S10-005;
+  (Shortcuts, Colors, Reset); `WindowsUserSettingsStore` Save/Reset/Import;
   `CommandRouterRoutabilityTests` confirms **79/79 routed**; PR #100; 316 dotnet tests green.
-  Next: S10-005 color picker COM panel.
+  Next: S10-005 color picker COM panel (merged).
 - **S10-003:** Format/objects/text None unlock на Windows line — 3 команды (`FormatPainter`,
   `PasteFormatted`, `Regroup`); COM `Shape.PickUp`/`Apply` (двухфазный `FormatPainterStore`),
   `ShapeRange.Regroup()`, `TextRange.Paste()` formatted clipboard; ribbon **Format** group extended

@@ -1,6 +1,6 @@
 # Sprint 10 — Backlog
 
-> **Status:** In Progress (S10-005 next)
+> **Status:** Done (2026-07-02)
 
 | ID | Задача | Компонент | Статус | Issue / PR |
 |----|--------|-----------|--------|------------|
@@ -8,4 +8,4 @@
 | S10-002 | None unlock: view/print (6) | Windows | **Done** | PR #95 |
 | S10-003 | None unlock: FormatPainter, PasteFormatted, Regroup | Windows | **Done** | PR #97 |
 | S10-004 | Settings task pane + UserSettings | Windows | **Done** | #99 / PR #100 |
-| S10-005 | Color picker + profiles | Windows | **In Review** | #103 / PR #104 |
+| S10-005 | Color picker + profiles | Windows | **Done** | #103 / PR #104 |

@@ -21,4 +21,5 @@
 ## Definition of Done
 
 - [x] All 79 commands routed
-- [ ] Settings JSON compatible with Web export/import v1
+- [x] Settings JSON compatible with Web export/import v1
+- [x] Color picker COM panel (theme + recent + apply)

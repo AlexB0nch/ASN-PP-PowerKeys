@@ -19,8 +19,8 @@
 | **S07** | [`sprint-07-ltsc-foundation/`](../sprint-07-ltsc-foundation/) | **Done** | Spikes + VSTO shell + ComHost POC | S07-001…004 |
 | **S08** | [`sprint-08-ltsc-layout-parity/`](../sprint-08-ltsc-layout-parity/) | **Done** | 32 ServerLayout + alignment extras | S08-001…005 |
 | **S09** | [`sprint-09-ltsc-objects-format-text/`](../sprint-09-ltsc-objects-format-text/) | **Done** | Objects, Format, Text HostScript | S09-001…006 |
-| **S10** | [`sprint-10-ltsc-slides-settings/`](../sprint-10-ltsc-slides-settings/) | **Next** | Slides + 9 None unlock + Settings UI | S10-001…005 |
-| **S11** | [`sprint-11-ltsc-ship/`](../sprint-11-ltsc-ship/) | Planned | Global hotkeys, MSI, QA, release | S11-001…005 |
+| **S10** | [`sprint-10-ltsc-slides-settings/`](../sprint-10-ltsc-slides-settings/) | **Done** | Slides + 9 None unlock + Settings UI + color picker | S10-001…005 |
+| **S11** | [`sprint-11-ltsc-ship/`](../sprint-11-ltsc-ship/) | **Next** | Global hotkeys, MSI, QA, release | S11-001…005 |
 
 ### Milestones
 
@@ -28,7 +28,7 @@
 |-----------|---------------|----------|
 | **M1 Technical prototype** | S07 | Add-in loads in PP; 1 command e2e (e.g. AlignLeft) |
 | **M2 Layout beta** | S08 | All 32 ServerLayout + snap-to-grid |
-| **M3 Feature beta** | S10 | 79 commands routed; Settings + profiles |
+| **M3 Feature beta** | S10 | 79 commands routed; Settings + profiles + color picker |
 | **M4 Production** | S11 | Signed MSI; QA matrix; LTSC runbook |
 
 ---
@@ -83,5 +83,5 @@
 
 ## Следующий шаг
 
-**Sprint 10** — [`sprint-10-ltsc-slides-settings/ARCHITECT-KICKOFF.md`](../sprint-10-ltsc-slides-settings/ARCHITECT-KICKOFF.md)  
-Первая задача: **S10-001** Slide HostScript (`CopySlide`, `MoveSlidesToBackup`).
+**Sprint 11** — [`sprint-11-ltsc-ship/ARCHITECT-KICKOFF.md`](../sprint-11-ltsc-ship/ARCHITECT-KICKOFF.md)  
+Первая задача: **S11-001** Native ShortcutManager.
