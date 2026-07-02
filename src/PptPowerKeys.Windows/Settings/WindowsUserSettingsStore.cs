@@ -64,6 +64,60 @@ namespace PptPowerKeys.Windows.Settings
             }
         }
 
+        /// <summary>
+        /// Persists full settings from the task pane. <see cref="UserSettings.RecentColors"/> on disk
+        /// are preserved from the current store (not overwritten by pane edits).
+        /// </summary>
+        public void Save(UserSettings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            lock (_sync)
+            {
+                var recentColors = _settings.RecentColors?.ToList() ?? new List<string>();
+                _settings = new UserSettings
+                {
+                    Profile = settings.Profile ?? UserSettings.CreateDefaults().Profile,
+                    SnapToGrid = settings.SnapToGrid,
+                    AddupDisplayMode = string.IsNullOrWhiteSpace(settings.AddupDisplayMode)
+                        ? UserSettings.AddupDisplayModeDefault
+                        : settings.AddupDisplayMode,
+                    Shortcuts = settings.Shortcuts?
+                        .Select(s => new ShortcutBinding
+                        {
+                            CommandId = s.CommandId ?? string.Empty,
+                            Keys = s.Keys ?? string.Empty,
+                        })
+                        .ToList() ?? new List<ShortcutBinding>(),
+                    RecentColors = recentColors,
+                };
+                WriteAtomically(_filePath, Serialize(_settings));
+            }
+        }
+
+        /// <summary>Resets to catalog defaults; preserves <see cref="UserSettings.RecentColors"/>.</summary>
+        public void Reset()
+        {
+            lock (_sync)
+            {
+                var recentColors = _settings.RecentColors?.ToList() ?? new List<string>();
+                var defaults = UserSettings.CreateDefaults();
+                defaults.RecentColors = recentColors;
+                _settings = defaults;
+                WriteAtomically(_filePath, Serialize(_settings));
+            }
+        }
+
+        /// <summary>
+        /// Validates import JSON via Core <see cref="UserSettingsImporter"/>; does not persist until
+        /// <see cref="Save"/>.
+        /// </summary>
+        public SettingsImportResult Import(string json) =>
+            UserSettingsImporter.Import(json);
+
         /// <summary>Returns persisted recent format colors (newest first).</summary>
         public IReadOnlyList<string> GetRecentColors()
         {

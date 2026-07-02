@@ -10,6 +10,7 @@ namespace PptPowerKeys.Windows.UI
     public class PowerKeysRibbon : IRibbonExtensibility
     {
         private IRibbonUI _ribbon;
+        private static IRibbonUI? s_ribbon;
 
         public string GetCustomUI(string ribbonId)
         {
@@ -19,6 +20,12 @@ namespace PptPowerKeys.Windows.UI
         public void OnLoad(IRibbonUI ribbonUI)
         {
             _ribbon = ribbonUI;
+            s_ribbon = ribbonUI;
+        }
+
+        public static void InvalidateControl(string controlId)
+        {
+            s_ribbon?.InvalidateControl(controlId);
         }
 
         public bool GetSnapToGridPressed(IRibbonControl control)
@@ -65,6 +72,21 @@ namespace PptPowerKeys.Windows.UI
             {
                 MessageBox.Show(
                     $"Unknown host script command for ribbon control '{control.Id}'.",
+                    "PPT PowerKeys",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            ExecuteCommand(command);
+        }
+
+        public void OnSettingsCommand(IRibbonControl control)
+        {
+            if (!SettingsCommandMap.TryParse(control.Id, out var command))
+            {
+                MessageBox.Show(
+                    $"Unknown settings command for ribbon control '{control.Id}'.",
                     "PPT PowerKeys",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
