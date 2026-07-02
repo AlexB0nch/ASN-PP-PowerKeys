@@ -38,6 +38,7 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionCommands.cs" Link="Windows\PositionCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionClipboardStore.cs" Link="Windows\PositionClipboardStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\SlideCommands.cs" Link="Windows\SlideCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\ViewPrintCommands.cs" Link="Windows\ViewPrintCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\TextCommands.cs" Link="Windows\TextCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\UI\HostScriptCommandMap.cs" Link="Windows\HostScriptCommandMap.cs" />
   </ItemGroup>
