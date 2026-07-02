@@ -1,12 +1,13 @@
 # Sprint 10 — LTSC Slides · Settings · Web-None unlock
 
-> **Depends on:** Sprint 09 Done
+> **Depends on:** Sprint 09 Done  
+> **Kickoff:** [`ARCHITECT-KICKOFF.md`](./ARCHITECT-KICKOFF.md)
 
 ## Цель
 
-- **Slides (8)** including **6 OfficeJs None unlocks**
-- **FormatPainter**, **PasteFormatted**, **Regroup**
-- **Settings UI** (profiles, shortcuts, import/export, addupDisplayMode)
+- **Slides (8)** including **6 OfficeJs None unlocks** — S10-001…002 ✅
+- **FormatPainter**, **PasteFormatted**, **Regroup** — S10-003 ✅
+- **Settings UI** (profiles, shortcuts, import/export, addupDisplayMode) — S10-004
 
 ## Planned tasks
 
