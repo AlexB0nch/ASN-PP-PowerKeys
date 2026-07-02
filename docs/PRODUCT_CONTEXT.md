@@ -96,6 +96,12 @@ Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype)
 **Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 in progress** (Slides + Settings + None unlock). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S10-002:** View/print None unlock на Windows line — 6 команд (`ToggleZoom`, `ToggleSlideSorter`,
+  `StartSlideShow`, `ToggleGrid`, `ToggleGuides`, `PrintSlide`); COM `View.Zoom` fit↔100%,
+  `ViewType` sorter toggle, `SlideShowSettings.Run`, `GridLines`/`Guides` toggle, `PrintOut` current slide;
+  ribbon **Slides** group extended (`btnToggleZoom`, `btnSlideSorter`, `btnPrintSlide`; special map
+  `btnSlideSorter` → `ToggleSlideSorter`); Grid/Guides/SlideShow — router/shortcuts only;
+  `ViewPrintCommandsTests` + map tests; PR #95; 289 dotnet tests green; **73 commands routed**. Next: S10-003.
 - **S10-001:** Slide HostScript на Windows line — 2 команды (`CopySlide`, `MoveSlidesToBackup`);
   COM `Slide.Duplicate()` (first selected) + `Slide.MoveTo(Slides.Count)` (high index first);
   validation + success messages parity с Web `powerpoint.ts` / `runCommand.ts`; ribbon **Slides** group
