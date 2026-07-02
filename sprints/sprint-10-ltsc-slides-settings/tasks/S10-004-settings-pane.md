@@ -12,7 +12,7 @@
 | **Компонент** | `PptPowerKeys.Windows` + Core (reference) |
 | **Статус** | In Progress |
 | **Issue** | [#99](https://github.com/AlexB0nch/ASN-PP-PowerKeys/issues/99) |
-| **PR** | — |
+| **PR** | [#100](https://github.com/AlexB0nch/ASN-PP-PowerKeys/pull/100) |
 
 ## Цель
 
