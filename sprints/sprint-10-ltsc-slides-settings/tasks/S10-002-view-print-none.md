@@ -10,9 +10,9 @@
 | **Спринт** | `sprint-10-ltsc-slides-settings` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | In Progress |
+| **Статус** | In Review |
 | **Issue** | — |
-| **PR** | — |
+| **PR** | #95 |
 
 ## Цель
 
