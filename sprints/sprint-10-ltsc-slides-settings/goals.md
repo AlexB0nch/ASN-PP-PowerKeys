@@ -20,5 +20,5 @@
 
 ## Definition of Done
 
-- [ ] All 79 commands routed
+- [x] All 79 commands routed
 - [ ] Settings JSON compatible with Web export/import v1
