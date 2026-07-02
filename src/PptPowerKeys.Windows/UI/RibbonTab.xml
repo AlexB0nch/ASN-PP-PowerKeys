@@ -333,6 +333,12 @@
                   imageMso="FontColorPicker"
                   screentip="Text color"
                   supertip="Cycle theme + recent palette colors on shape text." />
+          <button id="btnFormatPainter"
+                  label="Format Painter"
+                  onAction="OnHostScriptCommand"
+                  imageMso="FormatPainter"
+                  screentip="Format painter"
+                  supertip="Copy format from one shape, then apply to other shape(s). Run twice: pick up, then apply." />
         </group>
         <group id="grpText" label="Text">
           <button id="btnPasteUnformatted"

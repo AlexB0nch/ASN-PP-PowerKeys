@@ -89,6 +89,8 @@
     <Compile Include="Host\DuplicateGapStore.cs" />
     <Compile Include="Host\FormatColorCommands.cs" />
     <Compile Include="Host\FormatColorCycleStore.cs" />
+    <Compile Include="Host\FormatPainterStore.cs" />
+    <Compile Include="Host\FormatRegroupCommands.cs" />
     <Compile Include="Host\GroupZOrderCommands.cs" />
     <Compile Include="Host\InsertShapeCommands.cs" />
     <Compile Include="Host\MultiSlideShapeCommands.cs" />
