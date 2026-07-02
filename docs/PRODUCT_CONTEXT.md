@@ -93,9 +93,15 @@ S06-005 Done — Color Picker HEX input + eyedropper (PR #57).
 
 **Epic LTSC Windows Native (planned S07–S11):** ADR-001 — product line B `PptPowerKeys.Windows` (VSTO/COM +
 Core in-process) для LTSC/perpetual Office. **Sprint 07 Done** (M1 prototype); **Sprint 08 Done** (M2 layout beta);
-**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 in progress** (Slides + Settings + None unlock). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
+**Sprint 09 Done** (M3 Objects/Format/Text beta); **Sprint 10 in progress** (Slides + Settings + None unlock — **79/79 routed**; color picker S10-005 remaining). См. `sprints/epic-ltsc-windows-native/ROADMAP.md`.
 
 ## 7. Журнал ключевых решений (анти-дрейф контекста)
+- **S10-004:** Settings WPF task pane на Windows line — 3 Settings-команды (`OpenShortcutManager`,
+  `OpenColorScheme`, `ResetToDefaults`); `SettingsCommands` + `ITaskPaneService` + `SettingsPane.xaml`
+  (profile, snap, addup mode, shortcuts editor, Save/Reset/Export/Import); ribbon `grpSettings`
+  (Shortcuts, Colors, Reset); `WindowsUserSettingsStore` Save/Reset/Import; Colors tab placeholder → S10-005;
+  `CommandRouterRoutabilityTests` confirms **79/79 routed**; PR #100; 316 dotnet tests green.
+  Next: S10-005 color picker COM panel.
 - **S10-003:** Format/objects/text None unlock на Windows line — 3 команды (`FormatPainter`,
   `PasteFormatted`, `Regroup`); COM `Shape.PickUp`/`Apply` (двухфазный `FormatPainterStore`),
   `ShapeRange.Regroup()`, `TextRange.Paste()` formatted clipboard; ribbon **Format** group extended

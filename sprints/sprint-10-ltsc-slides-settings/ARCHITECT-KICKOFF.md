@@ -1,6 +1,6 @@
 # Architect Kickoff — Sprint 10 LTSC Slides · Settings · Web-None unlock
 
-> **Статус:** In Progress. Следующая задача: **S10-004**.
+> **Статус:** In Progress. Следующая задача: **S10-005**.
 
 ## Контекст
 
@@ -8,8 +8,8 @@
 - **S10-001 Done** (PR #93) — +2 Slide HostScript → **67 commands routed**.
 - **S10-002 Done** (PR #95) — +6 view/print None unlocks → **73 commands routed**.
 - **S10-003 Done** (PR #97) — +3 format/objects/text None unlocks → **76 commands routed**. **9/9 None unlocks complete.**
-- `CommandRouter` + `ComHostAdapter` + `HostScriptCommandMap` готовы к wave 4 (Settings).
-- Linux CI green (`dotnet test` 298 passed at S10-003 close).
+- **S10-004 Done** (PR #100) — Settings WPF pane + 3 Settings cmds → **79/79 commands routed**.
+- Linux CI green (`dotnet test` 316 passed at S10-004 close).
 
 ## Цель Sprint 10
 
@@ -20,7 +20,7 @@
 | Slides COM | CopySlide, MoveSlidesToBackup | S10-001 ✅ |
 | None unlock view/print | Zoom, Sorter, SlideShow, Grid, Guides, Print | S10-002 ✅ |
 | None unlock format/objects/text | FormatPainter, PasteFormatted, Regroup | S10-003 ✅ PR #97 |
-| Settings WPF pane | profiles, shortcuts, import/export, addupDisplayMode | S10-004 |
+| Settings WPF pane | profiles, shortcuts, import/export, addupDisplayMode | S10-004 ✅ |
 | Color picker + profiles | COM theme panel + consulting presets | S10-005 |
 
 ## Задачи спринта
@@ -30,8 +30,8 @@
 | S10-001 | [`tasks/S10-001-slide-commands.md`](./tasks/S10-001-slide-commands.md) | Done (#93) |
 | S10-002 | [`tasks/S10-002-view-print-none.md`](./tasks/S10-002-view-print-none.md) | Done (#95) |
 | S10-003 | [`tasks/S10-003-format-regroup-none.md`](./tasks/S10-003-format-regroup-none.md) | Done (#97) |
-| S10-004 | `tasks/S10-004-settings-pane.md` (создать) | `/builder выполни S10-004` |
-| S10-005 | `tasks/S10-005-color-picker-profiles.md` (создать) | после 004 |
+| S10-004 | `tasks/S10-004-settings-pane.md` | Done (#100) |
+| S10-005 | [`tasks/S10-005-color-picker-profiles.md`](./tasks/S10-005-color-picker-profiles.md) | `/builder выполни S10-005` |
 
 ## Инварианты
 
