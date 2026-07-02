@@ -142,5 +142,26 @@ namespace PptPowerKeys.Windows.Host
 
         /// <summary>Prints the current slide via COM <c>PrintOut</c>.</summary>
         void PrintCurrentSlide();
+
+        /// <summary>
+        /// Copies format from the single selected shape via COM <c>Shape.PickUp()</c>.
+        /// Throws when selection is not exactly one shape.
+        /// </summary>
+        void PickUpFormatFromSelection();
+
+        /// <summary>
+        /// Applies picked-up format to each selected shape via COM <c>Shape.Apply()</c>.
+        /// Throws when nothing is selected. Returns the number of shapes updated.
+        /// </summary>
+        int ApplyFormatToSelection();
+
+        /// <summary>
+        /// Regroups the current shape selection via COM <c>ShapeRange.Regroup()</c>.
+        /// Throws when fewer than two shapes are selected. Returns the pre-regroup count.
+        /// </summary>
+        int RegroupSelectedShapes();
+
+        /// <summary>Pastes formatted clipboard content into selected shapes with text frames.</summary>
+        int PasteFormattedText();
     }
 }

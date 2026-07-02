@@ -32,6 +32,8 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateGapStore.cs" Link="Windows\DuplicateGapStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorCommands.cs" Link="Windows\FormatColorCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorCycleStore.cs" Link="Windows\FormatColorCycleStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\FormatPainterStore.cs" Link="Windows\FormatPainterStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\FormatRegroupCommands.cs" Link="Windows\FormatRegroupCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\GroupZOrderCommands.cs" Link="Windows\GroupZOrderCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\InsertShapeCommands.cs" Link="Windows\InsertShapeCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\MultiSlideShapeCommands.cs" Link="Windows\MultiSlideShapeCommands.cs" />

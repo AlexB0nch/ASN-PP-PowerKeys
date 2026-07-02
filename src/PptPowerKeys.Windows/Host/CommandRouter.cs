@@ -24,6 +24,7 @@ namespace PptPowerKeys.Windows.Host
     /// S09-006: Text HostScript commands (paste plain, ellipsis, scripts, addup).
     /// S10-001: Slide HostScript commands (CopySlide, MoveSlidesToBackup).
     /// S10-002: View/print HostScript commands (zoom, sorter, slideshow, grid, guides, print).
+    /// S10-003: Format painter / formatted paste / regroup HostScript commands (3 COM None unlocks).
     /// </summary>
     public sealed class CommandRouter
     {
@@ -96,6 +97,11 @@ namespace PptPowerKeys.Windows.Host
             if (ViewPrintCommands.IsViewPrintCommand(command))
             {
                 return ExecuteViewPrint(command);
+            }
+
+            if (FormatRegroupCommands.IsFormatRegroupCommand(command))
+            {
+                return ExecuteFormatRegroup(command);
             }
 
             throw new NotSupportedException(
@@ -548,6 +554,57 @@ namespace PptPowerKeys.Windows.Host
 
                 default:
                     throw new InvalidOperationException($"Unknown view/print command: {command}.");
+            }
+        }
+
+        private CommandExecutionResult ExecuteFormatRegroup(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.FormatPainter:
+                {
+                    if (FormatPainterStore.HasPickedUp)
+                    {
+                        int count = _host.ApplyFormatToSelection();
+                        FormatPainterStore.Clear();
+                        return new CommandExecutionResult
+                        {
+                            Changed = true,
+                            Message = $"Applied format to {count} shape(s).",
+                        };
+                    }
+
+                    _host.PickUpFormatFromSelection();
+                    FormatPainterStore.SetPickedUp();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Format picked up. Select target shape(s) and run format painter again.",
+                    };
+                }
+
+                case CommandIds.PasteFormatted:
+                {
+                    int count = _host.PasteFormattedText();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Pasted formatted text into {count} shape(s).",
+                    };
+                }
+
+                case CommandIds.Regroup:
+                {
+                    int count = _host.RegroupSelectedShapes();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = $"Regrouped {count} shape(s).",
+                    };
+                }
+
+                default:
+                    throw new InvalidOperationException($"Unknown format/regroup command: {command}.");
             }
         }
     }

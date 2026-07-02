@@ -778,6 +778,101 @@ namespace PptPowerKeys.Windows.Host
                 MsoTriState.msoFalse);
         }
 
+        public void PickUpFormatFromSelection()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select exactly one shape to copy format from.");
+            if (range.Count != 1)
+            {
+                throw new InvalidOperationException("Select exactly one shape to copy format from.");
+            }
+
+            range[1].PickUp();
+        }
+
+        public int ApplyFormatToSelection()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select one or more shapes to apply format to.");
+            int count = range.Count;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                range[i].Apply();
+            }
+
+            return count;
+        }
+
+        public int RegroupSelectedShapes()
+        {
+            ShapeRange range = GetSelectedShapeRangeOrEmpty();
+            if (range == null || range.Count < 2)
+            {
+                throw new InvalidOperationException("Select at least two shapes to regroup.");
+            }
+
+            int count = range.Count;
+            range.Regroup();
+            return count;
+        }
+
+        public int PasteFormattedText()
+        {
+            if (!ClipboardContainsPasteableText())
+            {
+                throw new InvalidOperationException("Clipboard is empty.");
+            }
+
+            ShapeRange? range = GetSelectedShapeRangeOrEmpty();
+            if (range == null)
+            {
+                throw new InvalidOperationException("Select one or more shapes first.");
+            }
+
+            int applied = 0;
+            for (int i = 1; i <= range.Count; i++)
+            {
+                Shape shape = range[i];
+                if (shape.HasTextFrame != MsoTriState.msoTrue)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    shape.TextFrame.TextRange.Paste();
+                    applied++;
+                }
+                catch
+                {
+                    // Shape has no usable text frame — skip.
+                }
+            }
+
+            if (applied == 0)
+            {
+                throw new InvalidOperationException("Selected shape(s) have no text frame to paste into.");
+            }
+
+            return applied;
+        }
+
+        private static bool ClipboardContainsPasteableText()
+        {
+            if (Clipboard.ContainsText())
+            {
+                return true;
+            }
+
+            IDataObject? data = Clipboard.GetDataObject();
+            if (data == null)
+            {
+                return false;
+            }
+
+            return data.GetDataPresent(DataFormats.Rtf)
+                || data.GetDataPresent(DataFormats.Html)
+                || data.GetDataPresent(DataFormats.UnicodeText);
+        }
+
         private static int CalculateFitZoom(DocumentWindow window, View view)
         {
             Slide slide = view.Slide;
