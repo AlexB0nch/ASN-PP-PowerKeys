@@ -19,7 +19,7 @@
 | **S07** | [`sprint-07-ltsc-foundation/`](../sprint-07-ltsc-foundation/) | **Done** | Spikes + VSTO shell + ComHost POC | S07-001…004 |
 | **S08** | [`sprint-08-ltsc-layout-parity/`](../sprint-08-ltsc-layout-parity/) | **Done** | 32 ServerLayout + alignment extras | S08-001…005 |
 | **S09** | [`sprint-09-ltsc-objects-format-text/`](../sprint-09-ltsc-objects-format-text/) | **Done** | Objects, Format, Text HostScript | S09-001…006 |
-| **S10** | [`sprint-10-ltsc-slides-settings/`](../sprint-10-ltsc-slides-settings/) | **Next** | Slides + 9 None unlock + Settings UI | S10-001…005 |
+| **S10** | [`sprint-10-ltsc-slides-settings/`](../sprint-10-ltsc-slides-settings/) | **In progress** | Slides + 9 None unlock + Settings UI | S10-001…005 |
 | **S11** | [`sprint-11-ltsc-ship/`](../sprint-11-ltsc-ship/) | Planned | Global hotkeys, MSI, QA, release | S11-001…005 |
 
 ### Milestones
@@ -84,4 +84,4 @@
 ## Следующий шаг
 
 **Sprint 10** — [`sprint-10-ltsc-slides-settings/ARCHITECT-KICKOFF.md`](../sprint-10-ltsc-slides-settings/ARCHITECT-KICKOFF.md)  
-Первая задача: **S10-001** Slide HostScript (`CopySlide`, `MoveSlidesToBackup`).
+Следующая задача: **S10-004** Settings task pane + UserSettings (3 Settings commands).
