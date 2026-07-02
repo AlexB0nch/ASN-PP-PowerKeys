@@ -54,6 +54,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -100,9 +104,11 @@
     <Compile Include="Host\SlideCommands.cs" />
     <Compile Include="Host\ViewPrintCommands.cs" />
     <Compile Include="Host\TextCommands.cs" />
+    <Compile Include="Host\SettingsCommands.cs" />
     <Compile Include="Host\ShapeBoundsId.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\ITaskPaneService.cs" />
     <Compile Include="Settings\WindowsUserSettingsStore.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
@@ -113,8 +119,17 @@
     <Compile Include="UI\HostScriptCommandMap.cs" />
     <Compile Include="UI\PowerKeysRibbon.cs" />
     <Compile Include="UI\RibbonCommandMap.cs" />
+    <Compile Include="UI\SettingsCommandMap.cs" />
+    <Compile Include="UI\TaskPaneService.cs" />
+    <Compile Include="UI\SettingsPane.xaml.cs">
+      <DependentUpon>SettingsPane.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\SettingsPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <EmbeddedResource Include="UI\RibbonTab.xml" />
   </ItemGroup>
   <ItemGroup>

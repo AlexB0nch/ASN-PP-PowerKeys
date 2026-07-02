@@ -30,11 +30,16 @@ namespace PptPowerKeys.Windows.Host
     {
         private readonly IComHostAdapter _host;
         private readonly WindowsUserSettingsStore _settingsStore;
+        private readonly ITaskPaneService _taskPaneService;
 
-        public CommandRouter(IComHostAdapter host, WindowsUserSettingsStore settingsStore)
+        public CommandRouter(
+            IComHostAdapter host,
+            WindowsUserSettingsStore settingsStore,
+            ITaskPaneService taskPaneService)
         {
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _settingsStore = settingsStore ?? throw new ArgumentNullException(nameof(settingsStore));
+            _taskPaneService = taskPaneService ?? throw new ArgumentNullException(nameof(taskPaneService));
         }
 
         public CommandExecutionResult Execute(CommandIds command)
@@ -104,8 +109,47 @@ namespace PptPowerKeys.Windows.Host
                 return ExecuteFormatRegroup(command);
             }
 
+            if (SettingsCommands.IsSettingsCommand(command))
+            {
+                return ExecuteSettings(command);
+            }
+
             throw new NotSupportedException(
                 $"Command '{command}' is not implemented in PptPowerKeys.Windows yet.");
+        }
+
+        private CommandExecutionResult ExecuteSettings(CommandIds command)
+        {
+            switch (command)
+            {
+                case CommandIds.OpenShortcutManager:
+                    _taskPaneService.ShowSettingsScrollToShortcuts();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Settings pane opened (shortcuts).",
+                    };
+
+                case CommandIds.OpenColorScheme:
+                    _taskPaneService.ShowColorsPlaceholder();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Settings pane opened (colors).",
+                    };
+
+                case CommandIds.ResetToDefaults:
+                    _settingsStore.Reset();
+                    _taskPaneService.ReloadFromStore();
+                    return new CommandExecutionResult
+                    {
+                        Changed = true,
+                        Message = "Settings reset to defaults.",
+                    };
+
+                default:
+                    throw new InvalidOperationException($"Unknown settings command: {command}.");
+            }
         }
 
         private LayoutOptions GetLayoutOptions() =>

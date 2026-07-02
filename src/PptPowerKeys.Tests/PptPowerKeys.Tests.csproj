@@ -34,7 +34,12 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorCycleStore.cs" Link="Windows\FormatColorCycleStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatPainterStore.cs" Link="Windows\FormatPainterStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatRegroupCommands.cs" Link="Windows\FormatRegroupCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\SettingsCommands.cs" Link="Windows\SettingsCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\CommandRouter.cs" Link="Windows\CommandRouter.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\CommandExecutionResult.cs" Link="Windows\CommandExecutionResult.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Settings\ITaskPaneService.cs" Link="Windows\ITaskPaneService.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\GroupZOrderCommands.cs" Link="Windows\GroupZOrderCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\IComHostAdapter.cs" Link="Windows\IComHostAdapter.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\InsertShapeCommands.cs" Link="Windows\InsertShapeCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\MultiSlideShapeCommands.cs" Link="Windows\MultiSlideShapeCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\PositionCommands.cs" Link="Windows\PositionCommands.cs" />
@@ -43,6 +48,7 @@
     <Compile Include="..\PptPowerKeys.Windows\Host\ViewPrintCommands.cs" Link="Windows\ViewPrintCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\TextCommands.cs" Link="Windows\TextCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\UI\HostScriptCommandMap.cs" Link="Windows\HostScriptCommandMap.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\UI\SettingsCommandMap.cs" Link="Windows\SettingsCommandMap.cs" />
   </ItemGroup>
 
 </Project>

@@ -364,11 +364,52 @@ changes save immediately. All 32 ServerLayout commands receive
 
 Snap manual QA: [06-windows-layout-qa.md](../../docs/migration/06-windows-layout-qa.md#snap-to-grid-regression).
 
+## Settings task pane (S10-004)
+
+`CommandRouter.Execute(CommandIds)` routes **3** Settings commands via the WPF custom task pane
+(`TaskPaneService` + `SettingsPane.xaml`). **79/79** catalog commands are routable (no
+`NotSupportedException` for Settings ids).
+
+| CommandId | Ribbon | Behavior |
+|-----------|--------|----------|
+| OpenShortcutManager | **Settings → Shortcuts** | Show task pane, scroll to shortcuts grid |
+| OpenColorScheme | **Settings → Colors** | Show task pane, **Colors** tab (placeholder → S10-005) |
+| ResetToDefaults | **Settings → Reset** | `UserSettings.CreateDefaults()` + persist + reload pane |
+
+`UserSettings.json` at `%AppData%\PptPowerKeys\` supports full parity with Web export/import v1
+(camelCase, `schemaVersion`, profile, shortcuts, `snapToGrid`, `addupDisplayMode`). `recentColors`
+are preserved on Save/Reset.
+
+Ribbon **PowerKeys** → **Settings** (3 buttons) → `OnSettingsCommand` → `SettingsCommandMap` →
+`CommandRouter.Execute`.
+
+### Manual QA (Settings pane)
+
+1. Click **Settings → Shortcuts** → task pane opens on the right; shortcuts section is visible.
+2. Change **Profile** to McKinsey → shortcuts grid updates; warning to click Save; click **Save** →
+   `%AppData%\PptPowerKeys\UserSettings.json` updated; ribbon **Options → Snap to grid** stays in sync
+   if you toggled snap in the pane.
+3. **Export JSON** → file contains `schemaVersion: 1` and camelCase fields (matches Web export).
+4. **Import JSON** (Web-exported file) → UI updates; click **Save** to persist.
+5. **Reset to defaults** (pane button or ribbon **Settings → Reset**) → shortcuts restored from catalog;
+   `recentColors` preserved.
+6. Click **Settings → Colors** → **Colors** tab shows *Color picker — S10-005* placeholder.
+7. Edit shortcut keys in the grid → **Save** → reload PowerPoint session → bindings persist in JSON
+   (global hotkey runtime = S11 anti-scope).
+
+Programmatic smoke:
+
+```csharp
+var router = Globals.ThisAddIn.CommandRouter;
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.OpenShortcutManager);
+router.Execute(PptPowerKeys.Core.Commands.CommandIds.ResetToDefaults);
+```
+
 ## Solution layout
 
 | Project | TFM | Role |
 |---------|-----|------|
-| `PptPowerKeys.Windows` | .NET Framework 4.8 VSTO | COM host, Ribbon, Task Pane (future) |
+| `PptPowerKeys.Windows` | .NET Framework 4.8 VSTO | COM host, Ribbon, Settings task pane (WPF) |
 | `PptPowerKeys.Core` | netstandard2.0 (from this sln) | Shared business logic |
 
 Root `PptPowerKeys.sln` (Linux CI) does **not** include this solution.

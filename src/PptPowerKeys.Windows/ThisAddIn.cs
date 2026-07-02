@@ -3,13 +3,18 @@ namespace PptPowerKeys.Windows
     public partial class ThisAddIn
     {
         private Settings.WindowsUserSettingsStore _settingsStore;
+        private UI.TaskPaneService _taskPaneService;
         private Host.CommandRouter _commandRouter;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             _settingsStore = new Settings.WindowsUserSettingsStore();
             var host = new Host.ComHostAdapter(Application);
-            _commandRouter = new Host.CommandRouter(host, _settingsStore);
+            _taskPaneService = new UI.TaskPaneService(
+                CustomTaskPanes,
+                _settingsStore,
+                () => UI.PowerKeysRibbon.InvalidateControl("chkSnapToGrid"));
+            _commandRouter = new Host.CommandRouter(host, _settingsStore, _taskPaneService);
             System.Diagnostics.Debug.WriteLine(
                 $"PptPowerKeys.Windows loaded. Core catalog: {Core.Commands.CommandCatalog.All.Count} commands. " +
                 $"SnapToGrid={_settingsStore.Current.SnapToGrid}.");
@@ -18,6 +23,7 @@ namespace PptPowerKeys.Windows
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
             _commandRouter = null;
+            _taskPaneService = null;
             _settingsStore = null;
         }
 

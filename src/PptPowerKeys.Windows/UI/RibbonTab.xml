@@ -426,6 +426,27 @@
                     screentip="Snap to grid"
                     supertip="When enabled, layout commands snap geometry to a 0.1 cm grid (Consulting Mode)." />
         </group>
+        <group id="grpSettings" label="Settings">
+          <button id="btnShortcutManager"
+                  label="Shortcuts"
+                  onAction="OnSettingsCommand"
+                  size="large"
+                  imageMso="KeyboardCustomization"
+                  screentip="Shortcut manager"
+                  supertip="Open the Settings task pane and scroll to keyboard shortcuts." />
+          <button id="btnColorScheme"
+                  label="Colors"
+                  onAction="OnSettingsCommand"
+                  imageMso="ThemeColorsGallery"
+                  screentip="Color scheme"
+                  supertip="Open the Settings task pane (color picker — S10-005)." />
+          <button id="btnResetDefaults"
+                  label="Reset"
+                  onAction="OnSettingsCommand"
+                  imageMso="Undo"
+                  screentip="Reset to defaults"
+                  supertip="Reset UserSettings.json to catalog defaults and reload the Settings pane." />
+        </group>
       </tab>
     </tabs>
   </ribbon>
