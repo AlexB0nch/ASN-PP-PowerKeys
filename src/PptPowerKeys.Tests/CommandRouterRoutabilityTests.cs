@@ -17,7 +17,8 @@ public class CommandRouterRoutabilityTests
         {
             var store = new WindowsUserSettingsStore(tempDir);
             var taskPane = new RecordingTaskPaneService();
-            var router = new CommandRouter(new StubComHostAdapter(), store, taskPane);
+            var paletteProvider = new FormatColorPaletteProvider(new StubComHostAdapter(), store);
+            var router = new CommandRouter(new StubComHostAdapter(), store, taskPane, paletteProvider);
             var notSupported = new List<CommandIds>();
 
             foreach (var descriptor in CommandCatalog.All)
@@ -56,14 +57,15 @@ public class CommandRouterRoutabilityTests
         {
             var store = new WindowsUserSettingsStore(tempDir);
             var taskPane = new RecordingTaskPaneService();
-            var router = new CommandRouter(new StubComHostAdapter(), store, taskPane);
+            var paletteProvider = new FormatColorPaletteProvider(new StubComHostAdapter(), store);
+            var router = new CommandRouter(new StubComHostAdapter(), store, taskPane, paletteProvider);
 
             router.Execute(CommandIds.OpenShortcutManager);
             router.Execute(CommandIds.OpenColorScheme);
             router.Execute(CommandIds.ResetToDefaults);
 
             Assert.Contains(nameof(ITaskPaneService.ShowSettingsScrollToShortcuts), taskPane.Calls);
-            Assert.Contains(nameof(ITaskPaneService.ShowColorsPlaceholder), taskPane.Calls);
+            Assert.Contains(nameof(ITaskPaneService.ShowColorPicker), taskPane.Calls);
             Assert.Contains(nameof(ITaskPaneService.ReloadFromStore), taskPane.Calls);
         }
         finally
@@ -80,7 +82,7 @@ public class CommandRouterRoutabilityTests
 
         public void ShowSettingsScrollToShortcuts() => Calls.Add(nameof(ShowSettingsScrollToShortcuts));
 
-        public void ShowColorsPlaceholder() => Calls.Add(nameof(ShowColorsPlaceholder));
+        public void ShowColorPicker() => Calls.Add(nameof(ShowColorPicker));
 
         public void ReloadFromStore() => Calls.Add(nameof(ReloadFromStore));
     }

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Microsoft.Office.Core;
 using Microsoft.Office.Tools;
+using PptPowerKeys.Windows.Host;
 using PptPowerKeys.Windows.Settings;
 
 namespace PptPowerKeys.Windows.UI
@@ -18,6 +19,8 @@ namespace PptPowerKeys.Windows.UI
         public TaskPaneService(
             CustomTaskPaneCollection panes,
             WindowsUserSettingsStore store,
+            IComHostAdapter host,
+            FormatColorPaletteProvider paletteProvider,
             Action onSettingsSaved)
         {
             if (panes is null)
@@ -30,14 +33,24 @@ namespace PptPowerKeys.Windows.UI
                 throw new ArgumentNullException(nameof(store));
             }
 
-            _settingsPane = new SettingsPane(store, onSettingsSaved);
-            var host = new ElementHost
+            if (host is null)
+            {
+                throw new ArgumentNullException(nameof(host));
+            }
+
+            if (paletteProvider is null)
+            {
+                throw new ArgumentNullException(nameof(paletteProvider));
+            }
+
+            _settingsPane = new SettingsPane(store, host, paletteProvider, onSettingsSaved);
+            var hostControl = new ElementHost
             {
                 Child = _settingsPane,
                 Dock = DockStyle.Fill,
             };
 
-            _pane = panes.Add(host, "PowerKeys Settings");
+            _pane = panes.Add(hostControl, "PowerKeys Settings");
             _pane.Visible = false;
             _pane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight;
             _pane.Width = 320;
@@ -55,15 +68,16 @@ namespace PptPowerKeys.Windows.UI
             _settingsPane.ScrollToShortcuts();
         }
 
-        public void ShowColorsPlaceholder()
+        public void ShowColorPicker()
         {
-            _settingsPane.SelectColorsTab();
+            _settingsPane.FocusColorPicker();
             _pane.Visible = true;
         }
 
         public void ReloadFromStore()
         {
             _settingsPane.ReloadFromStore();
+            _settingsPane.ReloadColorPicker();
         }
     }
 }

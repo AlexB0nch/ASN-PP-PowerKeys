@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PptPowerKeys.Core.Commands;
-using PptPowerKeys.Core.Colors;
 using PptPowerKeys.Core.Geometry;
 using PptPowerKeys.Core.Layout;
 using PptPowerKeys.Core.Text;
@@ -31,15 +30,18 @@ namespace PptPowerKeys.Windows.Host
         private readonly IComHostAdapter _host;
         private readonly WindowsUserSettingsStore _settingsStore;
         private readonly ITaskPaneService _taskPaneService;
+        private readonly FormatColorPaletteProvider _paletteProvider;
 
         public CommandRouter(
             IComHostAdapter host,
             WindowsUserSettingsStore settingsStore,
-            ITaskPaneService taskPaneService)
+            ITaskPaneService taskPaneService,
+            FormatColorPaletteProvider paletteProvider)
         {
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _settingsStore = settingsStore ?? throw new ArgumentNullException(nameof(settingsStore));
             _taskPaneService = taskPaneService ?? throw new ArgumentNullException(nameof(taskPaneService));
+            _paletteProvider = paletteProvider ?? throw new ArgumentNullException(nameof(paletteProvider));
         }
 
         public CommandExecutionResult Execute(CommandIds command)
@@ -131,7 +133,7 @@ namespace PptPowerKeys.Windows.Host
                     };
 
                 case CommandIds.OpenColorScheme:
-                    _taskPaneService.ShowColorsPlaceholder();
+                    _taskPaneService.ShowColorPicker();
                     return new CommandExecutionResult
                     {
                         Changed = true,
@@ -412,12 +414,7 @@ namespace PptPowerKeys.Windows.Host
                 throw new InvalidOperationException("Select one or more shapes first.");
             }
 
-            var theme = _host.ReadPresentationThemeColors();
-            var recent = _settingsStore.GetRecentColors();
-            var palette = ColorPaletteBuilder.Build(
-                theme,
-                recent,
-                DefaultColorPalette.FallbackTheme);
+            var palette = _paletteProvider.BuildCyclingPalette();
 
             var shapeIds = shapes.Select(shape => shape.Id).ToList();
             string color = FormatColorCycleStore.NextPaletteColor(command, palette, shapeIds);

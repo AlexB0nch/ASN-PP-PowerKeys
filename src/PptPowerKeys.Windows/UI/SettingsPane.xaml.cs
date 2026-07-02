@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using PptPowerKeys.Core.Commands;
 using PptPowerKeys.Core.Settings;
 using PptPowerKeys.Core.Text;
+using PptPowerKeys.Windows.Host;
 using PptPowerKeys.Windows.Settings;
 
 namespace PptPowerKeys.Windows.UI
@@ -26,15 +27,32 @@ namespace PptPowerKeys.Windows.UI
         private readonly List<CommandDescriptor> _commands;
         private bool _suppressProfileChange;
 
-        public SettingsPane(WindowsUserSettingsStore store, Action onSettingsSaved)
+        public SettingsPane(
+            WindowsUserSettingsStore store,
+            IComHostAdapter host,
+            FormatColorPaletteProvider paletteProvider,
+            Action onSettingsSaved)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _onSettingsSaved = onSettingsSaved ?? throw new ArgumentNullException(nameof(onSettingsSaved));
+            if (host is null)
+            {
+                throw new ArgumentNullException(nameof(host));
+            }
+
+            if (paletteProvider is null)
+            {
+                throw new ArgumentNullException(nameof(paletteProvider));
+            }
+
             _commands = CommandCatalog.All
                 .OrderBy(c => c.Title, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
             InitializeComponent();
+
+            ColorPicker = new ColorPickerPane(host, store, paletteProvider);
+            ColorsTab.Content = ColorPicker;
 
             ProfileCombo.ItemsSource = ConsultingProfilePresets.KnownProfiles;
             AddupModeCombo.ItemsSource = BuildAddupModeOptions();
@@ -73,6 +91,19 @@ namespace PptPowerKeys.Windows.UI
         {
             MainTabs.SelectedItem = ColorsTab;
         }
+
+        public void FocusColorPicker()
+        {
+            SelectColorsTab();
+            ColorPicker.FocusPicker();
+        }
+
+        public void ReloadColorPicker()
+        {
+            ColorPicker.ReloadPalette();
+        }
+
+        private ColorPickerPane ColorPicker { get; set; } = null!;
 
         public void ScrollToShortcuts()
         {

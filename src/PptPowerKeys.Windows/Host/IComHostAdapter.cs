@@ -91,6 +91,12 @@ namespace PptPowerKeys.Windows.Host
         /// <summary>Applies a font color to selected shapes with text.</summary>
         int ApplyTextColor(string hex);
 
+        /// <summary>
+        /// Reads fill, line, or text color from the first selected shape as normalized <c>#RRGGBB</c>.
+        /// Throws when nothing is selected or the color is unavailable.
+        /// </summary>
+        string ReadColorFromSelection(ColorPickSource source);
+
         /// <summary>Toggles fill between black and white for each selected shape.</summary>
         int ToggleFillBlackWhite();
 

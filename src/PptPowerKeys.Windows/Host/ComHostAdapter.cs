@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
 using PptPowerKeys.Core.Commands;
+using PptPowerKeys.Core.Colors;
 using PptPowerKeys.Core.Geometry;
 
 namespace PptPowerKeys.Windows.Host
@@ -471,6 +472,60 @@ namespace PptPowerKeys.Windows.Host
             }
 
             return applied;
+        }
+
+        public string ReadColorFromSelection(ColorPickSource source)
+        {
+            ShapeRange range = GetSelectedShapeRangeOrThrow("Select a shape first.");
+            Shape shape = range[1];
+            int oleRgb;
+            string label;
+
+            switch (source)
+            {
+                case ColorPickSource.Fill:
+                    oleRgb = shape.Fill.ForeColor.RGB;
+                    label = "fill";
+                    break;
+                case ColorPickSource.Line:
+                    oleRgb = shape.Line.ForeColor.RGB;
+                    label = "line";
+                    break;
+                case ColorPickSource.Text:
+                    if (shape.HasTextFrame != MsoTriState.msoTrue)
+                    {
+                        throw new InvalidOperationException("Selected shape has no text frame.");
+                    }
+
+                    try
+                    {
+                        oleRgb = shape.TextFrame.TextRange.Font.Color.RGB;
+                    }
+                    catch
+                    {
+                        throw new InvalidOperationException("Selected shape has no text frame.");
+                    }
+
+                    label = "text";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown color pick source.");
+            }
+
+            string hex = ColorRgbHelper.OleRgbToHex(oleRgb);
+            if (!ThemeColor.IsValidHex(hex))
+            {
+                throw new InvalidOperationException($"No {label} color on selected shape.");
+            }
+
+            try
+            {
+                return ThemeColor.NormalizeHex(hex);
+            }
+            catch (FormatException)
+            {
+                throw new InvalidOperationException($"Could not read a valid {label} color from the shape.");
+            }
         }
 
         public int ToggleFillBlackWhite()

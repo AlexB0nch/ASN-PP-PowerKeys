@@ -9,7 +9,7 @@ namespace PptPowerKeys.Windows.Settings
 
         void ShowSettingsScrollToShortcuts();
 
-        void ShowColorsPlaceholder();
+        void ShowColorPicker();
 
         void ReloadFromStore();
     }

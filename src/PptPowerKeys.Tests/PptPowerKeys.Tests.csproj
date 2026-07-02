@@ -27,11 +27,13 @@
   <ItemGroup>
     <Compile Include="..\PptPowerKeys.Windows\Settings\WindowsUserSettingsStore.cs" Link="Windows\WindowsUserSettingsStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\CopyAndAlignCommands.cs" Link="Windows\CopyAndAlignCommands.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\ColorPickSource.cs" Link="Windows\ColorPickSource.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\ColorRgbHelper.cs" Link="Windows\ColorRgbHelper.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateCommands.cs" Link="Windows\DuplicateCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\DuplicateGapStore.cs" Link="Windows\DuplicateGapStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorCommands.cs" Link="Windows\FormatColorCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorCycleStore.cs" Link="Windows\FormatColorCycleStore.cs" />
+    <Compile Include="..\PptPowerKeys.Windows\Host\FormatColorPaletteProvider.cs" Link="Windows\FormatColorPaletteProvider.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatPainterStore.cs" Link="Windows\FormatPainterStore.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\FormatRegroupCommands.cs" Link="Windows\FormatRegroupCommands.cs" />
     <Compile Include="..\PptPowerKeys.Windows\Host\SettingsCommands.cs" Link="Windows\SettingsCommands.cs" />
