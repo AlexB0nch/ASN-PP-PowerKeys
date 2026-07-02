@@ -10,7 +10,7 @@
 | **Спринт** | `sprint-10-ltsc-slides-settings` |
 | **Epic** | LTSC Windows Native (Product Line B) |
 | **Компонент** | `PptPowerKeys.Windows` |
-| **Статус** | Todo |
+| **Статус** | In Progress |
 | **Issue** | — |
 | **PR** | — |
 
@@ -60,10 +60,10 @@
 
 ## Критерии приёмки
 
-- [ ] 6 commands routed via `CommandRouter.Execute`
-- [ ] COM behavior matches VSTO / PowerPoint Desktop expectations
-- [ ] Ribbon buttons for Zoom, Sorter, Print in `grpSlides`
-- [ ] Unit tests + `dotnet test PptPowerKeys.sln` green
+- [x] 6 commands routed via `CommandRouter.Execute`
+- [x] COM behavior matches VSTO / PowerPoint Desktop expectations
+- [x] Ribbon buttons for Zoom, Sorter, Print in `grpSlides`
+- [x] Unit tests + `dotnet test PptPowerKeys.sln` green (289 passed)
 - [ ] PR with Task ID S10-002
 
 ## Reference files
