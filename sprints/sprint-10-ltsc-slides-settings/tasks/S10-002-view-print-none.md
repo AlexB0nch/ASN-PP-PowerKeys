@@ -64,7 +64,7 @@
 - [x] COM behavior matches VSTO / PowerPoint Desktop expectations
 - [x] Ribbon buttons for Zoom, Sorter, Print in `grpSlides`
 - [x] Unit tests + `dotnet test PptPowerKeys.sln` green (289 passed)
-- [ ] PR with Task ID S10-002
+- [x] PR with Task ID S10-002 (#95)
 
 ## Reference files
 
