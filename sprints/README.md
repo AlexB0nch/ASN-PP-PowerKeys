@@ -33,7 +33,7 @@ sprints/
 | Sprint 07 | LTSC foundation (Core multitarget, VSTO shell) | **Done** — `sprint-07-ltsc-foundation/retrospective.md` |
 | Sprint 08 | LTSC layout parity (38 cmd) | **Done** — `sprint-08-ltsc-layout-parity/retrospective.md` |
 | Sprint 09 | LTSC objects · format · text | **Done** — `sprint-09-ltsc-objects-format-text/retrospective.md` |
-| Sprint 10 | LTSC slides · settings · None unlock | **Next** — `sprint-10-ltsc-slides-settings/` |
+| Sprint 10 | LTSC slides · settings · None unlock | **In Progress** — S10-005 last — `sprint-10-ltsc-slides-settings/` |
 | Sprint 11 | LTSC ship (hotkeys, MSI, QA) | Planned |
 
 > Sprint 01 по факту сфокусировался на миграции на Office Web Add-in и доведении сквозного пути до

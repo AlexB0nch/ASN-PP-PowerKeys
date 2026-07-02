@@ -20,5 +20,6 @@
 
 ## Definition of Done
 
-- [x] All 79 commands routed
-- [ ] Settings JSON compatible with Web export/import v1
+- [x] All 79 commands routed (S10-004)
+- [x] Settings JSON compatible with Web export/import v1 (S10-004)
+- [ ] Color picker COM panel in Settings (theme + recent + apply) — **S10-005**
