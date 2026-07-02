@@ -18,5 +18,7 @@ Production-ready **PptPowerKeys.Windows**: global hotkeys, signed installer, QA 
 
 ## Definition of Done
 
-- [ ] IT deployment pack
-- [ ] Epic retrospective; Product Line B v1.0 tagged
+- [ ] Native ShortcutManager binds 76 hotkey-eligible commands (S11-001…002)
+- [ ] Signed MSI + IT deployment runbook (S11-003)
+- [ ] QA matrix Office 2019 / 2021 LTSC / 2024 LTSC (S11-005)
+- [ ] Epic retrospective; Product Line B v1.0 tagged (M4)
